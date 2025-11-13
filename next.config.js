@@ -30,7 +30,7 @@ const nextConfig = {
     MOVIES_WEB_API_URL: 'https://dataset-web-api.onrender.com/',
     MOVIES_WEB_API_KEY: process.env.MOVIES_WEB_API_KEY,
 
-    // for deployment, should point to the remote url
+    // these might be deleted later? idk
     MESSAGES_WEB_API_URL: process.env.MESSAGES_WEB_API_URL,
     MESSAGES_WEB_API_KEY: process.env.MESSAGES_WEB_API_KEY,
 
