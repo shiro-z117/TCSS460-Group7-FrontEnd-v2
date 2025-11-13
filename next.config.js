@@ -18,15 +18,20 @@ const nextConfig = {
     ]
   },
   env: {
-    NEXT_APP_VERSION: process.env.REACT_APP_VERSION,
+    NEXT_APP_VERSION: '1.0.0',
+
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET_KEY,
     NEXTAUTH_SECRET_KEY: process.env.NEXTAUTH_SECRET_KEY,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-    MESSAGES_WEB_API_URL: process.env.MESSAGES_WEB_API_URL,
+    NEXTAUTH_URL: 'http://localhost:3000',
+
+    MESSAGES_WEB_API_URL: 'https://dataset-web-api.onrender.com/api-docs/',
     MESSAGES_WEB_API_KEY: process.env.MESSAGES_WEB_API_KEY,
-    CREDENTIALS_API_URL: process.env.CREDENTIALS_API_URL,
+
+    CREDENTIALS_API_URL: 'https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/',
+
     NEXT_APP_JWT_SECRET: process.env.REACT_APP_JWT_SECRET,
     NEXT_APP_JWT_TIMEOUT: process.env.REACT_APP_JWT_TIMEOUT,
+    
     NEXT_APP_GOOGLE_MAPS_API_KEY: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
   }
 };
