@@ -6,11 +6,8 @@ import { useRouter } from 'next/navigation';
 // material-ui
 import Button from '@mui/material/Button';
 import FormHelperText from '@mui/material/FormHelperText';
-import Grid from '@mui/material/Grid';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 
 // third party
 import * as Yup from 'yup';
@@ -68,45 +65,83 @@ export default function AuthForgotPassword() {
     >
       {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
         <form noValidate onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Stack spacing={1}>
-                <InputLabel htmlFor="email-forgot">Email Address</InputLabel>
-                <OutlinedInput
-                  fullWidth
-                  error={Boolean(touched.email && errors.email)}
-                  id="email-forgot"
-                  type="email"
-                  value={values.email}
-                  name="email"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  placeholder="Enter email address"
-                  inputProps={{}}
-                />
-              </Stack>
-              {touched.email && errors.email && (
-                <FormHelperText error id="helper-text-email-forgot">
-                  {errors.email}
-                </FormHelperText>
-              )}
-            </Grid>
-            {errors.submit && (
-              <Grid item xs={12}>
-                <FormHelperText error>{errors.submit}</FormHelperText>
-              </Grid>
+          {errors.submit && (
+            <div className="bg-red-500 bg-opacity-10 border border-red-500 text-red-500 px-4 py-3 rounded" style={{ marginBottom: '1rem' }}>
+              {errors.submit}
+            </div>
+          )}
+          <div style={{ marginBottom: '2rem' }}>
+            <InputLabel
+              htmlFor="email-forgot"
+              className="block text-white font-medium mb-2"
+              sx={{
+                color: '#ffffff !important',
+                fontWeight: 500,
+                marginBottom: '0.5rem',
+                display: 'block'
+              }}
+            >
+              Email Address
+            </InputLabel>
+            <OutlinedInput
+              fullWidth
+              error={Boolean(touched.email && errors.email)}
+              id="email-forgot"
+              type="email"
+              value={values.email}
+              name="email"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              placeholder="Enter your email"
+              inputProps={{}}
+              sx={{
+                backgroundColor: 'white',
+                borderRadius: '0.375rem',
+                '& .MuiOutlinedInput-notchedOutline': {
+                  border: 'none',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  border: 'none',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  border: '2px solid #9333ea',
+                },
+                '& input': {
+                  color: 'black',
+                }
+              }}
+            />
+            {touched.email && errors.email && (
+              <FormHelperText error id="helper-text-email-forgot">
+                {errors.email}
+              </FormHelperText>
             )}
-            <Grid item xs={12} sx={{ mb: -2 }}>
-              <Typography variant="caption">Do not forgot to check SPAM box.</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <AnimateButton>
-                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                  Send Password Reset Email
-                </Button>
-              </AnimateButton>
-            </Grid>
-          </Grid>
+          </div>
+          <AnimateButton>
+            <Button
+              disableElevation
+              disabled={isSubmitting}
+              fullWidth
+              size="large"
+              type="submit"
+              variant="contained"
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded"
+              sx={{
+                backgroundColor: '#9333ea',
+                '&:hover': {
+                  backgroundColor: '#7e22ce',
+                },
+                '&.Mui-disabled': {
+                  opacity: 0.5,
+                  cursor: 'not-allowed',
+                },
+                textTransform: 'none',
+                fontSize: '1rem',
+              }}
+            >
+              {isSubmitting ? 'Sending...' : 'Send Password Reset Email'}
+            </Button>
+          </AnimateButton>
         </form>
       )}
     </Formik>

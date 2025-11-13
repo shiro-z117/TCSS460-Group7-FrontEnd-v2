@@ -1,45 +1,27 @@
 import { ReactElement } from 'react';
 
-// material-ui
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-
-// project import
-import AuthCard from './AuthCard';
-import AuthFooter from 'components/cards/AuthFooter';
-import Logo from 'components/logo';
-
 interface Props {
-  children: ReactElement;
+  children: ReactElement | ReactElement[];
 }
 
 // ==============================|| AUTHENTICATION - WRAPPER ||============================== //
 
 export default function AuthWrapper({ children }: Props) {
   return (
-    <Box sx={{ minHeight: '100vh' }}>
-      <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' }}>
-        <Grid item xs={12} sx={{ ml: 3, mt: 3 }}>
-          <Logo />
-        </Grid>
-        <Grid item xs={12}>
-          <Grid
-            item
-            xs={12}
-            container
-            justifyContent="center"
-            alignItems="center"
-            sx={{ minHeight: { xs: 'calc(100vh - 210px)', sm: 'calc(100vh - 134px)', md: 'calc(100vh - 112px)' } }}
-          >
-            <Grid item>
-              <AuthCard>{children}</AuthCard>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
-          <AuthFooter />
-        </Grid>
-      </Grid>
-    </Box>
+    <div
+      className="min-h-screen bg-black flex items-center justify-center p-4"
+      style={{
+        backgroundColor: '#000000',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem'
+      }}
+    >
+      <div className="w-full max-w-md" style={{ width: '100%', maxWidth: '28rem' }}>
+        {children}
+      </div>
+    </div>
   );
 }

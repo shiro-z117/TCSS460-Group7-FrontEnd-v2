@@ -98,105 +98,164 @@ export default function AuthLogin({ providers, csrfToken }: any) {
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
             <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="email-login">Email Address</InputLabel>
-                  <OutlinedInput
-                    id="email-login"
-                    type="email"
-                    value={values.email}
-                    name="email"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="Enter email address"
-                    fullWidth
-                    error={Boolean(touched.email && errors.email)}
-                  />
-                </Stack>
-                {touched.email && errors.email && (
-                  <FormHelperText error id="standard-weight-helper-text-email-login">
-                    {errors.email}
-                  </FormHelperText>
-                )}
-              </Grid>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="password-login">Password</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    color={capsWarning ? 'warning' : 'primary'}
-                    error={Boolean(touched.password && errors.password)}
-                    id="-password-login"
-                    type={showPassword ? 'text' : 'password'}
-                    value={values.password}
-                    name="password"
-                    onBlur={(event: FocusEvent<any, Element>) => {
-                      setCapsWarning(false);
-                      handleBlur(event);
-                    }}
-                    onKeyDown={onKeyDown}
-                    onChange={handleChange}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                          color="secondary"
-                        >
-                          {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    placeholder="Enter password"
-                  />
-                  {capsWarning && (
-                    <Typography variant="caption" sx={{ color: 'warning.main' }} id="warning-helper-text-password-login">
-                      Caps lock on!
-                    </Typography>
-                  )}
-                </Stack>
-                {touched.password && errors.password && (
-                  <FormHelperText error id="standard-weight-helper-text-password-login">
-                    {errors.password}
-                  </FormHelperText>
-                )}
-              </Grid>
-
-              <Grid item xs={12} sx={{ mt: -1 }}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={checked}
-                        onChange={(event) => setChecked(event.target.checked)}
-                        name="checked"
-                        color="primary"
-                        size="small"
-                      />
-                    }
-                    label={<Typography variant="h6">Keep me sign in</Typography>}
-                  />
-                  <Link component={NextLink} href={'/forget-pass'} variant="h6" color="text.primary">
-                    Forgot Password?
-                  </Link>
-                </Stack>
-              </Grid>
-              {errors.submit && (
-                <Grid item xs={12}>
-                  <FormHelperText error>{errors.submit}</FormHelperText>
-                </Grid>
+            {errors.submit && (
+              <div className="bg-red-500 bg-opacity-10 border border-red-500 text-red-500 px-4 py-3 rounded" style={{ marginBottom: '1.5rem' }}>
+                {errors.submit}
+              </div>
+            )}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <InputLabel
+                htmlFor="email-login"
+                className="block text-white font-medium mb-2"
+                sx={{
+                  color: '#ffffff !important',
+                  fontWeight: 500,
+                  marginBottom: '0.5rem',
+                  display: 'block'
+                }}
+              >
+                Email
+              </InputLabel>
+              <OutlinedInput
+                id="email-login"
+                type="email"
+                value={values.email}
+                name="email"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                placeholder="Enter email address"
+                fullWidth
+                error={Boolean(touched.email && errors.email)}
+                sx={{
+                  backgroundColor: 'white',
+                  borderRadius: '0.375rem',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none',
+                  },
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    border: 'none',
+                  },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    border: '2px solid #9333ea',
+                  },
+                  '& input': {
+                    color: 'black',
+                  }
+                }}
+              />
+              {touched.email && errors.email && (
+                <FormHelperText error id="standard-weight-helper-text-email-login">
+                  {errors.email}
+                </FormHelperText>
               )}
-              <Grid item xs={12}>
-                <AnimateButton>
-                  <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                    Login
-                  </Button>
-                </AnimateButton>
-              </Grid>
-            </Grid>
+            </div>
+            <div style={{ marginBottom: '2rem' }}>
+              <InputLabel
+                htmlFor="password-login"
+                className="block text-white font-medium mb-2"
+                sx={{
+                  color: '#ffffff !important',
+                  fontWeight: 500,
+                  marginBottom: '0.5rem',
+                  display: 'block'
+                }}
+              >
+                Password
+              </InputLabel>
+              <OutlinedInput
+                fullWidth
+                color={capsWarning ? 'warning' : 'primary'}
+                error={Boolean(touched.password && errors.password)}
+                id="-password-login"
+                type={showPassword ? 'text' : 'password'}
+                value={values.password}
+                name="password"
+                onBlur={(event: FocusEvent<any, Element>) => {
+                  setCapsWarning(false);
+                  handleBlur(event);
+                }}
+                onKeyDown={onKeyDown}
+                onChange={handleChange}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                      color="secondary"
+                    >
+                      {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                placeholder="Enter password"
+                sx={{
+                  backgroundColor: 'white',
+                  borderRadius: '0.375rem',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none',
+                  },
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    border: 'none',
+                  },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    border: '2px solid #9333ea',
+                  },
+                  '& input': {
+                    color: 'black',
+                  }
+                }}
+              />
+              {capsWarning && (
+                <Typography variant="caption" sx={{ color: 'warning.main' }} id="warning-helper-text-password-login">
+                  Caps lock on!
+                </Typography>
+              )}
+              {touched.password && errors.password && (
+                <FormHelperText error id="standard-weight-helper-text-password-login">
+                  {errors.password}
+                </FormHelperText>
+              )}
+            </div>
+            <div className="text-right" style={{ textAlign: 'right', marginBottom: '2rem' }}>
+              <Link
+                component={NextLink}
+                href={'/forget-pass'}
+                className="text-purple-400 hover:text-purple-300 text-sm no-underline"
+                sx={{
+                  color: '#c084fc',
+                  fontSize: '0.875rem',
+                  textDecoration: 'none',
+                  '&:hover': {
+                    color: '#d8b4fe',
+                  }
+                }}
+              >
+                Forgot Password?
+              </Link>
+            </div>
+            <AnimateButton>
+              <Button
+                disableElevation
+                disabled={isSubmitting}
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded"
+                sx={{
+                  backgroundColor: '#9333ea',
+                  '&:hover': {
+                    backgroundColor: '#7e22ce',
+                  },
+                  textTransform: 'none',
+                  fontSize: '1rem',
+                }}
+              >
+                {isSubmitting ? 'Logging in...' : 'Login'}
+              </Button>
+            </AnimateButton>
           </form>
         )}
       </Formik>
