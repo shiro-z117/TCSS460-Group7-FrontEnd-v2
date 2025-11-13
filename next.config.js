@@ -24,14 +24,22 @@ const nextConfig = {
     NEXTAUTH_SECRET_KEY: process.env.NEXTAUTH_SECRET_KEY,
     NEXTAUTH_URL: 'http://localhost:3000',
 
-    MESSAGES_WEB_API_URL: 'https://dataset-web-api.onrender.com/api-docs/',
+    SHOWS_WEB_API_URL: 'https://g1-tvapi.onrender.com/',
+    SHOWS_WEB_API_KEY: process.env.SHOWS_WEB_API_KEY,
+
+    MOVIES_WEB_API_URL: 'https://dataset-web-api.onrender.com/',
+    MOVIES_WEB_API_KEY: process.env.MOVIES_WEB_API_KEY,
+
+    // for deployment, should point to the remote url
+    MESSAGES_WEB_API_URL: process.env.MESSAGES_WEB_API_URL,
     MESSAGES_WEB_API_KEY: process.env.MESSAGES_WEB_API_KEY,
 
-    CREDENTIALS_API_URL: 'https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/',
+    // should later be changed to use 'https://credentials-api-group2-20f368b8528b.herokuapp.com/'
+    CREDENTIALS_API_URL: 'http://localhost:8008',
 
     NEXT_APP_JWT_SECRET: process.env.REACT_APP_JWT_SECRET,
     NEXT_APP_JWT_TIMEOUT: process.env.REACT_APP_JWT_TIMEOUT,
-    
+
     NEXT_APP_GOOGLE_MAPS_API_KEY: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
   }
 };
