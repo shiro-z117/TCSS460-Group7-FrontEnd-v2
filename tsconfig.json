@@ -14,7 +14,10 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "downlevelIteration": true,
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
@@ -22,7 +25,7 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
-    "typeRoots": ["../node_modules/@types", "../@types", "./types"],
+    "typeRoots": ["./node_modules/@types", "./@types", "./types"],
     "plugins": [
       {
         "name": "next"

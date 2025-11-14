@@ -14,6 +14,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'flagcdn.com',
         pathname: '**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'image.tmdb.org',
+        pathname: '**'
       }
     ]
   },
@@ -30,11 +35,9 @@ const nextConfig = {
     MOVIES_WEB_API_URL: 'https://dataset-web-api.onrender.com/',
     MOVIES_WEB_API_KEY: process.env.MOVIES_WEB_API_KEY,
 
-    // these might be deleted later? idk
     MESSAGES_WEB_API_URL: process.env.MESSAGES_WEB_API_URL,
     MESSAGES_WEB_API_KEY: process.env.MESSAGES_WEB_API_KEY,
 
-    // should later be changed to use 'https://credentials-api-group2-20f368b8528b.herokuapp.com/'
     CREDENTIALS_API_URL: 'http://localhost:8008',
 
     NEXT_APP_JWT_SECRET: process.env.REACT_APP_JWT_SECRET,
