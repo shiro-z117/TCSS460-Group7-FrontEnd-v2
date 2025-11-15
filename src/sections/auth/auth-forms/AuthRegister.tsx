@@ -63,6 +63,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
       initialValues={{
         firstname: '',
         lastname: '',
+        username: '',
         email: '',
         password: '',
         submit: null
@@ -70,6 +71,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
       validationSchema={Yup.object().shape({
         firstname: Yup.string().max(255).required('First Name is required'),
         lastname: Yup.string().max(255).required('Last Name is required'),
+        username: Yup.string().min(3).max(50).required('Username is required'),
         email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
         password: Yup.string()
           .required('Password is required')
@@ -77,11 +79,13 @@ export default function AuthRegister({ providers, csrfToken }: any) {
           .max(10, 'Password must be less than 10 characters')
       })}
       onSubmit={async (values, { setErrors, setSubmitting }) => {
+        const trimmedUsername = values.username.trim();
         const trimmedEmail = values.email.trim();
         signIn('register', {
           redirect: false,
           firstname: values.firstname,
           lastname: values.lastname,
+          username: trimmedUsername,
           email: trimmedEmail,
           password: values.password,
           callbackUrl: APP_DEFAULT_PATH
@@ -137,6 +141,28 @@ export default function AuthRegister({ providers, csrfToken }: any) {
               {touched.lastname && errors.lastname && (
                 <FormHelperText error id="helper-text-lastname-signup">
                   {errors.lastname}
+                </FormHelperText>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <Stack spacing={1}>
+                <InputLabel htmlFor="username-signup">Username*</InputLabel>
+                <OutlinedInput
+                  fullWidth
+                  error={Boolean(touched.username && errors.username)}
+                  id="username-signup"
+                  type="text"
+                  value={values.username}
+                  name="username"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  placeholder="Enter username"
+                  inputProps={{}}
+                />
+              </Stack>
+              {touched.username && errors.username && (
+                <FormHelperText error id="helper-text-username-signup">
+                  {errors.username}
                 </FormHelperText>
               )}
             </Grid>
