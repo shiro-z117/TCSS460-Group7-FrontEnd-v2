@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
+//import Image from 'next/image';
 
 interface ItemDetailsProps {
   item: any;
@@ -18,7 +18,7 @@ export default function ItemDetails({ item }: ItemDetailsProps) {
   return (
     <div className="lg:col-span-2">
       <h1 className="text-5xl font-bold text-white mb-4">{item.title}</h1>
-      
+
       {/* Rating and Year */}
       <div className="flex items-center gap-4 mb-6">
         <span className="text-yellow-400 text-xl">⭐ {item.rating.toFixed(1)}</span>
@@ -31,17 +31,13 @@ export default function ItemDetails({ item }: ItemDetailsProps) {
         <button
           onClick={handleAddToWatchlist}
           className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
-            inWatchlist
-              ? 'bg-green-600 hover:bg-green-700 text-white'
-              : 'bg-purple-600 hover:bg-purple-700 text-white'
+            inWatchlist ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-purple-600 hover:bg-purple-700 text-white'
           }`}
         >
           {inWatchlist ? '✓ In Watchlist' : '+ Add to Watchlist'}
         </button>
-        
-        <button className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors">
-          ↗ Share
-        </button>
+
+        <button className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors">↗ Share </button>
       </div>
 
       {/* Genres */}
