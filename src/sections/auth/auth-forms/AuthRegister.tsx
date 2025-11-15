@@ -69,11 +69,23 @@ export default function AuthRegister({ providers, csrfToken }: any) {
         submit: null
       }}
       validationSchema={Yup.object().shape({
-        firstname: Yup.string().required('First Name is required').trim('First Name cannot start or end with spaces').max(255),
-        lastname: Yup.string().required('Last Name is required').trim('Last Name cannot start or end with spaces').max(255),
+        firstname: Yup.string()
+          .trim('First Name cannot start or end with spaces')
+          .matches(/^[\p{L} .'-]+$/u, 'First Name contains invalid characters')
+          .max(255, 'First Name cannot exceed 255 characters')
+          .required('First Name is required'),
+        lastname: Yup.string()
+          .trim('Last Name cannot start or end with spaces')
+          .matches(/^[\p{L} .'-]+$/u, 'Last Name contains invalid characters')
+          .max(255, 'Last Name cannot exceed 255 characters')
+          .required('Last Name is required'),
         username: Yup.string()
           .required('Username is required')
           .trim('Username cannot start or end with spaces')
+          .matches(
+            /^(?![._-])(?!.*[._-]{2})[A-Za-z0-9._-]+(?<![.-])$/,
+            'Username may only contain letters, numbers, periods (.), underscores (_), and hyphens (-), and cannot begin or end with special characters or have consecutive special characters'
+          )
           .min(3, 'Username must be at least 3 characters')
           .max(30, 'Username cannot exceed 30 characters'),
         email: Yup.string()
@@ -84,16 +96,19 @@ export default function AuthRegister({ providers, csrfToken }: any) {
         password: Yup.string()
           .required('Password is required')
           .trim('Password cannot start or end with spaces')
-          .min(5, 'Password must be at least 5 characters')
+          .matches(/^[\x21-\x7E]+$/, 'Password contains invalid characters')
+          .min(8, 'Password must be at least 8 characters')
           .max(50, 'Password cannot exceed 50 characters')
       })}
       onSubmit={async (values, { setErrors, setSubmitting }) => {
+        const trimmedFirst = values.firstname.trim();
+        const trimmedLast = values.lastname.trim();
         const trimmedUsername = values.username.trim();
         const trimmedEmail = values.email.trim();
         signIn('register', {
           redirect: false,
-          firstname: values.firstname,
-          lastname: values.lastname,
+          firstname: trimmedFirst,
+          lastname: trimmedLast,
           username: trimmedUsername,
           email: trimmedEmail,
           password: values.password,
