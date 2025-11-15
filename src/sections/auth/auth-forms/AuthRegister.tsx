@@ -69,14 +69,23 @@ export default function AuthRegister({ providers, csrfToken }: any) {
         submit: null
       }}
       validationSchema={Yup.object().shape({
-        firstname: Yup.string().max(255).required('First Name is required'),
-        lastname: Yup.string().max(255).required('Last Name is required'),
-        username: Yup.string().min(3).max(50).required('Username is required'),
-        email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+        firstname: Yup.string().required('First Name is required').trim('First Name cannot start or end with spaces').max(255),
+        lastname: Yup.string().required('Last Name is required').trim('Last Name cannot start or end with spaces').max(255),
+        username: Yup.string()
+          .required('Username is required')
+          .trim('Username cannot start or end with spaces')
+          .min(3, 'Username must be at least 3 characters')
+          .max(30, 'Username cannot exceed 30 characters'),
+        email: Yup.string()
+          .email('Must be a valid email')
+          .required('Email is required')
+          .trim('Email cannot start or end with spaces')
+          .max(255),
         password: Yup.string()
           .required('Password is required')
-          .test('no-leading-trailing-whitespace', 'Password cannot start or end with spaces', (value) => value === value.trim())
-          .max(10, 'Password must be less than 10 characters')
+          .trim('Password cannot start or end with spaces')
+          .min(5, 'Password must be at least 5 characters')
+          .max(50, 'Password cannot exceed 50 characters')
       })}
       onSubmit={async (values, { setErrors, setSubmitting }) => {
         const trimmedUsername = values.username.trim();

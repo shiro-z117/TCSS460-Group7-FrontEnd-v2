@@ -56,7 +56,7 @@ export const authOptions: NextAuthOptions = {
         firstname: { name: 'firstname', label: 'First Name', type: 'text', placeholder: 'Enter First Name' },
         lastname: { name: 'lastname', label: 'Last Name', type: 'text', placeholder: 'Enter Last Name' },
         email: { name: 'email', label: 'Email', type: 'email', placeholder: 'Enter Email' },
-        company: { name: 'company', label: 'Company', type: 'text', placeholder: 'Enter Company' },
+        username: { name: 'username', label: 'Username', type: 'text', placeholder: 'Enter Username' },
         password: { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter Password' }
       },
       async authorize(credentials) {
@@ -66,7 +66,7 @@ export const authOptions: NextAuthOptions = {
             lastname: credentials?.lastname!,
             password: credentials?.password!,
             email: credentials?.email!,
-            username: credentials?.email!,
+            username: credentials?.username!,
             phone: getRandomPhoneNumber() // TODO request phone number from user
           });
           if (response) {
