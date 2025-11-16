@@ -35,10 +35,7 @@ const nextConfig = {
     MOVIES_WEB_API_URL: 'https://dataset-web-api.onrender.com/',
     MOVIES_WEB_API_KEY: process.env.MOVIES_WEB_API_KEY,
 
-    MESSAGES_WEB_API_URL: process.env.MESSAGES_WEB_API_URL,
-    MESSAGES_WEB_API_KEY: process.env.MESSAGES_WEB_API_KEY,
-
-    CREDENTIALS_API_URL: 'http://localhost:8008',
+    CREDENTIALS_API_URL: process.env.CREDENTIALS_API_URL || 'https://tcss460-group7-credential-api-8zqv.onrender.com',
 
     NEXT_APP_JWT_SECRET: process.env.REACT_APP_JWT_SECRET,
     NEXT_APP_JWT_TIMEOUT: process.env.REACT_APP_JWT_TIMEOUT,

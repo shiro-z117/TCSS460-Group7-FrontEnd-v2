@@ -46,3 +46,7 @@ next-env.d.ts
 
 # other
 package-lock.json
+.idea/
+
+# claude code assistant files
+/claude/

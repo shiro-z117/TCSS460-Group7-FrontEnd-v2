@@ -16,7 +16,20 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "utils/*": ["./src/utils/*"],
+      "menu-items": ["./src/menu-items/index"],
+      "sections/*": ["./src/sections/*"],
+      "views/*": ["./src/views/*"],
+      "api/*": ["./src/api/*"],
+      "types/*": ["./src/types/*"],
+      "hooks/*": ["./src/hooks/*"],
+      "components/*": ["./src/components/*"],
+      "contexts/*": ["./src/contexts/*"],
+      "config": ["./src/config"],
+      "themes": ["./src/themes/index"],
+      "themes/*": ["./src/themes/*"],
+      "services/*": ["./src/services/*"]
     },
     "downlevelIteration": true,
     "allowSyntheticDefaultImports": true,
@@ -32,6 +45,6 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(dashboard)/messages/msgParam/page.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

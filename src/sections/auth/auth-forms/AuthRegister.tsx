@@ -64,6 +64,8 @@ export default function AuthRegister({ providers, csrfToken }: any) {
         firstname: '',
         lastname: '',
         email: '',
+        username: '',
+        phone: '',
         password: '',
         submit: null
       }}
@@ -71,6 +73,10 @@ export default function AuthRegister({ providers, csrfToken }: any) {
         firstname: Yup.string().max(255).required('First Name is required'),
         lastname: Yup.string().max(255).required('Last Name is required'),
         email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+        username: Yup.string().max(255).required('Username is required'),
+        phone: Yup.string()
+          .matches(/^[0-9]{10}$/, 'Phone number must be 10 digits')
+          .required('Phone is required'),
         password: Yup.string()
           .required('Password is required')
           .test('no-leading-trailing-whitespace', 'Password cannot start or end with spaces', (value) => value === value.trim())
@@ -83,6 +89,8 @@ export default function AuthRegister({ providers, csrfToken }: any) {
           firstname: values.firstname,
           lastname: values.lastname,
           email: trimmedEmail,
+          username: values.username,
+          phone: values.phone,
           password: values.password,
           callbackUrl: APP_DEFAULT_PATH
         }).then((res: any) => {
@@ -110,6 +118,12 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                   placeholder="Enter your First Name"
                   fullWidth
                   error={Boolean(touched.firstname && errors.firstname)}
+                  sx={{
+                    backgroundColor: 'background.paper',
+                    '& input': {
+                      color: 'text.primary'
+                    }
+                  }}
                 />
               </Stack>
               {touched.firstname && errors.firstname && (
@@ -132,6 +146,12 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                   onChange={handleChange}
                   placeholder="Enter your Last Name"
                   inputProps={{}}
+                  sx={{
+                    backgroundColor: 'background.paper',
+                    '& input': {
+                      color: 'text.primary'
+                    }
+                  }}
                 />
               </Stack>
               {touched.lastname && errors.lastname && (
@@ -154,11 +174,73 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                   onChange={handleChange}
                   placeholder="Enter email address"
                   inputProps={{}}
+                  sx={{
+                    backgroundColor: 'background.paper',
+                    '& input': {
+                      color: 'text.primary'
+                    }
+                  }}
                 />
               </Stack>
               {touched.email && errors.email && (
                 <FormHelperText error id="helper-text-email-signup">
                   {errors.email}
+                </FormHelperText>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <Stack spacing={1}>
+                <InputLabel htmlFor="username-signup">Username*</InputLabel>
+                <OutlinedInput
+                  fullWidth
+                  error={Boolean(touched.username && errors.username)}
+                  id="username-signup"
+                  type="text"
+                  value={values.username}
+                  name="username"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  placeholder="Enter username"
+                  inputProps={{}}
+                  sx={{
+                    backgroundColor: 'background.paper',
+                    '& input': {
+                      color: 'text.primary'
+                    }
+                  }}
+                />
+              </Stack>
+              {touched.username && errors.username && (
+                <FormHelperText error id="helper-text-username-signup">
+                  {errors.username}
+                </FormHelperText>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <Stack spacing={1}>
+                <InputLabel htmlFor="phone-signup">Phone Number*</InputLabel>
+                <OutlinedInput
+                  fullWidth
+                  error={Boolean(touched.phone && errors.phone)}
+                  id="phone-signup"
+                  type="tel"
+                  value={values.phone}
+                  name="phone"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  placeholder="Enter phone number (10 digits)"
+                  inputProps={{}}
+                  sx={{
+                    backgroundColor: 'background.paper',
+                    '& input': {
+                      color: 'text.primary'
+                    }
+                  }}
+                />
+              </Stack>
+              {touched.phone && errors.phone && (
+                <FormHelperText error id="helper-text-phone-signup">
+                  {errors.phone}
                 </FormHelperText>
               )}
             </Grid>
@@ -191,6 +273,12 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                     </InputAdornment>
                   }
                   placeholder="Enter password"
+                  sx={{
+                    backgroundColor: 'background.paper',
+                    '& input': {
+                      color: 'text.primary'
+                    }
+                  }}
                 />
               </Stack>
               {touched.password && errors.password && (

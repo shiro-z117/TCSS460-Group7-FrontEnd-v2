@@ -1,16 +1,35 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import MovieCard from '@/components/dashboard/MovieCard';
 import { mockMovies } from '@/lib/mockData';
+import { getMovies } from '@/services/moviesApi';
 
 export default function MoviesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [movies, setMovies] = useState(mockMovies); // Start with mock data as fallback
   const itemsPerPage = 12;
 
-  const filteredMovies = mockMovies.filter(movie => 
+  // Fetch movies from API on component mount
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const data = await getMovies();
+        // If API returns data, use it; otherwise keep mock data
+        if (data && Array.isArray(data)) {
+          setMovies(data);
+        }
+      } catch (error) {
+        console.error('Error fetching movies from API, using mock data:', error);
+        // Keep using mock data on error
+      }
+    };
+    fetchMovies();
+  }, []);
+
+  const filteredMovies = movies.filter(movie =>
     movie.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -27,7 +46,7 @@ export default function MoviesPage() {
           <h1 className="text-5xl font-bold text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
             Movies
           </h1>
-          <p className="text-gray-400 mb-6">Browse {mockMovies.length} movies</p>
+          <p className="text-gray-400 mb-6">Browse {movies.length} movies</p>
           
           <input
             type="text"

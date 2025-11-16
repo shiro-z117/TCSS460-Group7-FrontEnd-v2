@@ -1,16 +1,35 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import MovieCard from '@/components/dashboard/MovieCard';
 import { mockShows } from '@/lib/mockData';
+import { getShows } from '@/services/showsApi';
 
 export default function ShowsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [shows, setShows] = useState(mockShows); // Start with mock data as fallback
   const itemsPerPage = 12;
 
-  const filteredShows = mockShows.filter(show => 
+  // Fetch TV shows from API on component mount
+  useEffect(() => {
+    const fetchShows = async () => {
+      try {
+        const data = await getShows();
+        // If API returns data, use it; otherwise keep mock data
+        if (data && Array.isArray(data)) {
+          setShows(data);
+        }
+      } catch (error) {
+        console.error('Error fetching TV shows from API, using mock data:', error);
+        // Keep using mock data on error
+      }
+    };
+    fetchShows();
+  }, []);
+
+  const filteredShows = shows.filter(show =>
     show.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -28,7 +47,7 @@ export default function ShowsPage() {
           <h1 className="text-5xl font-bold text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-600">
             TV Shows
           </h1>
-          <p className="text-gray-400 mb-6">Browse {mockShows.length} TV shows</p>
+          <p className="text-gray-400 mb-6">Browse {shows.length} TV shows</p>
           
           <input
             type="text"

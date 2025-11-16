@@ -5,19 +5,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 // project import
 import { authApi } from 'services/authApi';
 
-function getRandomInt(min: number, max: number) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function getRandomPhoneNumber() {
-  const areaCode = getRandomInt(100, 999);
-  const centralOfficeCode = getRandomInt(100, 999);
-  const lineNumber = getRandomInt(1000, 9999);
-  return `${areaCode}-${centralOfficeCode}-${lineNumber}`;
-}
-
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -56,7 +43,8 @@ export const authOptions: NextAuthOptions = {
         firstname: { name: 'firstname', label: 'First Name', type: 'text', placeholder: 'Enter First Name' },
         lastname: { name: 'lastname', label: 'Last Name', type: 'text', placeholder: 'Enter Last Name' },
         email: { name: 'email', label: 'Email', type: 'email', placeholder: 'Enter Email' },
-        company: { name: 'company', label: 'Company', type: 'text', placeholder: 'Enter Company' },
+        username: { name: 'username', label: 'Username', type: 'text', placeholder: 'Enter Username' },
+        phone: { name: 'phone', label: 'Phone', type: 'tel', placeholder: 'Enter Phone Number' },
         password: { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter Password' }
       },
       async authorize(credentials) {
@@ -64,10 +52,10 @@ export const authOptions: NextAuthOptions = {
           const response = await authApi.register({
             firstname: credentials?.firstname!,
             lastname: credentials?.lastname!,
-            password: credentials?.password!,
             email: credentials?.email!,
-            username: credentials?.email!,
-            phone: getRandomPhoneNumber() // TODO request phone number from user
+            username: credentials?.username!,
+            phone: credentials?.phone!,
+            password: credentials?.password!
           });
           if (response) {
             // TODO form your user object based on the Credentials API you're using.
