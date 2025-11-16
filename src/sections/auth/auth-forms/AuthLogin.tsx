@@ -221,7 +221,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
             <div className="text-right" style={{ textAlign: 'right', marginBottom: '2rem' }}>
               <Link
                 component={NextLink}
-                href={'/forget-pass'}
+                href={'/forgot-password'}
                 className="text-purple-400 hover:text-purple-300 text-sm no-underline"
                 sx={{
                   color: '#c084fc',
