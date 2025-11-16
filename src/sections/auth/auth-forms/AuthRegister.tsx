@@ -241,6 +241,22 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                     </InputAdornment>
                   }
                   placeholder="Enter password"
+                  sx={{
+                    backgroundColor: 'white',
+                    borderRadius: '0.375rem',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      border: '2px solid #9333ea'
+                    },
+                    '& input': {
+                      color: 'black'
+                    }
+                  }}
                 />
               </Stack>
               {touched.password && errors.password && (
