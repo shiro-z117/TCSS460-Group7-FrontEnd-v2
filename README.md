@@ -20,6 +20,13 @@ Credentials: https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 - Planned out the components and pages for the front-end.
 - Delegated tasks between members.
 - Full functionality and API integration (except for login credentials) will likely not be included for this week.
+### Discussion 2
+- **Date:** Wednesday, November 12, 2025
+- **Time:** 3:30 PM - 4:50 PM (80 minutes)
+- **Location:** In-Person
+#### Actions:
+- Prepared to use starter code.
+- Further defined end goals.
 ---
 
 ## Beta I Sprint Contributions
