@@ -49,6 +49,8 @@ Credentials: https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 ### Shiannel
 
 ### Bao
+- Finished UI for login, forgot password pages
+- Fixed issues related to dashboard pages
 
 ### Shiraz 
 
@@ -63,6 +65,7 @@ Credentials: https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 ### Shiannel
 
 ### Bao
+- I found that I should use npm run start instead of npm run dev for the local deployment
 
 ### Shiraz 
 
