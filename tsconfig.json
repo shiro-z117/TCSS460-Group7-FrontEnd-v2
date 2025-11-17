@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
@@ -33,5 +33,5 @@
     ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(dashboard)/messages/msgParam/page.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "OUR_FILES"]
 }
