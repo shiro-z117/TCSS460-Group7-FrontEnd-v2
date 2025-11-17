@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": "src",
+    "baseUrl": ".", // TODO: figure out how to solve the issue where credentials stuff only works if this is "src" and dashboard stuff only works if this is "."
     "paths": {
       "@/*": ["./src/*"]
     },
