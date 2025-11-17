@@ -27,11 +27,22 @@ Credentials: https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 #### Actions:
 - Prepared to use starter code.
 - Further defined end goals.
+
+### Discussion 3
+- **Date:** Sunday, November 16, 2025
+- **Time:** 7:00 PM - 10:30 PM (210 minutes)
+- **Location:** Discord
+#### Actions:
+- Debugged issues on different machines.
+- Deployed Frontend to Vercel.
 ---
 
 ## Beta I Sprint Contributions
 
 ### Patrick
+- Planned week's sprint and seperated tasks
+- Debugged import errors with team
+- Assisted with vercel deployment
 
 ### Linda Miao
 
