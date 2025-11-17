@@ -34,7 +34,6 @@ Credentials: https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 - **Location:** Discord
 #### Actions:
 - Debugged issues on different machines.
-- Deployed Frontend to Vercel.
 ---
 
 ## Beta I Sprint Contributions
