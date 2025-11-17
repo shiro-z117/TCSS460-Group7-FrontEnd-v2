@@ -3,7 +3,7 @@
 Group Project for TCSS 460 @ UWT  
 
 
-### Live API: 
+### Live API: https://tcss460-group7-frontend-v2.vercel.app
 
 Utilizes the following APIs:
 
@@ -33,7 +33,7 @@ Credentials: https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 
 ### Discussion 3
 - **Date:** Sunday, November 16, 2025
-- **Time:** 7:00 PM - 10:30 PM (210 minutes)
+- **Time:** 7:00 PM - 11:00 PM (240 minutes)
 - **Location:** Discord
 #### Actions:
 - Debugged issues on different machines.
@@ -55,7 +55,9 @@ Credentials: https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 - Fixed issues related to dashboard pages
 
 ### Shiraz 
-
+- Prepared starter code repo and merged some of our previous work into it
+- Created change-password page
+- Debugged a lot of the front end bugs (rather painfully)
 --- 
 
 ## Beta I Sprint Comments
@@ -70,7 +72,7 @@ Credentials: https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 - I found that I should use npm run start instead of npm run dev for the local deployment
 
 ### Shiraz 
-
+- The starter code is very finnicky with modifications and I kind of feel like it would be easier to work from scratch 
 ---
 
 ## Alpha Sprint Meetings
