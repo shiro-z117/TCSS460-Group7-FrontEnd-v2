@@ -30,7 +30,7 @@ export default function SignIn() {
         <Grid item xs={12}>
           <div className="text-center" style={{ textAlign: 'center' }}>
             <p className="text-white mb-4" style={{ color: '#ffffff', marginBottom: '1rem' }}>
-              Don't have an account?
+              Don&apos;t have an account?
             </p>
             <Link
               component={NextLink}

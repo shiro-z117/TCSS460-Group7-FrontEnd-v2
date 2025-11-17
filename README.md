@@ -2,6 +2,9 @@
 
 Group Project for TCSS 460 @ UWT  
 
+
+### Live API: 
+
 Utilizes the following APIs:
 
 Movies Data: https://dataset-web-api.onrender.com/api-docs/
@@ -27,17 +30,29 @@ Credentials: https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 #### Actions:
 - Prepared to use starter code.
 - Further defined end goals.
+
+### Discussion 3
+- **Date:** Sunday, November 16, 2025
+- **Time:** 7:00 PM - 10:30 PM (210 minutes)
+- **Location:** Discord
+#### Actions:
+- Debugged issues on different machines.
 ---
 
 ## Beta I Sprint Contributions
 
 ### Patrick
+- Planned week's sprint and seperated tasks
+- Debugged import errors with team
+- Assisted with vercel deployment
 
 ### Linda Miao
 
 ### Shiannel
 
 ### Bao
+- Finished UI for login, forgot password pages
+- Fixed issues related to dashboard pages
 
 ### Shiraz 
 
@@ -52,6 +67,7 @@ Credentials: https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 ### Shiannel
 
 ### Bao
+- I found that I should use npm run start instead of npm run dev for the local deployment
 
 ### Shiraz 
 
