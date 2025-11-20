@@ -1,0 +1,2079 @@
+TV Database System API
+ 1.0.0 
+OAS 3.0
+A clean, rebuilt OpenAPI 3.0 specification for the TV Database System. Includes public show/actor endpoints, stats endpoints, and admin endpoints with API key authentication (X-API-Key).
+
+Servers
+
+https://g1-tvapi.onrender.com/ - Production server
+
+Authorize
+Shows
+TV show information and filtering (require API key)
+
+
+
+GET
+/shows
+List shows
+
+
+Parameters
+Try it out
+Name	Description
+page
+integer
+(query)
+Default value : 1
+
+Example : 1
+
+1
+limit
+integer
+(query)
+Default value : 50
+
+Example : 50
+
+50
+Responses
+Code	Description	Links
+200	
+Paginated shows list
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "count": 0,
+  "page": 0,
+  "limit": 0,
+  "data": [
+    {
+      "show_id": 0,
+      "name": "string",
+      "original_name": "string",
+      "first_air_date": "2025-11-18",
+      "status": "string",
+      "seasons": 0,
+      "episodes": 0,
+      "tmdb_rating": 0,
+      "popularity": 0,
+      "poster_url": "string"
+    }
+  ]
+}
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+
+GET
+/shows/filter
+Filter shows
+
+
+Parameters
+Try it out
+Name	Description
+actors
+string
+(query)
+Filter by actor(s), comma separated
+
+actors
+genres
+string
+(query)
+Filter by genre(s), comma separated
+
+genres
+network
+string
+(query)
+network
+min_rating
+number
+(query)
+min_rating
+startDate
+string
+(query)
+startDate
+endDate
+string
+(query)
+endDate
+page
+integer
+(query)
+Default value : 1
+
+Example : 1
+
+1
+limit
+integer
+(query)
+Default value : 50
+
+Example : 50
+
+50
+Responses
+Code	Description	Links
+200	
+Filtered shows
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "count": 0,
+  "data": [
+    {
+      "show_id": 0,
+      "name": "string",
+      "original_name": "string",
+      "first_air_date": "2025-11-18",
+      "status": "string",
+      "seasons": 0,
+      "episodes": 0,
+      "tmdb_rating": 0,
+      "popularity": 0,
+      "poster_url": "string"
+    }
+  ]
+}
+No links
+400	
+Bad request - validation failed or invalid parameters
+
+Media type
+
+application/json
+Examples
+
+Invalid input format
+Example Value
+Schema
+{
+  "message": "Invalid format: missing or malformed fields",
+  "errors": [
+    {
+      "field": "name",
+      "message": "Name is required and must be a non-empty string"
+    },
+    {
+      "field": "id",
+      "message": "ID must be a positive integer"
+    },
+    {
+      "field": "first_air_date",
+      "message": "First air date must be a valid date"
+    },
+    {
+      "field": "tmdb_rating",
+      "message": "TMDB rating must be between 0 and 10"
+    }
+  ]
+}
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+
+GET
+/shows/random
+Random shows
+
+
+Parameters
+Try it out
+Name	Description
+limit
+integer
+(query)
+Default value : 50
+
+Example : 50
+
+50
+Responses
+Code	Description	Links
+200	
+Random shows
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+[
+  {
+    "show_id": 0,
+    "name": "string",
+    "original_name": "string",
+    "first_air_date": "2025-11-18",
+    "status": "string",
+    "seasons": 0,
+    "episodes": 0,
+    "tmdb_rating": 0,
+    "popularity": 0,
+    "poster_url": "string"
+  }
+]
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+
+GET
+/shows/{id}
+Get show by ID
+
+
+Parameters
+Try it out
+Name	Description
+id *
+integer
+(path)
+id
+Responses
+Code	Description	Links
+200	
+Show detail
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "show_id": 0,
+  "name": "string",
+  "original_name": "string",
+  "first_air_date": "2025-11-18",
+  "status": "string",
+  "seasons": 0,
+  "episodes": 0,
+  "tmdb_rating": 0,
+  "popularity": 0,
+  "poster_url": "string",
+  "last_air_date": "2025-11-18",
+  "overview": "string",
+  "vote_count": 0,
+  "backdrop_url": "string",
+  "genres": [
+    {
+      "genre_id": 0,
+      "name": "string"
+    }
+  ],
+  "creators": [
+    "string"
+  ],
+  "networks": [
+    {
+      "network_id": 0,
+      "name": "string",
+      "logo": "string",
+      "country": "string"
+    }
+  ],
+  "companies": [
+    {
+      "company_id": 0,
+      "name": "string"
+    }
+  ],
+  "actors": [
+    {
+      "actor_id": 0,
+      "name": "string",
+      "character": "string",
+      "profile_url": "string"
+    }
+  ]
+}
+No links
+400	
+Bad request - validation failed or invalid parameters
+
+Media type
+
+application/json
+Examples
+
+Invalid input format
+Example Value
+Schema
+{
+  "message": "Invalid format: missing or malformed fields",
+  "errors": [
+    {
+      "field": "name",
+      "message": "Name is required and must be a non-empty string"
+    },
+    {
+      "field": "id",
+      "message": "ID must be a positive integer"
+    },
+    {
+      "field": "first_air_date",
+      "message": "First air date must be a valid date"
+    },
+    {
+      "field": "tmdb_rating",
+      "message": "TMDB rating must be between 0 and 10"
+    }
+  ]
+}
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+404	
+Resource not found
+
+Media type
+
+application/json
+Examples
+
+Resource missing
+Example Value
+Schema
+{
+  "message": "Not Found - requested resource does not exist"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+
+GET
+/shows/{id}/summary
+Abridged show summary
+
+
+Parameters
+Try it out
+Name	Description
+id *
+integer
+(path)
+id
+Responses
+Code	Description	Links
+200	
+Short show summary
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "show_id": 0,
+  "name": "string",
+  "first_air_date": "2025-11-18",
+  "status": "string",
+  "tmdb_rating": 0,
+  "overview": "string"
+}
+No links
+400	
+Bad request - validation failed or invalid parameters
+
+Media type
+
+application/json
+Examples
+
+Invalid input format
+Example Value
+Schema
+{
+  "message": "Invalid format: missing or malformed fields",
+  "errors": [
+    {
+      "field": "name",
+      "message": "Name is required and must be a non-empty string"
+    },
+    {
+      "field": "id",
+      "message": "ID must be a positive integer"
+    },
+    {
+      "field": "first_air_date",
+      "message": "First air date must be a valid date"
+    },
+    {
+      "field": "tmdb_rating",
+      "message": "TMDB rating must be between 0 and 10"
+    }
+  ]
+}
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+404	
+Resource not found
+
+Media type
+
+application/json
+Examples
+
+Resource missing
+Example Value
+Schema
+{
+  "message": "Not Found - requested resource does not exist"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+Actors
+Actor information and filtering (require API key)
+
+
+
+GET
+/actors
+List actors
+
+
+Parameters
+Try it out
+Name	Description
+page
+integer
+(query)
+Default value : 1
+
+Example : 1
+
+1
+limit
+integer
+(query)
+Default value : 50
+
+Example : 50
+
+50
+name
+string
+(query)
+Filter by actor name
+
+name
+Responses
+Code	Description	Links
+200	
+Actors list
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "count": 0,
+  "page": 0,
+  "data": [
+    {
+      "actor_id": 0,
+      "name": "string",
+      "profile_url": "string"
+    }
+  ]
+}
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+
+GET
+/actors/{id}
+Get actor
+
+
+Parameters
+Try it out
+Name	Description
+id *
+integer
+(path)
+id
+Responses
+Code	Description	Links
+200	
+Actor profile
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "actor_id": 0,
+  "name": "string",
+  "profile_url": "string"
+}
+No links
+400	
+Bad request - validation failed or invalid parameters
+
+Media type
+
+application/json
+Examples
+
+Invalid input format
+Example Value
+Schema
+{
+  "message": "Invalid format: missing or malformed fields",
+  "errors": [
+    {
+      "field": "name",
+      "message": "Name is required and must be a non-empty string"
+    },
+    {
+      "field": "id",
+      "message": "ID must be a positive integer"
+    },
+    {
+      "field": "first_air_date",
+      "message": "First air date must be a valid date"
+    },
+    {
+      "field": "tmdb_rating",
+      "message": "TMDB rating must be between 0 and 10"
+    }
+  ]
+}
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+404	
+Resource not found
+
+Media type
+
+application/json
+Examples
+
+Resource missing
+Example Value
+Schema
+{
+  "message": "Not Found - requested resource does not exist"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+
+GET
+/actors/{id}/shows
+Shows by actor
+
+
+Parameters
+Try it out
+Name	Description
+id *
+integer
+(path)
+id
+Responses
+Code	Description	Links
+200	
+Shows featuring the actor
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "actor": "string",
+  "count": 0,
+  "shows": [
+    {}
+  ]
+}
+No links
+400	
+Bad request - validation failed or invalid parameters
+
+Media type
+
+application/json
+Examples
+
+Invalid input format
+Example Value
+Schema
+{
+  "message": "Invalid format: missing or malformed fields",
+  "errors": [
+    {
+      "field": "name",
+      "message": "Name is required and must be a non-empty string"
+    },
+    {
+      "field": "id",
+      "message": "ID must be a positive integer"
+    },
+    {
+      "field": "first_air_date",
+      "message": "First air date must be a valid date"
+    },
+    {
+      "field": "tmdb_rating",
+      "message": "TMDB rating must be between 0 and 10"
+    }
+  ]
+}
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+404	
+Resource not found
+
+Media type
+
+application/json
+Examples
+
+Resource missing
+Example Value
+Schema
+{
+  "message": "Not Found - requested resource does not exist"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+
+GET
+/actors/{id}/ratings
+Actor top-rated shows
+
+
+Parameters
+Try it out
+Name	Description
+id *
+integer
+(path)
+id
+count
+integer
+(query)
+count
+Responses
+Code	Description	Links
+200	
+Top rated shows by actor
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "actor": "string",
+  "count": 0,
+  "shows": [
+    {
+      "show_id": 0,
+      "name": "string",
+      "original_name": "string",
+      "first_air_date": "2025-11-18",
+      "status": "string",
+      "seasons": 0,
+      "episodes": 0,
+      "tmdb_rating": 0,
+      "popularity": 0,
+      "poster_url": "string"
+    }
+  ]
+}
+No links
+400	
+Bad request - validation failed or invalid parameters
+
+Media type
+
+application/json
+Examples
+
+Invalid input format
+Example Value
+Schema
+{
+  "message": "Invalid format: missing or malformed fields",
+  "errors": [
+    {
+      "field": "name",
+      "message": "Name is required and must be a non-empty string"
+    },
+    {
+      "field": "id",
+      "message": "ID must be a positive integer"
+    },
+    {
+      "field": "first_air_date",
+      "message": "First air date must be a valid date"
+    },
+    {
+      "field": "tmdb_rating",
+      "message": "TMDB rating must be between 0 and 10"
+    }
+  ]
+}
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+404	
+Resource not found
+
+Media type
+
+application/json
+Examples
+
+Resource missing
+Example Value
+Schema
+{
+  "message": "Not Found - requested resource does not exist"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+Genres
+Genre listing and metadata (require API key)
+
+
+
+GET
+/genres
+List genres
+
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Genres list
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "count": 0,
+  "data": [
+    {
+      "genre_id": 0,
+      "name": "string"
+    }
+  ]
+}
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+Statistics
+Aggregations and quick stats (require API key)
+
+
+
+GET
+/stats/genres
+Stats per genre
+
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Genre statistics
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+[
+  {
+    "id": 18,
+    "name": "Drama",
+    "show_count": 1250,
+    "avg_rating": 7.85,
+    "min_rating": 3.2,
+    "max_rating": 9.8
+  },
+  {
+    "id": 35,
+    "name": "Comedy",
+    "show_count": 980,
+    "avg_rating": 7.45,
+    "min_rating": 4.1,
+    "max_rating": 9.5
+  }
+]
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+
+GET
+/stats/networks
+Stats per network
+
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Network statistics
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+[
+  {
+    "name": "HBO",
+    "show_count": 145,
+    "avg_rating": 8.25,
+    "min_rating": 5.5,
+    "max_rating": 9.8
+  },
+  {
+    "name": "Netflix",
+    "show_count": 320,
+    "avg_rating": 7.65,
+    "min_rating": 4.2,
+    "max_rating": 9.3
+  }
+]
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+
+GET
+/stats/actors
+Stats per actor
+
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Actor statistics
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+[
+  {
+    "id": 7399,
+    "name": "Ben Mendelsohn",
+    "show_count": 12,
+    "avg_rating": 8.15,
+    "min_rating": 6.8,
+    "max_rating": 9.2
+  },
+  {
+    "id": 1223,
+    "name": "Bryan Cranston",
+    "show_count": 8,
+    "avg_rating": 8.75,
+    "min_rating": 7.5,
+    "max_rating": 9.5
+  }
+]
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+
+GET
+/stats/years
+Stats per year
+
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Year statistics
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+[
+  {
+    "year": 2024,
+    "show_count": 156,
+    "avg_rating": 7.65,
+    "min_rating": 4.5,
+    "max_rating": 9.1
+  },
+  {
+    "year": 2023,
+    "show_count": 234,
+    "avg_rating": 7.82,
+    "min_rating": 3.8,
+    "max_rating": 9.4
+  }
+]
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+
+GET
+/stats/countries
+Stats per country
+
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Country statistics
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+[
+  {
+    "country": "US",
+    "show_count": 3456,
+    "avg_rating": 7.55,
+    "min_rating": 2.1,
+    "max_rating": 9.8
+  },
+  {
+    "country": "GB",
+    "show_count": 892,
+    "avg_rating": 7.95,
+    "min_rating": 4.3,
+    "max_rating": 9.6
+  }
+]
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+
+GET
+/stats/status
+Stats per status
+
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Status statistics
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+[
+  {
+    "status": "Ended",
+    "show_count": 2145,
+    "avg_rating": 7.85,
+    "min_rating": 2.5,
+    "max_rating": 9.8
+  },
+  {
+    "status": "Returning Series",
+    "show_count": 1567,
+    "avg_rating": 7.65,
+    "min_rating": 3.2,
+    "max_rating": 9.5
+  }
+]
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+
+GET
+/stats/companies
+Stats per company
+
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Company statistics
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+[
+  {
+    "name": "Warner Bros. Television",
+    "show_count": 234,
+    "avg_rating": 7.92,
+    "min_rating": 4.5,
+    "max_rating": 9.6
+  },
+  {
+    "name": "Sony Pictures Television",
+    "show_count": 189,
+    "avg_rating": 7.68,
+    "min_rating": 5.1,
+    "max_rating": 9.3
+  }
+]
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+Admin
+Administrative endpoints (require API key)
+
+
+
+POST
+/admin/shows
+Create show (admin)
+
+
+Parameters
+Try it out
+No parameters
+
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "name": "Breaking Bad",
+  "original_name": "Breaking Bad",
+  "first_air_date": "2008-01-20",
+  "last_air_date": "2013-09-29",
+  "status": "Ended",
+  "overview": "A high school chemistry teacher turns to meth production.",
+  "seasons": 5,
+  "episodes": 62,
+  "tmdb_rating": 9.5,
+  "creators": [
+    "Vince Gilligan"
+  ],
+  "country": "US",
+  "poster_url": "https://image.tmdb.org/t/p/poster.jpg",
+  "backdrop_url": "https://image.tmdb.org/t/p/backdrop.jpg",
+  "companies": [
+    12,
+    34
+  ],
+  "networks": [
+    7
+  ],
+  "genres": [
+    1,
+    5
+  ]
+}
+Responses
+Code	Description	Links
+201	
+Show created successfully
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "show_id": 0,
+  "name": "string",
+  "original_name": "string",
+  "first_air_date": "2025-11-18",
+  "status": "string",
+  "seasons": 0,
+  "episodes": 0,
+  "tmdb_rating": 0,
+  "popularity": 0,
+  "poster_url": "string",
+  "last_air_date": "2025-11-18",
+  "overview": "string",
+  "vote_count": 0,
+  "backdrop_url": "string",
+  "genres": [
+    {
+      "genre_id": 0,
+      "name": "string"
+    }
+  ],
+  "creators": [
+    "string"
+  ],
+  "networks": [
+    {
+      "network_id": 0,
+      "name": "string",
+      "logo": "string",
+      "country": "string"
+    }
+  ],
+  "companies": [
+    {
+      "company_id": 0,
+      "name": "string"
+    }
+  ],
+  "actors": [
+    {
+      "actor_id": 0,
+      "name": "string",
+      "character": "string",
+      "profile_url": "string"
+    }
+  ]
+}
+No links
+400	
+Bad request - validation failed or invalid parameters
+
+Media type
+
+application/json
+Examples
+
+Invalid input format
+Example Value
+Schema
+{
+  "message": "Invalid format: missing or malformed fields",
+  "errors": [
+    {
+      "field": "name",
+      "message": "Name is required and must be a non-empty string"
+    },
+    {
+      "field": "id",
+      "message": "ID must be a positive integer"
+    },
+    {
+      "field": "first_air_date",
+      "message": "First air date must be a valid date"
+    },
+    {
+      "field": "tmdb_rating",
+      "message": "TMDB rating must be between 0 and 10"
+    }
+  ]
+}
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+
+PUT
+/admin/shows/{id}
+Update show (admin)
+
+
+Parameters
+Try it out
+Name	Description
+id *
+integer
+(path)
+id
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "name": "Breaking Bad (Updated)",
+  "seasons": 6
+}
+Responses
+Code	Description	Links
+200	
+Show updated successfully
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "show_id": 0,
+  "name": "string",
+  "original_name": "string",
+  "first_air_date": "2025-11-18",
+  "status": "string",
+  "seasons": 0,
+  "episodes": 0,
+  "tmdb_rating": 0,
+  "popularity": 0,
+  "poster_url": "string",
+  "last_air_date": "2025-11-18",
+  "overview": "string",
+  "vote_count": 0,
+  "backdrop_url": "string",
+  "genres": [
+    {
+      "genre_id": 0,
+      "name": "string"
+    }
+  ],
+  "creators": [
+    "string"
+  ],
+  "networks": [
+    {
+      "network_id": 0,
+      "name": "string",
+      "logo": "string",
+      "country": "string"
+    }
+  ],
+  "companies": [
+    {
+      "company_id": 0,
+      "name": "string"
+    }
+  ],
+  "actors": [
+    {
+      "actor_id": 0,
+      "name": "string",
+      "character": "string",
+      "profile_url": "string"
+    }
+  ]
+}
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+404	
+Resource not found
+
+Media type
+
+application/json
+Examples
+
+Resource missing
+Example Value
+Schema
+{
+  "message": "Not Found - requested resource does not exist"
+}
+No links
+
+DELETE
+/admin/shows/{id}
+Delete show (admin)
+
+
+Parameters
+Try it out
+Name	Description
+id *
+integer
+(path)
+id
+Responses
+Code	Description	Links
+204	
+Show deleted
+
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+403	
+Forbidden - authenticated but insufficient permissions
+
+Media type
+
+application/json
+Examples
+
+No permission
+Example Value
+Schema
+{
+  "message": "Forbidden - insufficient permissions"
+}
+No links
+404	
+Resource not found
+
+Media type
+
+application/json
+Examples
+
+Resource missing
+Example Value
+Schema
+{
+  "message": "Not Found - requested resource does not exist"
+}
+No links
+
+POST
+/admin/actors
+Create actor (admin)
+
+
+Parameters
+Try it out
+No parameters
+
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "name": "Bryan Cranston",
+  "profile_url": "https://image.tmdb.org/t/p/profile17.jpg"
+}
+Responses
+Code	Description	Links
+201	
+Actor created
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "actor_id": 0,
+  "name": "string",
+  "profile_url": "string"
+}
+No links
+400	
+Bad request - validation failed or invalid parameters
+
+Media type
+
+application/json
+Examples
+
+Invalid input format
+Example Value
+Schema
+{
+  "message": "Invalid format: missing or malformed fields",
+  "errors": [
+    {
+      "field": "name",
+      "message": "Name is required and must be a non-empty string"
+    },
+    {
+      "field": "id",
+      "message": "ID must be a positive integer"
+    },
+    {
+      "field": "first_air_date",
+      "message": "First air date must be a valid date"
+    },
+    {
+      "field": "tmdb_rating",
+      "message": "TMDB rating must be between 0 and 10"
+    }
+  ]
+}
+No links
+401	
+Unauthorized - missing or invalid API key or credentials
+
+Media type
+
+application/json
+Examples
+
+Missing API key
+Example Value
+Schema
+{
+  "message": "Unauthorized - missing or invalid API key"
+}
+No links
+Authentication
+API key generation
+
+
+
+POST
+/api-key
+Generate API key
+
+Parameters
+Try it out
+No parameters
+
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "name": "string",
+  "email": "user@example.com"
+}
+Responses
+Code	Description	Links
+201	
+API key generated
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "success": true,
+  "data": {
+    "api_key": "550e8400-e29b-41d4-a716-446655440000"
+  }
+}
+No links
+400	
+Bad request - validation failed or invalid parameters
+
+Media type
+
+application/json
+Examples
+
+Invalid input format
+Example Value
+Schema
+{
+  "message": "Invalid format: missing or malformed fields",
+  "errors": [
+    {
+      "field": "name",
+      "message": "Name is required and must be a non-empty string"
+    },
+    {
+      "field": "id",
+      "message": "ID must be a positive integer"
+    },
+    {
+      "field": "first_air_date",
+      "message": "First air date must be a valid date"
+    },
+    {
+      "field": "tmdb_rating",
+      "message": "TMDB rating must be between 0 and 10"
+    }
+  ]
+}
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+Documentation
+
+
+GET
+/api-docs
+Serve Swagger UI
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Swagger UI HTML page
+
+Media type
+
+text/html
+Controls Accept header.
+Example Value
+Schema
+string
+No links
+500	
+Internal server error
+
+Media type
+
+application/json
+Examples
+
+Server failure
+Example Value
+Schema
+{
+  "message": "Internal Server Error - unexpected error occurred"
+}
+No links
+
+Schemas
+ShowSummary
+ShowDetail
+ShowCreate
+ShowUpdate
+Actor
+AggregateResponse
+ErrorResponse
+ValidationErrorResponse

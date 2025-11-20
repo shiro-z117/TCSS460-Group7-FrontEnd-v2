@@ -1,0 +1,950 @@
+Movies API
+ 1.0.0 
+OAS 3.0
+API for movies from the last 30 years. Provides routes for listing, retrieving, creating, updating, deleting, and analyzing movies. Supports filtering, pagination, and statistics grouped by year, genre, or other dimensions.
+
+Servers
+
+https://dataset-web-api.onrender.com/api - Render (production)
+
+Authorize
+Movies
+
+
+GET
+/movies
+List movies with basic pagination
+
+Returns a paginated list of movies with basic filtering options. This endpoint supports simple pagination without advanced filters.
+
+Parameters
+Try it out
+Name	Description
+page
+integer
+(query)
+Page number
+
+Default value : 1
+
+1
+pageSize
+integer
+(query)
+Number of movies per page
+
+Default value : 25
+
+25
+Responses
+Code	Description	Links
+200	
+Successfully retrieved movies list
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "success": true,
+  "page": 1,
+  "pageSize": 25,
+  "data": [
+    {
+      "id": 101,
+      "title": "Inception",
+      "original_title": "Inception",
+      "release_date": "2010-07-16",
+      "runtime": 148,
+      "genres": [
+        "Science Fiction",
+        "Thriller"
+      ],
+      "overview": "string",
+      "budget": 160000000,
+      "revenue": 829895144,
+      "studios": [
+        "Warner Bros.",
+        "Legendary Pictures"
+      ],
+      "producers": [
+        "Emma Thomas",
+        "Christopher Nolan"
+      ],
+      "directors": [
+        "Christopher Nolan"
+      ],
+      "mpa_rating": "PG-13",
+      "collection": "The Dark Knight Collection",
+      "poster_url": "string",
+      "backdrop_url": "string",
+      "studio_logos": [
+        "string"
+      ],
+      "studio_countries": [
+        "string"
+      ],
+      "actors": [
+        {
+          "name": "string",
+          "character": "string",
+          "profile": "string"
+        }
+      ]
+    }
+  ],
+  "timestamp": "2025-11-18T22:36:12.337Z"
+}
+No links
+400	
+Invalid query parameters
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "success": false,
+  "message": "Movie not found",
+  "code": "MOVIE_NOT_FOUND",
+  "timestamp": "2025-11-18T22:36:12.341Z"
+}
+No links
+
+GET
+/movies/page
+Advanced paginated list with comprehensive filters
+
+Returns a paginated list of movies with advanced filtering capabilities. Supports filtering by year range, runtime, budget, revenue, genre, rating, title search, studios, producers, directors, collections, and actor names. All filters can be combined to narrow down search results.
+
+Parameters
+Try it out
+Name	Description
+page
+integer
+(query)
+Page number (starting from 1)
+
+Default value : 1
+
+1
+limit
+integer
+(query)
+Number of movies per page
+
+Default value : 25
+
+25
+yearStart
+integer
+(query)
+Minimum release year
+
+yearStart
+yearEnd
+integer
+(query)
+Maximum release year
+
+yearEnd
+year
+integer
+(query)
+Filter by specific release year
+
+year
+runtimeMin
+integer
+(query)
+Minimum runtime in minutes
+
+runtimeMin
+runtimeMax
+integer
+(query)
+Maximum runtime in minutes
+
+runtimeMax
+budgetMin
+integer
+(query)
+Minimum budget in USD
+
+budgetMin
+budgetMax
+integer
+(query)
+Maximum budget in USD
+
+budgetMax
+revenueMin
+integer
+(query)
+Minimum revenue in USD
+
+revenueMin
+revenueMax
+integer
+(query)
+Maximum revenue in USD
+
+revenueMax
+title
+string
+(query)
+Filter by partial movie title match (case-insensitive)
+
+title
+genre
+string
+(query)
+Filter by genre (exact match)
+
+genre
+mpaRating
+string
+(query)
+Filter by MPA rating (e.g., PG-13, R)
+
+mpaRating
+studios
+string
+(query)
+Filter by studio name (case-insensitive)
+
+studios
+producers
+string
+(query)
+Filter by producer name (case-insensitive)
+
+producers
+directors
+string
+(query)
+Filter by director name (case-insensitive)
+
+directors
+collection
+string
+(query)
+Filter by movie collection name
+
+collection
+posterUrl
+string
+(query)
+Filter by poster image URL or partial match
+
+posterUrl
+backdropUrl
+string
+(query)
+Filter by backdrop image URL or partial match
+
+backdropUrl
+studioLogos
+string
+(query)
+Filter by studio logo path or reference
+
+studioLogos
+studioCountries
+string
+(query)
+Filter by studio country name
+
+studioCountries
+actorNames
+string
+(query)
+Comma-separated actor names to filter by
+
+actorNames
+Responses
+Code	Description	Links
+200	
+Paginated movie results with applied filters
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "success": true,
+  "page": 1,
+  "limit": 25,
+  "offset": 0,
+  "data": [
+    {
+      "id": 101,
+      "title": "Inception",
+      "original_title": "Inception",
+      "release_date": "2010-07-16",
+      "runtime": 148,
+      "genres": [
+        "Science Fiction",
+        "Thriller"
+      ],
+      "overview": "string",
+      "budget": 160000000,
+      "revenue": 829895144,
+      "studios": [
+        "Warner Bros.",
+        "Legendary Pictures"
+      ],
+      "producers": [
+        "Emma Thomas",
+        "Christopher Nolan"
+      ],
+      "directors": [
+        "Christopher Nolan"
+      ],
+      "mpa_rating": "PG-13",
+      "collection": "The Dark Knight Collection",
+      "poster_url": "string",
+      "backdrop_url": "string",
+      "studio_logos": [
+        "string"
+      ],
+      "studio_countries": [
+        "string"
+      ],
+      "actors": [
+        {
+          "name": "string",
+          "character": "string",
+          "profile": "string"
+        }
+      ]
+    }
+  ]
+}
+No links
+400	
+Invalid query parameters
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "success": false,
+  "message": "Movie not found",
+  "code": "MOVIE_NOT_FOUND",
+  "timestamp": "2025-11-18T22:36:12.355Z"
+}
+No links
+
+GET
+/movies/random
+Get random movies
+
+Returns a random selection of 10 movies from the database.
+
+Parameters
+Try it out
+No parameters
+
+Responses
+Code	Description	Links
+200	
+Array of random movies
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "success": true,
+  "data": [
+    {
+      "id": 101,
+      "title": "Inception",
+      "original_title": "Inception",
+      "release_date": "2010-07-16",
+      "runtime": 148,
+      "genres": [
+        "Science Fiction",
+        "Thriller"
+      ],
+      "overview": "string",
+      "budget": 160000000,
+      "revenue": 829895144,
+      "studios": [
+        "Warner Bros.",
+        "Legendary Pictures"
+      ],
+      "producers": [
+        "Emma Thomas",
+        "Christopher Nolan"
+      ],
+      "directors": [
+        "Christopher Nolan"
+      ],
+      "mpa_rating": "PG-13",
+      "collection": "The Dark Knight Collection",
+      "poster_url": "string",
+      "backdrop_url": "string",
+      "studio_logos": [
+        "string"
+      ],
+      "studio_countries": [
+        "string"
+      ],
+      "actors": [
+        {
+          "name": "string",
+          "character": "string",
+          "profile": "string"
+        }
+      ]
+    }
+  ],
+  "timestamp": "2025-11-18T22:36:12.356Z"
+}
+No links
+500	
+Server error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "success": false,
+  "message": "Movie not found",
+  "code": "MOVIE_NOT_FOUND",
+  "timestamp": "2025-11-18T22:36:12.358Z"
+}
+No links
+
+GET
+/movies/stats
+Movie statistics
+
+Returns aggregated movie statistics grouped by the specified dimension. Supports both categorical groupings (genre, year, etc.) and numeric aggregations (runtime, budget, revenue).
+
+Parameters
+Try it out
+Name	Description
+by *
+string
+(query)
+Dimension to group statistics by
+
+Available values : genre, year, mpa_rating, producers, directors, studios, collection, runtime, budget, revenue
+
+
+genre
+Responses
+Code	Description	Links
+200	
+Statistics results
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "success": true,
+  "groupedBy": "genre",
+  "data": [
+    {
+      "key": "2010",
+      "count": 145
+    }
+  ],
+  "count": 24,
+  "timestamp": "2025-11-18T22:36:12.360Z"
+}
+No links
+400	
+Missing or invalid 'by' parameter
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "success": false,
+  "message": "Movie not found",
+  "code": "MOVIE_NOT_FOUND",
+  "timestamp": "2025-11-18T22:36:12.360Z"
+}
+No links
+
+GET
+/movies/getID/{id}
+Get movie details by ID
+
+Retrieve detailed information about a specific movie.
+
+Parameters
+Try it out
+Name	Description
+id *
+integer
+(path)
+Numeric movie ID
+
+id
+Responses
+Code	Description	Links
+200	
+Movie details
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "success": true,
+  "data": {
+    "id": 101,
+    "title": "Inception",
+    "original_title": "Inception",
+    "release_date": "2010-07-16",
+    "runtime": 148,
+    "genres": [
+      "Science Fiction",
+      "Thriller"
+    ],
+    "overview": "string",
+    "budget": 160000000,
+    "revenue": 829895144,
+    "studios": [
+      "Warner Bros.",
+      "Legendary Pictures"
+    ],
+    "producers": [
+      "Emma Thomas",
+      "Christopher Nolan"
+    ],
+    "directors": [
+      "Christopher Nolan"
+    ],
+    "mpa_rating": "PG-13",
+    "collection": "The Dark Knight Collection",
+    "poster_url": "string",
+    "backdrop_url": "string",
+    "studio_logos": [
+      "string"
+    ],
+    "studio_countries": [
+      "string"
+    ],
+    "actors": [
+      {
+        "name": "string",
+        "character": "string",
+        "profile": "string"
+      }
+    ]
+  },
+  "timestamp": "2025-11-18T22:36:12.362Z"
+}
+No links
+404	
+Movie not found
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "success": false,
+  "message": "Movie not found",
+  "code": "MOVIE_NOT_FOUND",
+  "timestamp": "2025-11-18T22:36:12.366Z"
+}
+No links
+
+POST
+/movies/post
+Create a new movie
+
+
+Create a new movie record in the database. Requires API key authentication. Only the title field is required; all other fields are optional.
+
+Parameters
+Try it out
+No parameters
+
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "title": "The Quantum Paradox",
+  "release_date": "2024-06-15",
+  "runtime": 135,
+  "genres": "Science Fiction; Thriller",
+  "overview": "A physicist discovers a portal to parallel universes...",
+  "budget": 75000000,
+  "mpa_rating": "PG-13",
+  "directors": "Jane Director",
+  "studios": "Quantum Pictures",
+  "actor1_name": "John Actor",
+  "actor1_character": "Dr. Smith"
+}
+Responses
+Code	Description	Links
+201	
+Movie created successfully
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "success": true,
+  "message": "Movie created successfully",
+  "data": {
+    "id": 101,
+    "title": "Inception",
+    "original_title": "Inception",
+    "release_date": "2010-07-16",
+    "runtime": 148,
+    "genres": [
+      "Science Fiction",
+      "Thriller"
+    ],
+    "overview": "string",
+    "budget": 160000000,
+    "revenue": 829895144,
+    "studios": [
+      "Warner Bros.",
+      "Legendary Pictures"
+    ],
+    "producers": [
+      "Emma Thomas",
+      "Christopher Nolan"
+    ],
+    "directors": [
+      "Christopher Nolan"
+    ],
+    "mpa_rating": "PG-13",
+    "collection": "The Dark Knight Collection",
+    "poster_url": "string",
+    "backdrop_url": "string",
+    "studio_logos": [
+      "string"
+    ],
+    "studio_countries": [
+      "string"
+    ],
+    "actors": [
+      {
+        "name": "string",
+        "character": "string",
+        "profile": "string"
+      }
+    ]
+  },
+  "timestamp": "2025-11-18T22:36:12.368Z"
+}
+No links
+400	
+Validation error
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "success": false,
+  "message": "Movie not found",
+  "code": "MOVIE_NOT_FOUND",
+  "timestamp": "2025-11-18T22:36:12.371Z"
+}
+No links
+401	
+Unauthorized - missing or invalid API key
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "success": false,
+  "message": "Movie not found",
+  "code": "MOVIE_NOT_FOUND",
+  "timestamp": "2025-11-18T22:36:12.371Z"
+}
+No links
+
+PATCH
+/movies/patchID/{id}
+Partially update a movie
+
+
+Update specific fields of an existing movie. Only provided fields will be updated. Requires API key authentication.
+
+Parameters
+Try it out
+Name	Description
+id *
+integer
+(path)
+Movie ID to update
+
+id
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "revenue": 185000000,
+  "mpa_rating": "R",
+  "overview": "Updated description with more details..."
+}
+Responses
+Code	Description	Links
+200	
+Movie updated successfully
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "success": true,
+  "message": "Movie partially updated successfully",
+  "data": {
+    "id": 101,
+    "title": "Inception",
+    "original_title": "Inception",
+    "release_date": "2010-07-16",
+    "runtime": 148,
+    "genres": [
+      "Science Fiction",
+      "Thriller"
+    ],
+    "overview": "string",
+    "budget": 160000000,
+    "revenue": 829895144,
+    "studios": [
+      "Warner Bros.",
+      "Legendary Pictures"
+    ],
+    "producers": [
+      "Emma Thomas",
+      "Christopher Nolan"
+    ],
+    "directors": [
+      "Christopher Nolan"
+    ],
+    "mpa_rating": "PG-13",
+    "collection": "The Dark Knight Collection",
+    "poster_url": "string",
+    "backdrop_url": "string",
+    "studio_logos": [
+      "string"
+    ],
+    "studio_countries": [
+      "string"
+    ],
+    "actors": [
+      {
+        "name": "string",
+        "character": "string",
+        "profile": "string"
+      }
+    ]
+  },
+  "timestamp": "2025-11-18T22:36:12.373Z"
+}
+No links
+400	
+Validation error or no fields provided
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "success": false,
+  "message": "Movie not found",
+  "code": "MOVIE_NOT_FOUND",
+  "timestamp": "2025-11-18T22:36:12.375Z"
+}
+No links
+401	
+Unauthorized - missing or invalid API key
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "success": false,
+  "message": "Movie not found",
+  "code": "MOVIE_NOT_FOUND",
+  "timestamp": "2025-11-18T22:36:12.376Z"
+}
+No links
+404	
+Movie not found
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "success": false,
+  "message": "Movie not found",
+  "code": "MOVIE_NOT_FOUND",
+  "timestamp": "2025-11-18T22:36:12.376Z"
+}
+No links
+
+DELETE
+/movies/deleteID/{id}
+Delete a movie
+
+
+Remove a movie from the database by ID. Requires API key authentication.
+
+Parameters
+Try it out
+Name	Description
+id *
+integer
+(path)
+Movie ID to delete
+
+id
+Responses
+Code	Description	Links
+200	
+Movie deleted successfully
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "success": true,
+  "message": "Movie with ID 5001 deleted successfully",
+  "timestamp": "2025-11-18T22:36:12.378Z"
+}
+No links
+401	
+Unauthorized - missing or invalid API key
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "success": false,
+  "message": "Movie not found",
+  "code": "MOVIE_NOT_FOUND",
+  "timestamp": "2025-11-18T22:36:12.378Z"
+}
+No links
+404	
+Movie not found
+
+Media type
+
+application/json
+Example Value
+Schema
+{
+  "success": false,
+  "message": "Movie not found",
+  "code": "MOVIE_NOT_FOUND",
+  "timestamp": "2025-11-18T22:36:12.379Z"
+}
+No links
+
+Schemas
+MovieInput{
+description:	
+Input payload for creating/updating a movie. Same as Movie without movie_id.
+
+title*	[...]
+original_title	[...]
+release_date	[...]
+runtime	[...]
+genres	[...]
+overview	[...]
+budget	[...]
+revenue	[...]
+mpa_rating	[...]
+collection	[...]
+poster_url	[...]
+backdrop_url	[...]
+producers	[...]
+directors	[...]
+studios	[...]
+studio_logos	[...]
+studio_countries	[...]
+actor1_name	[...]
+actor1_character	[...]
+actor1_profile	[...]
+actor2_name	[...]
+actor2_character	[...]
+actor2_profile	[...]
+actor3_name	[...]
+actor3_character	[...]
+actor3_profile	[...]
+actor4_name	[...]
+actor4_character	[...]
+actor4_profile	[...]
+actor5_name	[...]
+actor5_character	[...]
+actor5_profile	[...]
+actor6_name	[...]
+actor6_character	[...]
+actor6_profile	[...]
+actor7_name	[...]
+actor7_character	[...]
+actor7_profile	[...]
+actor8_name	[...]
+actor8_character	[...]
+actor8_profile	[...]
+actor9_name	[...]
+actor9_character	[...]
+actor9_profile	[...]
+actor10_name	[...]
+actor10_character	[...]
+actor10_profile	[...]
+}
+Movie
+PagedMovies
+StatBucket
+NumericStats
+Error
