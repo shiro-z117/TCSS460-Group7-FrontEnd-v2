@@ -12,7 +12,7 @@ export default function DashboardPage() {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-900 via-indigo-900 to-gray-900">
       <Sidebar />
-      
+
       <main className="ml-64 flex-1 p-8">
         <div className="mb-12">
           <h1 className="text-6xl font-bold text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500">
@@ -24,7 +24,7 @@ export default function DashboardPage() {
         <div className="mb-12">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-white">Featured Movies</h2>
-            <Link 
+            <Link
               href="/dashboard/movies"
               className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-all flex items-center gap-2"
             >
@@ -32,7 +32,7 @@ export default function DashboardPage() {
               <span className="text-xl">→</span>
             </Link>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredMovies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} type="movie" />
@@ -43,7 +43,7 @@ export default function DashboardPage() {
         <div className="mb-12">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-white">Featured TV Shows</h2>
-            <Link 
+            <Link
               href="/dashboard/shows"
               className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all flex items-center gap-2"
             >
@@ -51,7 +51,7 @@ export default function DashboardPage() {
               <span className="text-xl">→</span>
             </Link>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredShows.map((show) => (
               <MovieCard key={show.id} movie={show} type="show" />
