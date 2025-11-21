@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { movieApi, MovieFilters } from 'services/movieApi';
 import SearchBar from 'components/search/SearchBar';
 import MovieFilterPanel from 'components/search/MovieFilterPanel';
@@ -14,24 +14,44 @@ export default function MovieSearchPage() {
   });
   const [movies, setMovies] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
   const [hasMorePages, setHasMorePages] = useState(true);
 
-  // Initial load - fetch all movies when component mounts
-  useEffect(() => {
-    handleSearch();
+  const handleSearchChange = useCallback((query: string) => {
+    setSearchQuery(query);
+    setFilters((prev) => ({ ...prev, page: 1 }));
   }, []);
 
-  // Auto-fetch when page changes (for pagination)
+  // Fetch movies whenever searchQuery, page, or limit change
   useEffect(() => {
-    if (hasSearched) {
-      handleSearch();
-    }
-  }, [filters.page]);
+    const fetchMovies = async () => {
+      setLoading(true);
+      try {
+        const searchFilters: MovieFilters = {
+          ...filters,
+          title: searchQuery || undefined
+        };
+
+        const response = await movieApi.getAllFiltered(searchFilters);
+        const results = response.data.data || [];
+        setMovies(results);
+
+        // Detect if there are more pages:
+        // If we got fewer results than the limit, we're on the last page
+        setHasMorePages(results.length === filters.limit);
+      } catch (error) {
+        console.error('Search error:', error);
+        setMovies([]);
+        setHasMorePages(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMovies();
+  }, [searchQuery, filters.page, filters.limit]);
 
   const handleSearch = async () => {
     setLoading(true);
-    setHasSearched(true);
     try {
       const searchFilters: MovieFilters = {
         ...filters,
@@ -76,7 +96,7 @@ export default function MovieSearchPage() {
         <div className="max-w-7xl mx-auto px-8 py-6">
           <SearchBar
             searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
+            onSearchChange={handleSearchChange}
             onSearch={handleSearch}
             loading={loading}
             title="Movie Search"

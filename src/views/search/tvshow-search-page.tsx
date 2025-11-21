@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { showsApi, ShowsFilters } from 'services/showsApi';
 import SearchBar from 'components/search/SearchBar';
 import ShowsFilterPanel from 'components/search/ShowsFilterPanel';
@@ -14,24 +14,44 @@ export default function TVShowSearchPage() {
   });
   const [shows, setShows] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
   const [hasMorePages, setHasMorePages] = useState(true);
 
-  // Initial load - fetch all shows when component mounts
-  useEffect(() => {
-    handleSearch();
+  const handleSearchChange = useCallback((query: string) => {
+    setSearchQuery(query);
+    setFilters((prev) => ({ ...prev, page: 1 }));
   }, []);
 
-  // Auto-fetch when page changes (for pagination)
+  // Fetch shows whenever searchQuery, page, or limit change
   useEffect(() => {
-    if (hasSearched) {
-      handleSearch();
-    }
-  }, [filters.page]);
+    const fetchShows = async () => {
+      setLoading(true);
+      try {
+        const searchFilters: ShowsFilters = {
+          ...filters,
+          name: searchQuery || undefined
+        };
+
+        const response = await showsApi.getAllFiltered(searchFilters);
+        const results = response.data.data || [];
+        setShows(results);
+
+        // Detect if there are more pages:
+        // If we got fewer results than the limit, we're on the last page
+        setHasMorePages(results.length === filters.limit);
+      } catch (error) {
+        console.error('Search error:', error);
+        setShows([]);
+        setHasMorePages(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchShows();
+  }, [searchQuery, filters.page, filters.limit]);
 
   const handleSearch = async () => {
     setLoading(true);
-    setHasSearched(true);
     try {
       const searchFilters: ShowsFilters = {
         ...filters,
@@ -76,7 +96,7 @@ export default function TVShowSearchPage() {
         <div className="max-w-7xl mx-auto px-8 py-6">
           <SearchBar
             searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
+            onSearchChange={handleSearchChange}
             onSearch={handleSearch}
             loading={loading}
             title="TV Show Search"

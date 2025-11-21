@@ -34,7 +34,6 @@ export default function SearchBar({
           onKeyPress={handleKeyPress}
           placeholder={placeholder}
           className="flex-1 px-6 py-3 bg-gray-800/50 backdrop-blur border border-purple-500/30 rounded-xl text-white placeholder-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all"
-          disabled={loading}
         />
         <button
           onClick={onSearch}
