@@ -38,7 +38,7 @@ const nextConfig = {
     SHOWS_WEB_API_URL: 'https://g1-tvapi.onrender.com/',
     SHOWS_WEB_API_KEY: process.env.SHOWS_WEB_API_KEY,
 
-    MOVIES_WEB_API_URL: 'https://dataset-web-api.onrender.com/api',
+    MOVIES_WEB_API_URL: process.env.MOVIES_WEB_API_URL || 'https://dataset-web-api.onrender.com/api',
     MOVIES_WEB_API_KEY: process.env.MOVIES_WEB_API_KEY,
 
     MESSAGES_WEB_API_URL: process.env.MESSAGES_WEB_API_URL,
