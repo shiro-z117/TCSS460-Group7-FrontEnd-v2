@@ -21,14 +21,14 @@ export default function MoviesPage() {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <Sidebar />
-      
+
       <main className="ml-64 flex-1 p-8">
         <div className="mb-8">
-          <h1 className="text-5xl font-bold text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+          <h1 className="text-6xl font-bold text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
             Movies
           </h1>
-          <p className="text-gray-400 mb-6">Browse {mockMovies.length} movies</p>
-          
+          <p className="text-xl text-gray-400 mb-6">Browse {mockMovies.length} movies</p>
+
           <input
             type="text"
             value={searchQuery}
@@ -51,21 +51,19 @@ export default function MoviesPage() {
         {totalPages > 1 && (
           <div className="flex justify-center items-center gap-2 mt-12">
             <button
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
               className="px-4 py-2 text-purple-400 hover:text-purple-300 disabled:text-gray-600 disabled:cursor-not-allowed"
             >
               &lt;
             </button>
-            
+
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
               <button
                 key={pageNum}
                 onClick={() => setCurrentPage(pageNum)}
                 className={`w-10 h-10 rounded ${
-                  currentPage === pageNum
-                    ? 'bg-purple-600 text-white font-bold'
-                    : 'text-gray-400 hover:bg-gray-800'
+                  currentPage === pageNum ? 'bg-purple-600 text-white font-bold' : 'text-gray-400 hover:bg-gray-800'
                 }`}
               >
                 {pageNum}
@@ -73,7 +71,7 @@ export default function MoviesPage() {
             ))}
 
             <button
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
               className="px-4 py-2 text-purple-400 hover:text-purple-300 disabled:text-gray-600 disabled:cursor-not-allowed"
             >

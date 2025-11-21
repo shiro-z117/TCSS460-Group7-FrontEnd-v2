@@ -15,10 +15,10 @@ export default function DashboardPage() {
       
       <main className="ml-64 flex-1 p-8">
         <div className="mb-12">
-          <h1 className="text-6xl font-bold text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500">
+          <h1 className="text-7xl font-bold text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500">
             Welcome to PIBBLE
           </h1>
-          <p className="text-gray-400 text-xl">Discover your favorite movies and TV shows</p>
+          <p className="text-gray-400 text-2xl">Discover your favorite movies and TV shows</p>
         </div>
 
         <div className="mb-12">
