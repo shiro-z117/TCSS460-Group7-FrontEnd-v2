@@ -49,6 +49,11 @@ Credentials: https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 ### Linda Miao
 
 ### Shiannel
+- Created single page movie and show detail pages (/dashboard/movies/[id]) and (/dashboard/shows/[id])
+- Implemented the delete UI button with confirmation messages
+- Reorganised and structured code to follow the template patterns (views and page.tsx separation)
+- Added placeholder cast section for future API integration
+- Fixed/remade credentials api
 
 ### Bao
 - Finished UI for login, forgot password pages
@@ -67,6 +72,8 @@ Credentials: https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 ### Linda Miao
 
 ### Shiannel
+- Navigating through the whole template code was a lot, but we managed
+- Making sure my code worked and figuring out the overall layout and aesthetics of the webpage was a struggle 
 
 ### Bao
 - I found that I should use npm run start instead of npm run dev for the local deployment
