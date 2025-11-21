@@ -10,9 +10,7 @@ export default function ShowsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
-  const filteredShows = mockTVShows.filter(show =>
-    show.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredShows = mockTVShows.filter((show) => show.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const totalPages = Math.ceil(filteredShows.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -21,7 +19,7 @@ export default function ShowsPage() {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900">
       <Sidebar />
-      
+
       <main className="ml-64 flex-1 p-8">
         {/* Header */}
         <div className="mb-8">
@@ -29,7 +27,7 @@ export default function ShowsPage() {
             TV Shows
           </h1>
           <p className="text-gray-400 mb-6">Browse {mockTVShows.length} TV shows</p>
-          
+
           <input
             type="text"
             value={searchQuery}
