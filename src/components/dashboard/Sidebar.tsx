@@ -7,7 +7,7 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: '🏠' },
   { name: 'Movies', href: '/dashboard/movies', icon: '🎬' },
   { name: 'TV Shows', href: '/dashboard/shows', icon: '📺' },
-  { name: 'Profile', href: '/dashboard/profile/change-password', icon: '👤' },
+  { name: 'Profile', href: '/dashboard/profile', icon: '👤' },
 ];
 
 export default function Sidebar() {
