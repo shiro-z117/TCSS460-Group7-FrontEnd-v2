@@ -36,7 +36,7 @@ export default function PromotionalCarousel() {
 
   if (loading) {
     return (
-      <div className="w-full h-96 bg-gradient-to-r from-purple-900/20 to-blue-900/20 rounded-xl animate-pulse" />
+      <div className="w-full h-[500px] bg-gradient-to-r from-purple-900/20 to-blue-900/20 rounded-xl animate-pulse" />
     );
   }
 
@@ -49,7 +49,7 @@ export default function PromotionalCarousel() {
   const backdropUrl = getImageUrl(currentItem.backdrop_path, 'original');
 
   return (
-    <div className="relative w-full h-96 rounded-xl overflow-hidden mb-12 group">
+    <div className="relative w-full h-[500px] rounded-xl overflow-hidden mb-12 group">
       {/* Background Image with Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center transition-all duration-700"

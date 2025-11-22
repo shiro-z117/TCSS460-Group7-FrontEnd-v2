@@ -1,7 +1,8 @@
 import { TMDBMovie, TMDBTVShow, TMDBResponse, TrendingItem, Genre } from '@/types/media';
 
 // TMDB API Configuration
-const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || '';
+// Fallback API key if environment variable is not set
+const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || 'c7568553c770a72bae4439feb7bfd5f0';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
 
