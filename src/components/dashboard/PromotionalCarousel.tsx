@@ -1,22 +1,50 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getTrending, getImageUrl } from '@/lib/api/tmdb';
-import { TrendingItem } from '@/types/media';
+import { movieApi } from '@/services/movieApi';
+
+interface Movie {
+  id: number;
+  title: string;
+  overview: string;
+  backdrop_url?: string;
+  poster_url?: string;
+  vote_average?: number;
+  release_date?: string;
+}
+
+// Image base URL for poster/backdrop images stored in the database
+const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
 export default function PromotionalCarousel() {
-  const [items, setItems] = useState<TrendingItem[]>([]);
+  const [items, setItems] = useState<Movie[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // Fetch trending items on mount
+  // Fetch random movies on mount
   useEffect(() => {
-    async function fetchTrending() {
-      const trendingItems = await getTrending('all', 'week');
-      setItems(trendingItems.slice(0, 5)); // Only show 5 items
-      setLoading(false);
+    async function fetchMovies() {
+      try {
+        const response = await movieApi.getRandom();
+        const moviesData = response.data?.data || [];
+        if (moviesData.length > 0) {
+          setItems(moviesData.slice(0, 5)); // Only show 5 items
+        }
+      } catch (error: any) {
+        console.error('Error fetching promotional movies:', error?.message || error);
+        // If error, try to get regular movies instead
+        try {
+          const fallbackResponse = await movieApi.getAllFiltered({ page: 1, limit: 5 });
+          const fallbackData = fallbackResponse.data?.data || [];
+          setItems(fallbackData);
+        } catch (fallbackError) {
+          console.error('Fallback also failed:', fallbackError);
+        }
+      } finally {
+        setLoading(false);
+      }
     }
-    fetchTrending();
+    fetchMovies();
   }, []);
 
   // Auto-rotate carousel every 5 seconds
@@ -45,8 +73,13 @@ export default function PromotionalCarousel() {
   }
 
   const currentItem = items[currentIndex];
-  const title = currentItem.title || currentItem.name || 'Unknown';
-  const backdropUrl = getImageUrl(currentItem.backdrop_path, 'original');
+  const title = currentItem.title || 'Unknown';
+
+  // Fix relative image paths by adding the base URL
+  const rawBackdrop = currentItem.backdrop_url || currentItem.poster_url;
+  const backdropUrl = rawBackdrop
+    ? (rawBackdrop.startsWith('http') ? rawBackdrop : `${IMAGE_BASE_URL}${rawBackdrop}`)
+    : '/placeholder.jpg';
 
   return (
     <div className="relative w-full h-[500px] rounded-xl overflow-hidden mb-12 group">
@@ -62,7 +95,7 @@ export default function PromotionalCarousel() {
       <div className="relative h-full flex items-center px-12">
         <div className="max-w-2xl">
           <div className="inline-block px-4 py-1 bg-purple-600 rounded-full text-sm font-semibold mb-4">
-            {currentItem.media_type === 'movie' ? '🎬 TRENDING MOVIE' : '📺 TRENDING TV SHOW'}
+            🎬 FEATURED MOVIE
           </div>
 
           <h2 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">
@@ -70,15 +103,15 @@ export default function PromotionalCarousel() {
           </h2>
 
           <p className="text-gray-200 text-lg mb-6 line-clamp-3 drop-shadow-md">
-            {currentItem.overview}
+            {currentItem.overview || 'No description available.'}
           </p>
 
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-2 text-yellow-400 font-semibold">
-              ⭐ {currentItem.vote_average.toFixed(1)}
+              ⭐ {currentItem.vote_average?.toFixed(1) || 'N/A'}
             </span>
             <span className="text-gray-300">
-              {currentItem.release_date || currentItem.first_air_date}
+              {currentItem.release_date || 'Release date unknown'}
             </span>
           </div>
         </div>

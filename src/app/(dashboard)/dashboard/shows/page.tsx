@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import MovieCard from '@/components/dashboard/MovieCard';
-import { getPopularTVShows, searchTVShows, getImageUrl } from '@/lib/api/tmdb';
-import { TMDBTVShow } from '@/types/media';
+import { showsApi } from '@/services/showsApi';
 
 interface TVShow {
   id: number;
@@ -16,6 +15,9 @@ interface TVShow {
   genres: string[];
 }
 
+// Image base URL for poster images stored in the database
+const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+
 export default function ShowsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,8 +25,9 @@ export default function ShowsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const itemsPerPage = 12;
 
-  // Fetch TV shows from TMDB API
+  // Fetch TV shows from backend API
   useEffect(() => {
     const fetchShows = async () => {
       setIsLoading(true);
@@ -32,27 +35,35 @@ export default function ShowsPage() {
         let response;
 
         if (searchQuery.trim()) {
-          response = await searchTVShows(searchQuery, currentPage);
+          response = await showsApi.getAllFiltered({
+            page: currentPage,
+            limit: itemsPerPage,
+            name: searchQuery,
+          });
         } else {
-          response = await getPopularTVShows(currentPage);
+          response = await showsApi.getAll(currentPage, itemsPerPage);
         }
 
-        // Transform TMDB response to match MovieCard expected structure
-        const transformedShows: TVShow[] = response.results.map((show: TMDBTVShow) => ({
-          id: show.id,
+        // Transform API response to match MovieCard expected structure
+        // TV Shows API returns { count, page, limit, data }
+        const showsData = response.data?.data || [];
+        const transformedShows = showsData.map((show: any) => ({
+          id: show.show_id || show.id,
           name: show.name || 'Untitled',
           description: show.overview || '',
-          poster_url: getImageUrl(show.poster_path, 'w500'),
+          poster_url: show.poster_url, // TV Shows API returns full URLs
           first_air_date: show.first_air_date || '',
-          rating: show.vote_average || 0,
-          genres: [], // Genre IDs would need to be mapped to names
+          rating: show.tmdb_rating || 0,
+          genres: Array.isArray(show.genres) ? show.genres : [],
         }));
 
         setShows(transformedShows);
-        setTotalPages(Math.min(response.total_pages, 500)); // TMDB limits to 500 pages
-        setTotalResults(response.total_results);
+        // Use the 'count' field from the API response for total
+        const total = response.data?.count || showsData.length;
+        setTotalPages(Math.ceil(total / itemsPerPage));
+        setTotalResults(total);
       } catch (error) {
-        console.error('Error fetching TV shows from TMDB:', error);
+        console.error('Error fetching TV shows:', error);
         setShows([]);
       } finally {
         setIsLoading(false);
@@ -78,7 +89,7 @@ export default function ShowsPage() {
             TV Shows
           </h1>
           <p className="text-gray-400 mb-6">
-            {isLoading ? 'Loading...' : `Browse ${totalResults.toLocaleString()} TV shows from TMDB`}
+            {isLoading ? 'Loading...' : `Browse ${totalResults.toLocaleString()} TV shows`}
           </p>
 
           <input

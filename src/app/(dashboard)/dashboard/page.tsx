@@ -6,8 +6,8 @@ import Sidebar from '@/components/dashboard/Sidebar';
 import MovieCard from '@/components/dashboard/MovieCard';
 import MetricsGrid from '@/components/dashboard/MetricsGrid';
 import PromotionalCarousel from '@/components/dashboard/PromotionalCarousel';
-import { getPopularMovies, getPopularTVShows, getImageUrl } from '@/lib/api/tmdb';
-import { TMDBMovie, TMDBTVShow } from '@/types/media';
+import { movieApi } from '@/services/movieApi';
+import { showsApi } from '@/services/showsApi';
 
 interface Movie {
   id: number;
@@ -29,6 +29,9 @@ interface TVShow {
   genres: string[];
 }
 
+// Image base URL for poster images stored in the database
+const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+
 export default function DashboardPage() {
   const [featuredMovies, setFeaturedMovies] = useState<Movie[]>([]);
   const [featuredShows, setFeaturedShows] = useState<TVShow[]>([]);
@@ -39,37 +42,65 @@ export default function DashboardPage() {
   useEffect(() => {
     async function fetchDashboardData() {
       try {
-        const [moviesResponse, showsResponse] = await Promise.all([
-          getPopularMovies(1),
-          getPopularTVShows(1)
-        ]);
+        // Fetch movies with error handling
+        let transformedMovies: Movie[] = [];
+        let totalMoviesCount = 0;
 
-        // Transform movies data
-        const transformedMovies: Movie[] = moviesResponse.results.slice(0, 4).map((movie: TMDBMovie) => ({
-          id: movie.id,
-          title: movie.title || 'Untitled',
-          description: movie.overview || '',
-          poster_url: getImageUrl(movie.poster_path, 'w500'),
-          release_date: movie.release_date || '',
-          rating: movie.vote_average || 0,
-          genres: []
-        }));
+        try {
+          // Fetch featured movies
+          const moviesResponse = await movieApi.getAllFiltered({ page: 1, limit: 4 });
+          const moviesData = moviesResponse.data?.data || [];
+          transformedMovies = moviesData.slice(0, 4).map((movie: any) => ({
+            id: movie.id,
+            title: movie.title || 'Untitled',
+            description: movie.overview || '',
+            poster_url: movie.poster_url ? (movie.poster_url.startsWith('http') ? movie.poster_url : `${IMAGE_BASE_URL}${movie.poster_url}`) : undefined,
+            release_date: movie.release_date || '',
+            rating: 0, // Group 8 API doesn't provide ratings
+            genres: Array.isArray(movie.genres) ? movie.genres : []
+          }));
 
-        // Transform TV shows data
-        const transformedShows: TVShow[] = showsResponse.results.slice(0, 4).map((show: TMDBTVShow) => ({
-          id: show.id,
-          name: show.name || 'Untitled',
-          description: show.overview || '',
-          poster_url: getImageUrl(show.poster_path, 'w500'),
-          first_air_date: show.first_air_date || '',
-          rating: show.vote_average || 0,
-          genres: []
-        }));
+          // Get total count from stats API
+          try {
+            const statsResponse = await movieApi.getStats('year');
+            if (statsResponse.data?.data) {
+              totalMoviesCount = statsResponse.data.data.reduce((sum: number, item: any) => sum + (item.count || 0), 0);
+            }
+          } catch (statsErr) {
+            console.warn('Could not fetch movie stats:', statsErr);
+            totalMoviesCount = moviesData.length;
+          }
+        } catch (err) {
+          console.error('Error fetching movies:', err);
+        }
+
+        // Fetch TV shows with error handling
+        let transformedShows: TVShow[] = [];
+        let totalShowsCount = 0;
+
+        try {
+          const showsResponse = await showsApi.getAll(1, 4);
+          // TV Shows API returns { count, page, limit, data }
+          const showsData = showsResponse.data?.data || [];
+          transformedShows = showsData.slice(0, 4).map((show: any) => ({
+            id: show.show_id || show.id,
+            name: show.name || 'Untitled',
+            description: show.overview || '',
+            poster_url: show.poster_url, // TV Shows API returns full URLs
+            first_air_date: show.first_air_date || '',
+            rating: show.tmdb_rating || 0,
+            genres: Array.isArray(show.genres) ? show.genres : []
+          }));
+          // Use the 'count' field from the API response
+          totalShowsCount = showsResponse.data?.count || showsData.length;
+        } catch (err) {
+          console.error('Error fetching shows:', err);
+        }
 
         setFeaturedMovies(transformedMovies);
         setFeaturedShows(transformedShows);
-        setTotalMovies(moviesResponse.total_results);
-        setTotalShows(showsResponse.total_results);
+        setTotalMovies(totalMoviesCount);
+        setTotalShows(totalShowsCount);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       } finally {
@@ -115,10 +146,7 @@ export default function DashboardPage() {
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[1, 2, 3, 4].map((i) => (
-                <div
-                  key={i}
-                  className="bg-gray-800/50 rounded-xl h-96 animate-pulse"
-                ></div>
+                <div key={i} className="bg-gray-800/50 rounded-xl h-96 animate-pulse"></div>
               ))}
             </div>
           ) : (
@@ -146,10 +174,7 @@ export default function DashboardPage() {
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[1, 2, 3, 4].map((i) => (
-                <div
-                  key={i}
-                  className="bg-gray-800/50 rounded-xl h-96 animate-pulse"
-                ></div>
+                <div key={i} className="bg-gray-800/50 rounded-xl h-96 animate-pulse"></div>
               ))}
             </div>
           ) : (

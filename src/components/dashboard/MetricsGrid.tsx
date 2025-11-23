@@ -1,14 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import {
-  getPopularMovies,
-  getPopularTVShows,
-  getTrending,
-  getTopRatedMovies,
-  getTopRatedTVShows,
-  getNowPlayingMovies
-} from '@/lib/api/tmdb';
+import { movieApi } from '@/services/movieApi';
+import { showsApi } from '@/services/showsApi';
 
 interface Metric {
   id: number;
@@ -27,67 +21,93 @@ export default function MetricsGrid() {
   useEffect(() => {
     async function fetchMetrics() {
       try {
-        const [
-          popularMovies,
-          popularShows,
-          trending,
-          topRatedMovies,
-          topRatedShows,
-          nowPlaying
-        ] = await Promise.all([
-          getPopularMovies(1),
-          getPopularTVShows(1),
-          getTrending('all', 'week'),
-          getTopRatedMovies(1),
-          getTopRatedTVShows(1),
-          getNowPlayingMovies(1)
-        ]);
+        // Fetch movies data with error handling
+        let totalMovies = 0;
+        let randomMoviesCount = 0;
+
+        // Get total movies count from stats API (paginated API doesn't return total)
+        try {
+          const statsResponse = await movieApi.getStats('year');
+          if (statsResponse.data?.data) {
+            totalMovies = statsResponse.data.data.reduce((sum: number, item: any) => sum + (item.count || 0), 0);
+          }
+        } catch (err) {
+          console.warn('Could not fetch movie stats:', err);
+        }
+
+        try {
+          const randomMovies = await movieApi.getRandom();
+          randomMoviesCount = randomMovies.data?.data?.length || 0;
+        } catch (err) {
+          console.warn('Could not fetch random movies:', err);
+        }
+
+        // Fetch shows data with error handling
+        let totalShows = 0;
+        let randomShowsCount = 0;
+
+        // Get total shows count from API (uses 'count' field)
+        try {
+          const showsResponse = await showsApi.getAll(1, 1);
+          totalShows = showsResponse.data?.count || 0;
+        } catch (err) {
+          console.warn('Could not fetch shows:', err);
+        }
+
+        try {
+          const randomShows = await showsApi.getRandom(10);
+          // TV Shows API returns { count, page, limit, data }
+          const randomShowsData = randomShows.data?.data || [];
+          randomShowsCount = randomShowsData.length;
+        } catch (err) {
+          console.warn('Could not fetch random shows:', err);
+        }
 
         const metricsData: Metric[] = [
           {
             id: 1,
-            title: 'Popular Movies',
-            value: popularMovies.total_results.toLocaleString(),
+            title: 'Total Movies',
+            value: totalMovies.toLocaleString(),
             icon: '🎬',
             color: 'purple',
             gradient: 'from-purple-600/20 to-purple-900/20'
           },
           {
             id: 2,
-            title: 'Popular TV Shows',
-            value: popularShows.total_results.toLocaleString(),
+            title: 'Total TV Shows',
+            value: totalShows.toLocaleString(),
             icon: '📺',
             color: 'blue',
             gradient: 'from-blue-600/20 to-blue-900/20'
           },
           {
             id: 3,
-            title: 'Trending This Week',
-            value: trending.length.toString(),
+            title: 'Random Movies',
+            value: randomMoviesCount.toString(),
             icon: '🔥',
             color: 'orange',
             gradient: 'from-orange-600/20 to-orange-900/20'
           },
           {
             id: 4,
-            title: 'Top Rated Movies',
-            value: topRatedMovies.total_results.toLocaleString(),
+            title: 'Featured Content',
+            value: (totalMovies + totalShows).toLocaleString(),
             icon: '⭐',
             color: 'yellow',
             gradient: 'from-yellow-600/20 to-yellow-900/20'
           },
           {
             id: 5,
-            title: 'Top Rated Shows',
-            value: topRatedShows.total_results.toLocaleString(),
+            title: 'Random Shows',
+            value: randomShowsCount.toString(),
             icon: '🏆',
             color: 'green',
             gradient: 'from-green-600/20 to-green-900/20'
           },
           {
             id: 6,
-            title: 'Now Playing',
-            value: nowPlaying.total_results.toLocaleString(),
+            title: 'Total Library',
+            value: (totalMovies + totalShows).toLocaleString(),
             icon: '🎥',
             color: 'pink',
             gradient: 'from-pink-600/20 to-pink-900/20'
@@ -142,7 +162,7 @@ export default function MetricsGrid() {
   return (
     <div className="mb-12">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-white">Live Metrics from TMDB</h2>
+        <h2 className="text-3xl font-bold text-white">Live Metrics from Backend</h2>
         <div className="flex gap-2">
           {metrics.map((_, index) => (
             <button

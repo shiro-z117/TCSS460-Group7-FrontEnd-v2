@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import MovieCard from '@/components/dashboard/MovieCard';
-import { getPopularMovies, searchMovies, getImageUrl } from '@/lib/api/tmdb';
-import { TMDBMovie } from '@/types/media';
+import { movieApi } from '@/services/movieApi';
 
 interface Movie {
   id: number;
@@ -16,6 +15,9 @@ interface Movie {
   genres: string[];
 }
 
+// Image base URL for poster images stored in the database
+const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+
 export default function MoviesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,36 +25,52 @@ export default function MoviesPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const itemsPerPage = 12;
 
-  // Fetch movies from TMDB API
+  // Fetch movies from Group 8's database API
   useEffect(() => {
     const fetchMovies = async () => {
       setIsLoading(true);
       try {
-        let response;
+        const response = await movieApi.getAllFiltered({
+          page: currentPage,
+          limit: itemsPerPage,
+          title: searchQuery || undefined,
+        });
 
-        if (searchQuery.trim()) {
-          response = await searchMovies(searchQuery, currentPage);
-        } else {
-          response = await getPopularMovies(currentPage);
-        }
-
-        // Transform TMDB response to match MovieCard expected structure
-        const transformedMovies: Movie[] = response.results.map((movie: TMDBMovie) => ({
+        // Transform API response to match MovieCard expected structure
+        const moviesData = response.data.data || [];
+        const transformedMovies = moviesData.map((movie: any) => ({
           id: movie.id,
           title: movie.title || 'Untitled',
           description: movie.overview || '',
-          poster_url: getImageUrl(movie.poster_path, 'w500'),
+          poster_url: movie.poster_url ? (movie.poster_url.startsWith('http') ? movie.poster_url : `${IMAGE_BASE_URL}${movie.poster_url}`) : undefined,
           release_date: movie.release_date || '',
-          rating: movie.vote_average || 0,
-          genres: [], // Genre IDs would need to be mapped to names
+          rating: 0, // Group 8 API doesn't provide ratings
+          genres: Array.isArray(movie.genres) ? movie.genres : [],
         }));
 
         setMovies(transformedMovies);
-        setTotalPages(Math.min(response.total_pages, 500)); // TMDB limits to 500 pages
-        setTotalResults(response.total_results);
+
+        // Get accurate total count from stats API (API doesn't return total in paginated response)
+        try {
+          const statsResponse = await movieApi.getStats('year');
+          if (statsResponse.data?.data) {
+            const total = statsResponse.data.data.reduce((sum: number, item: any) => sum + (item.count || 0), 0);
+            setTotalResults(total);
+            setTotalPages(Math.ceil(total / itemsPerPage));
+          } else {
+            // Fallback if stats fail
+            setTotalResults(moviesData.length);
+            setTotalPages(1);
+          }
+        } catch (statsErr) {
+          console.warn('Could not fetch movie stats:', statsErr);
+          setTotalResults(moviesData.length);
+          setTotalPages(1);
+        }
       } catch (error) {
-        console.error('Error fetching movies from TMDB:', error);
+        console.error('Error fetching movies:', error);
         setMovies([]);
       } finally {
         setIsLoading(false);
@@ -78,7 +96,7 @@ export default function MoviesPage() {
             Movies
           </h1>
           <p className="text-gray-400 mb-6">
-            {isLoading ? 'Loading...' : `Browse ${totalResults.toLocaleString()} movies from TMDB`}
+            {isLoading ? 'Loading...' : `Browse ${totalResults.toLocaleString()} movies`}
           </p>
 
           <input
@@ -168,7 +186,7 @@ export default function MoviesPage() {
 
         {!isLoading && (
           <p className="text-center text-gray-500 mt-6">
-            Page {currentPage} of {totalPages} • Showing {movies.length} movies
+            Page {currentPage} of {totalPages} • Showing {movies.length} of {totalResults} movies
           </p>
         )}
       </main>
