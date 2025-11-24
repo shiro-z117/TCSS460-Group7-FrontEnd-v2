@@ -134,7 +134,7 @@ const movieService = axios.create({ baseURL: process.env.MOVIES_WEB_API_URL });
 
 movieService.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    config.headers['X-API-Key'] = process.env.MOVIES_WEB_API_KEY;
+    config.headers['Authorization'] = `Bearer ${process.env.MOVIES_WEB_API_KEY || 'dev-key'}`;
     return config;
   },
   (error: AxiosError) => {
