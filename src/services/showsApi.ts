@@ -2,6 +2,7 @@ import { showsService } from 'utils/axios';
 
 // Types for TV Shows API
 
+
 /**
  * ShowsFilters - Interface for advanced filtering with support for:
  * - Pagination (page, limit)
@@ -30,6 +31,7 @@ export interface ShowsFilters {
  * ShowInput - Interface for creating new TV shows
  * All fields are required for show creation.
  */
+
 export interface ShowInput {
   name: string;
   original_name?: string;
@@ -49,10 +51,12 @@ export interface ShowInput {
   genres?: number[];
 }
 
+
 /**
  * ShowUpdate - Interface for updating existing TV shows
  * All fields are optional. Only provided fields will be updated.
  */
+
 export interface ShowUpdate {
   name?: string;
   original_name?: string;
@@ -71,9 +75,11 @@ export const showsApi = {
     showsService.get(`/shows?page=${page}&limit=${limit}`),
 
   // GET /shows/filter - Filter shows with advanced options
+
   // Returns a filtered list of TV shows.
   // Supports filtering by actors, genres, network, minimum rating, and date range.
   // All filters can be combined to narrow down search results.
+
   getAllFiltered: (filters: ShowsFilters) => {
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
@@ -102,3 +108,4 @@ export const showsApi = {
   // DELETE /admin/shows/{id} - Delete a show (admin)
   delete: (id: number) => showsService.delete(`/admin/shows/${id}`)
 };
+
