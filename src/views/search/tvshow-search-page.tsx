@@ -1,0 +1,128 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { showsApi, ShowsFilters } from 'services/showsApi';
+import SearchBar from 'components/search/SearchBar';
+import ShowsFilterPanel from 'components/search/ShowsFilterPanel';
+import ShowsResults from 'components/search/ShowsResults';
+
+export default function TVShowSearchPage() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState<ShowsFilters>({
+    page: 1,
+    limit: 25
+  });
+  const [shows, setShows] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMorePages, setHasMorePages] = useState(true);
+
+  const handleSearchChange = useCallback((query: string) => {
+    setSearchQuery(query);
+    setFilters((prev) => ({ ...prev, page: 1 }));
+  }, []);
+
+  // Fetch shows whenever searchQuery, page, or limit change
+  useEffect(() => {
+    const fetchShows = async () => {
+      setLoading(true);
+      try {
+        const searchFilters: ShowsFilters = {
+          ...filters,
+          name: searchQuery || undefined
+        };
+
+        const response = await showsApi.getAllFiltered(searchFilters);
+        const results = response.data.data || [];
+        setShows(results);
+
+        // Detect if there are more pages:
+        // If we got fewer results than the limit, we're on the last page
+        setHasMorePages(results.length === filters.limit);
+      } catch (error) {
+        console.error('Search error:', error);
+        setShows([]);
+        setHasMorePages(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchShows();
+  }, [searchQuery, filters.page, filters.limit]);
+
+  const handleSearch = async () => {
+    setLoading(true);
+    try {
+      const searchFilters: ShowsFilters = {
+        ...filters,
+        name: searchQuery || undefined
+      };
+
+      const response = await showsApi.getAllFiltered(searchFilters);
+      const results = response.data.data || [];
+      setShows(results);
+
+      // Detect if there are more pages:
+      // If we got fewer results than the limit, we're on the last page
+      setHasMorePages(results.length === filters.limit);
+    } catch (error) {
+      console.error('Search error:', error);
+      setShows([]);
+      setHasMorePages(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFilterChange = (newFilters: Partial<ShowsFilters>) => {
+    setFilters((prev) => ({
+      ...prev,
+      ...newFilters,
+      page: 1 // Reset to first page when filters change
+    }));
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setFilters((prev) => ({
+      ...prev,
+      page: newPage
+    }));
+  };
+
+  return (
+    <>
+      {/* Search Bar */}
+      <div className="sticky top-[72px] z-10 bg-gray-900/80 backdrop-blur-lg border-b border-purple-500/30">
+        <div className="max-w-7xl mx-auto px-8 py-6">
+          <SearchBar
+            searchQuery={searchQuery}
+            onSearchChange={handleSearchChange}
+            onSearch={handleSearch}
+            loading={loading}
+            title="TV Show Search"
+            placeholder="Search for TV shows..."
+          />
+        </div>
+      </div>
+
+      <div className="flex">
+        {/* Filter Panel - Left Side */}
+        <aside className="w-80 border-r border-purple-500/30 bg-gray-900/50 min-h-screen sticky top-[160px] self-start">
+          <ShowsFilterPanel filters={filters} onFilterChange={handleFilterChange} onApply={handleSearch} />
+        </aside>
+
+        {/* Results Area - Center */}
+        <main className="flex-1 p-8">
+          <ShowsResults
+            shows={shows}
+            loading={loading}
+            currentPage={filters.page || 1}
+            itemsPerPage={filters.limit || 25}
+            hasMorePages={hasMorePages}
+            onPageChange={handlePageChange}
+          />
+        </main>
+      </div>
+    </>
+  );
+}

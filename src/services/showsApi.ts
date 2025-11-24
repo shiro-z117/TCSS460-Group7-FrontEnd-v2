@@ -2,6 +2,19 @@ import { showsService } from 'utils/axios';
 
 // Types for TV Shows API
 
+
+/**
+ * ShowsFilters - Interface for advanced filtering with support for:
+ * - Pagination (page, limit)
+ * - Name/title search
+ * - Actor filtering (comma-separated)
+ * - Genre filtering (comma-separated)
+ * - Network filtering
+ * - Minimum rating
+ * - Date range (startDate, endDate)
+ *
+ * All filters can be combined to narrow down search results.
+ */
 export interface ShowsFilters {
   page?: number;
   limit?: number;
@@ -13,6 +26,11 @@ export interface ShowsFilters {
   startDate?: string;
   endDate?: string;
 }
+
+/**
+ * ShowInput - Interface for creating new TV shows
+ * All fields are required for show creation.
+ */
 
 export interface ShowInput {
   name: string;
@@ -33,6 +51,12 @@ export interface ShowInput {
   genres?: number[];
 }
 
+
+/**
+ * ShowUpdate - Interface for updating existing TV shows
+ * All fields are optional. Only provided fields will be updated.
+ */
+
 export interface ShowUpdate {
   name?: string;
   original_name?: string;
@@ -51,6 +75,11 @@ export const showsApi = {
     showsService.get(`/shows?page=${page}&limit=${limit}`),
 
   // GET /shows/filter - Filter shows with advanced options
+
+  // Returns a filtered list of TV shows.
+  // Supports filtering by actors, genres, network, minimum rating, and date range.
+  // All filters can be combined to narrow down search results.
+
   getAllFiltered: (filters: ShowsFilters) => {
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
@@ -62,26 +91,21 @@ export const showsApi = {
   },
 
   // GET /shows/random - Get random shows
-  getRandom: (limit: number = 50) =>
-    showsService.get(`/shows/random?limit=${limit}`),
+  getRandom: (limit: number = 50) => showsService.get(`/shows/random?limit=${limit}`),
 
   // GET /shows/{id} - Get show details by ID
-  getById: (id: number) =>
-    showsService.get(`/shows/${id}`),
+  getById: (id: number) => showsService.get(`/shows/${id}`),
 
   // GET /shows/{id}/summary - Get abridged show summary
-  getSummary: (id: number) =>
-    showsService.get(`/shows/${id}/summary`),
+  getSummary: (id: number) => showsService.get(`/shows/${id}/summary`),
 
   // POST /admin/shows - Create a new show (admin)
-  create: (data: ShowInput) =>
-    showsService.post('/admin/shows', data),
+  create: (data: ShowInput) => showsService.post('/admin/shows', data),
 
   // PUT /admin/shows/{id} - Update a show (admin)
-  update: (id: number, data: ShowUpdate) =>
-    showsService.put(`/admin/shows/${id}`, data),
+  update: (id: number, data: ShowUpdate) => showsService.put(`/admin/shows/${id}`, data),
 
   // DELETE /admin/shows/{id} - Delete a show (admin)
-  delete: (id: number) =>
-    showsService.delete(`/admin/shows/${id}`)
+  delete: (id: number) => showsService.delete(`/admin/shows/${id}`)
 };
+
