@@ -125,8 +125,7 @@ export type StatsDimension = 'genre' | 'year' | 'mpa_rating' | 'producers' | 'di
 
 export const movieApi = {
   // GET /movies - List movies with basic pagination
-  getAll: (page: number = 1, pageSize: number = 25) =>
-    movieService.get(`/movies?page=${page}&pageSize=${pageSize}`),
+  getAll: (page: number = 1, pageSize: number = 25) => movieService.get(`/movies?page=${page}&pageSize=${pageSize}`),
 
   // GET /movies/page - Advanced paginated list with comprehensive filters
   // Returns a paginated list of movies with advanced filtering capabilities.
