@@ -95,9 +95,7 @@ export default function MoviesView() {
           <h1 className="text-5xl font-bold text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
             Movies
           </h1>
-          <p className="text-gray-400 mb-6">
-            {isLoading ? 'Loading...' : `Browse ${totalResults.toLocaleString()} movies`}
-          </p>
+          <p className="text-gray-400 mb-6">{isLoading ? 'Loading...' : `Browse ${totalResults.toLocaleString()} movies`}</p>
 
           <input
             type="text"
@@ -121,11 +119,9 @@ export default function MoviesView() {
 
         {/* Movies Grid */}
         {!isLoading && (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 mb-8">
             {movies.length > 0 ? (
-              movies.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} type="movie" />
-              ))
+              movies.map((movie) => <MovieCard key={movie.id} movie={movie} type="movie" />)
             ) : (
               <div className="col-span-full text-center py-12">
                 <p className="text-gray-400 text-xl">No movies found</p>
@@ -163,9 +159,7 @@ export default function MoviesView() {
                     key={pageNum}
                     onClick={() => handlePageChange(pageNum)}
                     className={`w-12 h-12 rounded-lg font-semibold transition-all ${
-                      currentPage === pageNum
-                        ? 'bg-purple-600 text-white'
-                        : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                      currentPage === pageNum ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                     }`}
                   >
                     {pageNum}
