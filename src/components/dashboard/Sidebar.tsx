@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: '🏠' },
   { name: 'Movies', href: '/dashboard/movies', icon: '🎬' },
   { name: 'TV Shows', href: '/dashboard/shows', icon: '📺' },
-  { name: 'Profile', href: '/dashboard/profile', icon: '👤' },
+  { name: 'Profile', href: '/dashboard/profile', icon: '👤' }
 ];
 
 export default function Sidebar() {
@@ -15,8 +16,10 @@ export default function Sidebar() {
   const router = useRouter();
 
   const handleLogout = () => {
-    localStorage.clear();
-    router.push('/login');
+    signOut({
+      redirect: true,
+      callbackUrl: '/login'
+    });
   };
 
   return (
@@ -29,15 +32,14 @@ export default function Sidebar() {
       <nav className="flex-1 p-4 overflow-y-auto">
         <ul className="space-y-2">
           {navigation.map((item) => {
-            const isActive = item.href === '/dashboard' ? pathname === '/dashboard' : pathname === item.href || pathname.startsWith(item.href + '/');
+            const isActive =
+              item.href === '/dashboard' ? pathname === '/dashboard' : pathname === item.href || pathname.startsWith(item.href + '/');
             return (
               <li key={item.name}>
                 <Link
                   href={item.href}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                    isActive 
-                      ? 'bg-purple-700 text-white shadow-lg' 
-                      : 'text-purple-200 hover:bg-purple-800 hover:text-white'
+                    isActive ? 'bg-purple-700 text-white shadow-lg' : 'text-purple-200 hover:bg-purple-800 hover:text-white'
                   }`}
                 >
                   <span className="text-xl">{item.icon}</span>
