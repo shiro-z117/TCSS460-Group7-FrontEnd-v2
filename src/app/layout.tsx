@@ -7,8 +7,8 @@ import ProviderWrapper from './ProviderWrapper';
 import { publicSans } from 'config';
 
 export const metadata: Metadata = {
-  title: 'PIBBLE: Movies & Shows',
-  description: 'PIBBLE: Movies & Shows'
+  title: 'PIBBLE: Movies & TV Shows',
+  description: 'PIBBLE: Movies & TV Shows'
 };
 
 export const viewport: Viewport = {
