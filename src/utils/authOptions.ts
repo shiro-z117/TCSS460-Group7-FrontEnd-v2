@@ -21,61 +21,58 @@ function getRandomPhoneNumber() {
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      id: 'login',
-      name: 'login',
+      id: 'credentials',
+      name: 'credentials',
+
       credentials: {
-        email: { name: 'email', label: 'Email', type: 'email', placeholder: 'Enter Email' },
-        password: { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter Password' }
+        mode: { type: 'text' },
+
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
+        firstname: { label: 'First Name', type: 'text' },
+        lastname: { label: 'Last Name', type: 'text' },
+        username: { label: 'Username', type: 'text' }
       },
+
       async authorize(credentials) {
         try {
-          const response = await authApi.login({
-            email: credentials?.email!,
-            password: credentials?.password!
-          });
+          if (!credentials) return null;
 
-          if (response) {
-            // TODO form your user object based on the Credentials API you're using.
-            // Check their API docs.
-            // console.dir(response.data);
+          // ---------------------
+          // LOGIN FLOW
+          // ---------------------
+          if (credentials.mode === 'login') {
+            const response = await authApi.login({
+              email: credentials.email!,
+              password: credentials.password!
+            });
+
             const data = response.data.data;
             data.user['accessToken'] = data.accessToken;
             return data.user;
           }
-        } catch (e: any) {
-          console.error(e);
-          const errorMessage = e?.message || e?.response?.data?.message || 'Something went wrong!';
-          throw new Error(errorMessage);
-        }
-      }
-    }),
-    CredentialsProvider({
-      id: 'register',
-      name: 'register',
-      credentials: {
-        firstname: { name: 'firstname', label: 'First Name', type: 'text', placeholder: 'Enter First Name' },
-        lastname: { name: 'lastname', label: 'Last Name', type: 'text', placeholder: 'Enter Last Name' },
-        email: { name: 'email', label: 'Email', type: 'email', placeholder: 'Enter Email' },
-        username: { name: 'username', label: 'Username', type: 'text', placeholder: 'Enter Username' },
-        password: { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter Password' }
-      },
-      async authorize(credentials) {
-        try {
-          const response = await authApi.register({
-            firstname: credentials?.firstname!,
-            lastname: credentials?.lastname!,
-            password: credentials?.password!,
-            email: credentials?.email!,
-            username: credentials?.username!,
-            phone: getRandomPhoneNumber() // TODO request phone number from user
-          });
-          if (response) {
-            // TODO form your user object based on the Credentials API you're using.
-            // Check their API docs.
-            // console.dir(response.data);
+
+          // ---------------------
+          // REGISTER FLOW
+          // ---------------------
+          if (credentials.mode === 'register') {
+            const response = await authApi.register({
+              firstname: credentials.firstname!,
+              lastname: credentials.lastname!,
+              password: credentials.password!,
+              email: credentials.email!,
+              username: credentials.username!,
+              phone: getRandomPhoneNumber()
+            });
+
             const data = response.data.data;
             data.user['accessToken'] = data.accessToken;
             return data.user;
+          }
+
+          // reject if invalid credential mode is attempted
+          if (!['login', 'register'].includes(credentials.mode)) {
+            throw new Error('Invalid mode');
           }
         } catch (e: any) {
           console.error(e);
@@ -85,8 +82,9 @@ export const authOptions: NextAuthOptions = {
       }
     })
   ],
+
   callbacks: {
-    jwt: async ({ token, user, account }) => {
+    async jwt({ token, user, account }) {
       if (user) {
         // @ts-ignore
         token.accessToken = user.accessToken;
@@ -95,7 +93,7 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    session: ({ session, token }) => {
+    session({ session, token }) {
       if (token) {
         session.id = token.id;
         session.provider = token.provider;
@@ -104,13 +102,16 @@ export const authOptions: NextAuthOptions = {
       return session;
     }
   },
+
   session: {
     strategy: 'jwt',
     maxAge: Number(process.env.NEXT_APP_JWT_TIMEOUT!)
   },
+
   jwt: {
     secret: process.env.NEXT_APP_JWT_SECRET
   },
+
   pages: {
     signIn: '/login',
     newUser: '/register'

@@ -73,8 +73,9 @@ export default function AuthLogin({ providers, csrfToken }: any) {
         })}
         onSubmit={(values, { setErrors, setSubmitting }) => {
           const trimmedEmail = values.email.trim();
-          signIn('login', {
+          signIn('credentials', {
             redirect: false,
+            mode: 'login',
             email: trimmedEmail,
             password: values.password,
             callbackUrl: APP_DEFAULT_PATH
