@@ -48,9 +48,9 @@ export default function DashboardView() {
 
         try {
           // Fetch featured movies
-          const moviesResponse = await movieApi.getAllFiltered({ page: 1, limit: 4 });
+          const moviesResponse = await movieApi.getAllFiltered({ page: 1, limit: 6 });
           const moviesData = moviesResponse.data?.data || [];
-          transformedMovies = moviesData.slice(0, 4).map((movie: any) => ({
+          transformedMovies = moviesData.slice(0, 6).map((movie: any) => ({
             id: movie.id,
             title: movie.title || 'Untitled',
             description: movie.overview || '',
@@ -79,10 +79,10 @@ export default function DashboardView() {
         let totalShowsCount = 0;
 
         try {
-          const showsResponse = await showsApi.getAll(1, 4);
+          const showsResponse = await showsApi.getAll(1, 6);
           // TV Shows API returns { count, page, limit, data }
           const showsData = showsResponse.data?.data || [];
-          transformedShows = showsData.slice(0, 4).map((show: any) => ({
+          transformedShows = showsData.slice(0, 6).map((show: any) => ({
             id: show.show_id || show.id,
             name: show.name || 'Untitled',
             description: show.overview || '',
@@ -170,13 +170,13 @@ export default function DashboardView() {
           </div>
 
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="bg-gray-800/50 rounded-xl h-96 animate-pulse"></div>
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
               {featuredShows.map((show) => (
                 <MovieCard key={show.id} movie={show} type="show" />
               ))}
