@@ -233,8 +233,8 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
               <div>
                 <h2 className="text-2xl font-bold mb-4 text-purple-300">Cast</h2>
                 {actors.length > 0 ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    {actors.slice(0, 8).map((actor: any, index: number) => (
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+                    {actors.slice(0, 10).map((actor: any, index: number) => (
                       <div key={index} className="text-center">
                         <div className="relative w-full aspect-square bg-purple-700 rounded-lg mb-2 overflow-hidden">
                           {actor.profile_url ? (
