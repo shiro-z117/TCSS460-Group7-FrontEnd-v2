@@ -105,8 +105,9 @@ export default function AuthRegister({ providers, csrfToken }: any) {
         const trimmedLast = values.lastname.trim();
         const trimmedUsername = values.username.trim();
         const trimmedEmail = values.email.trim();
-        signIn('register', {
+        signIn('credentials', {
           redirect: false,
+          mode: 'register',
           firstname: trimmedFirst,
           lastname: trimmedLast,
           username: trimmedUsername,
