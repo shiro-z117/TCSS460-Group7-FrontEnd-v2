@@ -7,8 +7,8 @@ import ProviderWrapper from './ProviderWrapper';
 import { publicSans } from 'config';
 
 export const metadata: Metadata = {
-  title: 'TCSS 460 UI Template',
-  description: 'TCSS 460 UI Template'
+  title: 'PIBBLE: Movies & Shows',
+  description: 'PIBBLE: Movies & Shows'
 };
 
 export const viewport: Viewport = {
