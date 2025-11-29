@@ -150,7 +150,7 @@ showsService.interceptors.response.use(
 // ==============================|| EXPORTS ||============================== //
 
 export default credentialsService; // Maintain backward compatibility
-export { credentialsService, messagesService, movieService, showsService };
+export { credentialsService, movieService, showsService };
 
 // Credentials service helpers
 export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
