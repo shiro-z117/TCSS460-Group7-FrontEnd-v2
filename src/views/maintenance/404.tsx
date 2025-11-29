@@ -1,56 +1,60 @@
-// next
-import Image from 'next/image';
-import NextLink from 'next/link';
+'use client';
 
-// material-ui
-import Box from '@mui/material/Box';
+import { APP_DEFAULT_PATH } from 'config';
+import NextLink from 'next/link';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-
-// project import
-import { APP_DEFAULT_PATH } from 'config';
-
-// assets
-const error404 = '/assets/images/maintenance/Error404.png';
-const TwoCone = '/assets/images/maintenance/TwoCone.png';
-
-// ==============================|| PAGE ||============================== //
+import Box from '@mui/material/Box';
 
 export default function Error404() {
   return (
-    <Grid
-      container
-      spacing={10}
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      sx={{ minHeight: '100vh', pt: 1.5, pb: 1, overflow: 'hidden' }}
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#111827',
+        color: 'white',
+        textAlign: 'center',
+        px: 2
+      }}
     >
-      <Grid item xs={12}>
-        <Stack direction="row">
-          <Grid item sx={{ position: 'relative', width: { xs: 250, sm: 590 }, height: { xs: 130, sm: 300 } }}>
-            <Image src={error404} alt="mantis" fill sizes="100vw" />
-          </Grid>
-          <Grid item sx={{ position: 'relative' }}>
-            <Box sx={{ position: 'absolute', top: 60, left: -40, width: { xs: 130, sm: 390 }, height: { xs: 115, sm: 330 } }}>
-              <Image src={TwoCone} alt="mantis" fill sizes="100vw" />
-            </Box>
-          </Grid>
-        </Stack>
-      </Grid>
-      <Grid item xs={12}>
-        <Stack spacing={2} justifyContent="center" alignItems="center">
-          <Typography variant="h1">Page Not Found</Typography>
-          <Typography color="text.secondary" align="center" sx={{ width: { xs: '73%', sm: '61%' } }}>
-            The page you are looking was moved, removed, renamed, or might never exist!
-          </Typography>
-          <Button component={NextLink} href={APP_DEFAULT_PATH} variant="contained">
-            Back To Home
-          </Button>
-        </Stack>
-      </Grid>
-    </Grid>
+      <Typography
+        variant="h1"
+        sx={{
+          fontSize: { xs: '8rem', sm: '12rem' },
+          fontWeight: 'bold',
+          color: '#9333ea'
+        }}
+      >
+        404
+      </Typography>
+
+      <Stack spacing={2} sx={{ maxWidth: 600 }}>
+        <Typography variant="h4">Page Not Found</Typography>
+        <Typography sx={{ color: 'gray.400' }}>
+          The page you are looking for was moved, removed, renamed, or might have never existed!
+        </Typography>
+        <Button
+          component={NextLink}
+          href={APP_DEFAULT_PATH}
+          variant="contained"
+          sx={{
+            backgroundColor: '#9333ea',
+            '&:hover': { backgroundColor: '#7e22ce' },
+            color: 'white',
+            textTransform: 'none',
+            fontSize: '1rem',
+            py: 1.5,
+            borderRadius: '0.375rem'
+          }}
+        >
+          Return
+        </Button>
+      </Stack>
+    </Box>
   );
 }

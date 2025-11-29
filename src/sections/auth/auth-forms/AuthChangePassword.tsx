@@ -44,8 +44,7 @@ export default function AuthChangePassword() {
         submit: null
       }}
       validationSchema={Yup.object().shape({
-        currentPassword: Yup.string()
-          .required('Current Password is required'),
+        currentPassword: Yup.string().required('Current Password is required'),
         newPassword: Yup.string()
           .trim('New Password cannot start or end with spaces')
           .matches(/^[\x21-\x7E]+$/, 'Password contains invalid characters')
@@ -65,20 +64,17 @@ export default function AuthChangePassword() {
         }
 
         try {
-          const response = await fetch(
-            'https://credentials-api-group2-20f368b8528b.herokuapp.com/auth/user/password/change',
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
-              },
-              body: JSON.stringify({
-                currentPassword: values.currentPassword,
-                newPassword: values.newPassword
-              })
-            }
-          );
+          const response = await fetch('https://credentials-api-group2-20f368b8528b.herokuapp.com/auth/user/password/change', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              currentPassword: values.currentPassword,
+              newPassword: values.newPassword
+            })
+          });
 
           const result = await response.json();
           if (!response.ok) {
