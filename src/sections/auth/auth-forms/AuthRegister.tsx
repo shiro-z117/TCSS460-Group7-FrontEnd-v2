@@ -70,18 +70,17 @@ export default function AuthRegister({ providers, csrfToken }: any) {
       }}
       validationSchema={Yup.object().shape({
         firstname: Yup.string()
-          .trim('First Name cannot start or end with spaces')
+          .trim()
           .matches(/^[\p{L} .'-]+$/u, 'First Name contains invalid characters')
           .max(255, 'First Name cannot exceed 255 characters')
           .required('First Name is required'),
         lastname: Yup.string()
-          .trim('Last Name cannot start or end with spaces')
+          .trim()
           .matches(/^[\p{L} .'-]+$/u, 'Last Name contains invalid characters')
           .max(255, 'Last Name cannot exceed 255 characters')
           .required('Last Name is required'),
         username: Yup.string()
           .required('Username is required')
-          .trim('Username cannot start or end with spaces')
           .matches(
             /^(?![._-])(?!.*[._-]{2})[A-Za-z0-9._-]+(?<![.-])$/,
             'Username may only contain letters, numbers, periods (.), underscores (_), and hyphens (-), and cannot begin or end with special characters or have consecutive special characters'
@@ -91,11 +90,10 @@ export default function AuthRegister({ providers, csrfToken }: any) {
         email: Yup.string()
           .email('Must be a valid email')
           .required('Email is required')
-          .trim('Email cannot start or end with spaces')
+          .trim()
           .max(255),
         password: Yup.string()
           .required('Password is required')
-          .trim('Password cannot start or end with spaces')
           .matches(/^[\x21-\x7E]+$/, 'Password contains invalid characters')
           .min(8, 'Password must be at least 8 characters')
           .max(50, 'Password cannot exceed 50 characters')
