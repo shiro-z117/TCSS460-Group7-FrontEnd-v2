@@ -45,11 +45,6 @@ const nextConfig = {
     MOVIES_WEB_API_KEY: process.env.MOVIES_WEB_API_KEY,
 
     CREDENTIALS_API_URL: process.env.CREDENTIALS_WEB_API_URL || 'https://credentials-api-group2-20f368b8528b.herokuapp.com/',
-
-    MESSAGES_WEB_API_URL: process.env.MESSAGES_WEB_API_URL,
-    MESSAGES_WEB_API_KEY: process.env.MESSAGES_WEB_API_KEY,
-
-    NEXT_APP_GOOGLE_MAPS_API_KEY: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
   }
 };
 
