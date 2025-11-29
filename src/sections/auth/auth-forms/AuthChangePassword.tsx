@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, SyntheticEvent } from 'react';
+import { useState, useEffect, SyntheticEvent } from 'react';
 
 // material-ui
 import Button from '@mui/material/Button';
@@ -10,6 +10,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
+import FormControl from '@mui/material/FormControl';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 // third party
 import * as Yup from 'yup';
@@ -18,6 +21,8 @@ import { Formik } from 'formik';
 // project import
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
+import { strengthColor, strengthIndicator } from 'utils/password-strength';
+import { StringColorProps } from 'types/password';
 
 // assets
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
@@ -26,14 +31,15 @@ import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 export default function AuthChangePassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [level, setLevel] = useState<StringColorProps>();
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = (event: SyntheticEvent) => event.preventDefault();
+  const changePassword = (value: string) => setLevel(strengthColor(strengthIndicator(value)));
 
-  const handleMouseDownPassword = (event: SyntheticEvent) => {
-    event.preventDefault();
-  };
+  useEffect(() => {
+    changePassword('');
+  }, []);
 
   return (
     <Formik
@@ -76,9 +82,7 @@ export default function AuthChangePassword() {
           });
 
           const result = await response.json();
-          if (!response.ok) {
-            throw new Error(result.details || result.error || 'Password change failed');
-          }
+          if (!response.ok) throw new Error(result.details || result.error || 'Password change failed');
 
           setSuccessMessage('Password changed successfully!');
           setSubmitting(false);
@@ -95,12 +99,7 @@ export default function AuthChangePassword() {
               <Stack spacing={1}>
                 <InputLabel
                   htmlFor="currentPassword-change"
-                  sx={{
-                    color: '#ffffff !important',
-                    fontWeight: 500,
-                    marginBottom: '0.5rem',
-                    display: 'block'
-                  }}
+                  sx={{ color: '#ffffff !important', fontWeight: 500, marginBottom: '0.5rem', display: 'block' }}
                 >
                   Current Password
                 </InputLabel>
@@ -130,18 +129,10 @@ export default function AuthChangePassword() {
                   sx={{
                     backgroundColor: 'white',
                     borderRadius: '0.375rem',
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      border: 'none'
-                    },
-                    '&:hover .MuiOutlinedInput-notchedOutline': {
-                      border: 'none'
-                    },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      border: '2px solid #9333ea'
-                    },
-                    '& input': {
-                      color: 'black'
-                    }
+                    '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                    '&:hover .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: '2px solid #9333ea' },
+                    '& input': { color: 'black' }
                   }}
                 />
               </Stack>
@@ -156,12 +147,7 @@ export default function AuthChangePassword() {
               <Stack spacing={1}>
                 <InputLabel
                   htmlFor="newPassword-change"
-                  sx={{
-                    color: '#ffffff !important',
-                    fontWeight: 500,
-                    marginBottom: '0.5rem',
-                    display: 'block'
-                  }}
+                  sx={{ color: '#ffffff !important', fontWeight: 500, marginBottom: '0.5rem', display: 'block' }}
                 >
                   New Password
                 </InputLabel>
@@ -171,7 +157,10 @@ export default function AuthChangePassword() {
                   value={values.newPassword}
                   name="newPassword"
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    changePassword(e.target.value);
+                  }}
                   placeholder="Enter your new password"
                   fullWidth
                   error={Boolean(touched.newPassword && errors.newPassword)}
@@ -191,18 +180,10 @@ export default function AuthChangePassword() {
                   sx={{
                     backgroundColor: 'white',
                     borderRadius: '0.375rem',
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      border: 'none'
-                    },
-                    '&:hover .MuiOutlinedInput-notchedOutline': {
-                      border: 'none'
-                    },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      border: '2px solid #9333ea'
-                    },
-                    '& input': {
-                      color: 'black'
-                    }
+                    '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                    '&:hover .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: '2px solid #9333ea' },
+                    '& input': { color: 'black' }
                   }}
                 />
               </Stack>
@@ -217,12 +198,7 @@ export default function AuthChangePassword() {
               <Stack spacing={1}>
                 <InputLabel
                   htmlFor="confirmPassword-change"
-                  sx={{
-                    color: '#ffffff !important',
-                    fontWeight: 500,
-                    marginBottom: '0.5rem',
-                    display: 'block'
-                  }}
+                  sx={{ color: '#ffffff !important', fontWeight: 500, marginBottom: '0.5rem', display: 'block' }}
                 >
                   Confirm New Password
                 </InputLabel>
@@ -239,7 +215,7 @@ export default function AuthChangePassword() {
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
-                        aria-label="toggle currentpassword visibility"
+                        aria-label="toggle password visibility"
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
@@ -252,18 +228,10 @@ export default function AuthChangePassword() {
                   sx={{
                     backgroundColor: 'white',
                     borderRadius: '0.375rem',
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      border: 'none'
-                    },
-                    '&:hover .MuiOutlinedInput-notchedOutline': {
-                      border: 'none'
-                    },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      border: '2px solid #9333ea'
-                    },
-                    '& input': {
-                      color: 'black'
-                    }
+                    '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                    '&:hover .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: '2px solid #9333ea' },
+                    '& input': { color: 'black' }
                   }}
                 />
               </Stack>
@@ -272,6 +240,21 @@ export default function AuthChangePassword() {
                   {errors.confirmPassword}
                 </FormHelperText>
               )}
+            </Grid>
+
+            <Grid item xs={12}>
+              <FormControl fullWidth sx={{ mt: 1 }}>
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item>
+                    <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: '7px' }} />
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="subtitle1" fontSize="0.75rem" sx={{ color: '#ffffff' }}>
+                      {level?.label}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </FormControl>
             </Grid>
 
             {successMessage && (
@@ -303,7 +286,8 @@ export default function AuthChangePassword() {
                     color: 'white',
                     paddingY: '0.75rem',
                     borderRadius: '0.375rem'
-                  }}>
+                  }}
+                >
                   Change Password
                 </Button>
               </AnimateButton>
