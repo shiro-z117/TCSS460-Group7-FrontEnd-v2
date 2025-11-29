@@ -29,11 +29,12 @@ import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 
 export default function AuthChangePassword() {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [level, setLevel] = useState<StringColorProps>();
 
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = (event: SyntheticEvent) => event.preventDefault();
   const changePassword = (value: string) => setLevel(strengthColor(strengthIndicator(value)));
 
@@ -105,7 +106,7 @@ export default function AuthChangePassword() {
                 </InputLabel>
                 <OutlinedInput
                   id="currentPassword-change"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showCurrentPassword ? 'text' : 'password'}
                   value={values.currentPassword}
                   name="currentPassword"
                   onBlur={handleBlur}
@@ -116,13 +117,13 @@ export default function AuthChangePassword() {
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
+                        aria-label="toggle current password visibility"
+                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                         color="secondary"
                       >
-                        {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                        {showCurrentPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
                       </IconButton>
                     </InputAdornment>
                   }
@@ -136,11 +137,7 @@ export default function AuthChangePassword() {
                   }}
                 />
               </Stack>
-              {touched.currentPassword && errors.currentPassword && (
-                <FormHelperText error id="helper-text-currentPassword-change">
-                  {errors.currentPassword}
-                </FormHelperText>
-              )}
+              {touched.currentPassword && errors.currentPassword && <FormHelperText error>{errors.currentPassword}</FormHelperText>}
             </Grid>
 
             <Grid item xs={12}>
@@ -153,7 +150,7 @@ export default function AuthChangePassword() {
                 </InputLabel>
                 <OutlinedInput
                   id="newPassword-change"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showNewPassword ? 'text' : 'password'}
                   value={values.newPassword}
                   name="newPassword"
                   onBlur={handleBlur}
@@ -167,13 +164,13 @@ export default function AuthChangePassword() {
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
+                        aria-label="toggle new password visibility"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                         color="secondary"
                       >
-                        {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                        {showNewPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
                       </IconButton>
                     </InputAdornment>
                   }
@@ -187,11 +184,7 @@ export default function AuthChangePassword() {
                   }}
                 />
               </Stack>
-              {touched.newPassword && errors.newPassword && (
-                <FormHelperText error id="helper-text-newPassword-change">
-                  {errors.newPassword}
-                </FormHelperText>
-              )}
+              {touched.newPassword && errors.newPassword && <FormHelperText error>{errors.newPassword}</FormHelperText>}
             </Grid>
 
             <Grid item xs={12}>
@@ -204,7 +197,7 @@ export default function AuthChangePassword() {
                 </InputLabel>
                 <OutlinedInput
                   id="confirmPassword-change"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? 'text' : 'password'}
                   value={values.confirmPassword}
                   name="confirmPassword"
                   onBlur={handleBlur}
@@ -215,13 +208,13 @@ export default function AuthChangePassword() {
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
+                        aria-label="toggle confirm password visibility"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                         color="secondary"
                       >
-                        {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                        {showConfirmPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
                       </IconButton>
                     </InputAdornment>
                   }
@@ -235,11 +228,7 @@ export default function AuthChangePassword() {
                   }}
                 />
               </Stack>
-              {touched.confirmPassword && errors.confirmPassword && (
-                <FormHelperText error id="helper-text-confirmPassword-change">
-                  {errors.confirmPassword}
-                </FormHelperText>
-              )}
+              {touched.confirmPassword && errors.confirmPassword && <FormHelperText error>{errors.confirmPassword}</FormHelperText>}
             </Grid>
 
             <Grid item xs={12}>
