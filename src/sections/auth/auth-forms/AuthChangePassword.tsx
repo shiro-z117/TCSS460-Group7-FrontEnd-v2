@@ -46,11 +46,10 @@ export default function AuthChangePassword() {
       validationSchema={Yup.object().shape({
         currentPassword: Yup.string().required('Current Password is required'),
         newPassword: Yup.string()
-          .trim('New Password cannot start or end with spaces')
+          .required('New Password is required')
           .matches(/^[\x21-\x7E]+$/, 'Password contains invalid characters')
           .min(8, 'Password must be at least 8 characters')
-          .max(50, 'Password cannot exceed 50 characters')
-          .required('New Password is required'),
+          .max(50, 'Password cannot exceed 50 characters'),
         confirmPassword: Yup.string()
           .required('Please confirm your password')
           .oneOf([Yup.ref('newPassword')], 'Passwords must match')
@@ -94,7 +93,17 @@ export default function AuthChangePassword() {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Stack spacing={1}>
-                <InputLabel htmlFor="currentPassword-change">Current Password*</InputLabel>
+                <InputLabel
+                  htmlFor="currentPassword-change"
+                  sx={{
+                    color: '#ffffff !important',
+                    fontWeight: 500,
+                    marginBottom: '0.5rem',
+                    display: 'block'
+                  }}
+                >
+                  Current Password
+                </InputLabel>
                 <OutlinedInput
                   id="currentPassword-change"
                   type={showPassword ? 'text' : 'password'}
@@ -118,6 +127,22 @@ export default function AuthChangePassword() {
                       </IconButton>
                     </InputAdornment>
                   }
+                  sx={{
+                    backgroundColor: 'white',
+                    borderRadius: '0.375rem',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      border: '2px solid #9333ea'
+                    },
+                    '& input': {
+                      color: 'black'
+                    }
+                  }}
                 />
               </Stack>
               {touched.currentPassword && errors.currentPassword && (
@@ -129,7 +154,17 @@ export default function AuthChangePassword() {
 
             <Grid item xs={12}>
               <Stack spacing={1}>
-                <InputLabel htmlFor="newPassword-change">New Password*</InputLabel>
+                <InputLabel
+                  htmlFor="newPassword-change"
+                  sx={{
+                    color: '#ffffff !important',
+                    fontWeight: 500,
+                    marginBottom: '0.5rem',
+                    display: 'block'
+                  }}
+                >
+                  New Password
+                </InputLabel>
                 <OutlinedInput
                   id="newPassword-change"
                   type={showPassword ? 'text' : 'password'}
@@ -153,6 +188,22 @@ export default function AuthChangePassword() {
                       </IconButton>
                     </InputAdornment>
                   }
+                  sx={{
+                    backgroundColor: 'white',
+                    borderRadius: '0.375rem',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      border: '2px solid #9333ea'
+                    },
+                    '& input': {
+                      color: 'black'
+                    }
+                  }}
                 />
               </Stack>
               {touched.newPassword && errors.newPassword && (
@@ -164,7 +215,17 @@ export default function AuthChangePassword() {
 
             <Grid item xs={12}>
               <Stack spacing={1}>
-                <InputLabel htmlFor="confirmPassword-change">Confirm New Password*</InputLabel>
+                <InputLabel
+                  htmlFor="confirmPassword-change"
+                  sx={{
+                    color: '#ffffff !important',
+                    fontWeight: 500,
+                    marginBottom: '0.5rem',
+                    display: 'block'
+                  }}
+                >
+                  Confirm New Password
+                </InputLabel>
                 <OutlinedInput
                   id="confirmPassword-change"
                   type={showPassword ? 'text' : 'password'}
@@ -178,7 +239,7 @@ export default function AuthChangePassword() {
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
-                        aria-label="toggle password visibility"
+                        aria-label="toggle currentpassword visibility"
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
@@ -188,6 +249,22 @@ export default function AuthChangePassword() {
                       </IconButton>
                     </InputAdornment>
                   }
+                  sx={{
+                    backgroundColor: 'white',
+                    borderRadius: '0.375rem',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      border: '2px solid #9333ea'
+                    },
+                    '& input': {
+                      color: 'black'
+                    }
+                  }}
                 />
               </Stack>
               {touched.confirmPassword && errors.confirmPassword && (
@@ -211,7 +288,22 @@ export default function AuthChangePassword() {
 
             <Grid item xs={12}>
               <AnimateButton>
-                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                <Button
+                  disableElevation
+                  disabled={isSubmitting}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    backgroundColor: '#9333ea',
+                    '&:hover': { backgroundColor: '#7e22ce' },
+                    textTransform: 'none',
+                    fontSize: '1rem',
+                    color: 'white',
+                    paddingY: '0.75rem',
+                    borderRadius: '0.375rem'
+                  }}>
                   Change Password
                 </Button>
               </AnimateButton>

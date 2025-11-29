@@ -135,7 +135,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                     display: 'block'
                   }}
                 >
-                  First Name*
+                  First Name
                 </InputLabel>
                 <OutlinedInput
                   id="firstname-signup"
@@ -182,7 +182,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                     display: 'block'
                   }}
                 >
-                  Last Name*
+                  Last Name
                 </InputLabel>
                 <OutlinedInput
                   id="lastname-signup"
@@ -229,7 +229,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                     display: 'block'
                   }}
                 >
-                  Username*
+                  Username
                 </InputLabel>
                 <OutlinedInput
                   id="username-signup"
@@ -276,7 +276,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                     display: 'block'
                   }}
                 >
-                  Email Address*
+                  Email Address
                 </InputLabel>
                 <OutlinedInput
                   id="email-login"
@@ -323,7 +323,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                     display: 'block'
                   }}
                 >
-                  Password*
+                  Password
                 </InputLabel>
                 <OutlinedInput
                   id="password-signup"
