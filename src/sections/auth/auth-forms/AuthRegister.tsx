@@ -128,17 +128,43 @@ export default function AuthRegister({ providers, csrfToken }: any) {
           <Grid container spacing={3}>
             <Grid item xs={6}>
               <Stack spacing={1}>
-                <InputLabel htmlFor="firstname-signup">First Name*</InputLabel>
+                <InputLabel
+                  htmlFor="firstname-signup"
+                  sx={{
+                    color: '#ffffff !important',
+                    fontWeight: 500,
+                    marginBottom: '0.5rem',
+                    display: 'block'
+                  }}
+                >
+                  First Name*
+                </InputLabel>
                 <OutlinedInput
-                  id="firstname-login"
+                  id="firstname-signup"
                   type="firstname"
-                  value={values.firstname}
                   name="firstname"
+                  value={values.firstname}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   placeholder="Enter your First Name"
                   fullWidth
                   error={Boolean(touched.firstname && errors.firstname)}
+                  sx={{
+                    backgroundColor: 'white',
+                    borderRadius: '0.375rem',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      border: '2px solid #9333ea'
+                    },
+                    '& input': {
+                      color: 'black'
+                    }
+                  }}
                 />
               </Stack>
               {touched.firstname && errors.firstname && (
@@ -149,18 +175,43 @@ export default function AuthRegister({ providers, csrfToken }: any) {
             </Grid>
             <Grid item xs={6}>
               <Stack spacing={1}>
-                <InputLabel htmlFor="lastname-signup">Last Name*</InputLabel>
+                <InputLabel
+                  htmlFor="lastname-signup"
+                  sx={{
+                    color: '#ffffff !important',
+                    fontWeight: 500,
+                    marginBottom: '0.5rem',
+                    display: 'block'
+                  }}
+                >
+                  Last Name*
+                </InputLabel>
                 <OutlinedInput
-                  fullWidth
-                  error={Boolean(touched.lastname && errors.lastname)}
                   id="lastname-signup"
                   type="lastname"
-                  value={values.lastname}
                   name="lastname"
+                  value={values.lastname}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   placeholder="Enter your Last Name"
-                  inputProps={{}}
+                  fullWidth
+                  error={Boolean(touched.lastname && errors.lastname)}
+                  sx={{
+                    backgroundColor: 'white',
+                    borderRadius: '0.375rem',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      border: '2px solid #9333ea'
+                    },
+                    '& input': {
+                      color: 'black'
+                    }
+                  }}
                 />
               </Stack>
               {touched.lastname && errors.lastname && (
@@ -171,18 +222,43 @@ export default function AuthRegister({ providers, csrfToken }: any) {
             </Grid>
             <Grid item xs={12}>
               <Stack spacing={1}>
-                <InputLabel htmlFor="username-signup">Username*</InputLabel>
+                <InputLabel
+                  htmlFor="username-signup"
+                  sx={{
+                    color: '#ffffff !important',
+                    fontWeight: 500,
+                    marginBottom: '0.5rem',
+                    display: 'block'
+                  }}
+                >
+                  Username*
+                </InputLabel>
                 <OutlinedInput
-                  fullWidth
-                  error={Boolean(touched.username && errors.username)}
                   id="username-signup"
                   type="text"
-                  value={values.username}
                   name="username"
+                  value={values.username}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   placeholder="Enter username"
-                  inputProps={{}}
+                  fullWidth
+                  error={Boolean(touched.username && errors.username)}
+                  sx={{
+                    backgroundColor: 'white',
+                    borderRadius: '0.375rem',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      border: '2px solid #9333ea'
+                    },
+                    '& input': {
+                      color: 'black'
+                    }
+                  }}
                 />
               </Stack>
               {touched.username && errors.username && (
@@ -193,18 +269,43 @@ export default function AuthRegister({ providers, csrfToken }: any) {
             </Grid>
             <Grid item xs={12}>
               <Stack spacing={1}>
-                <InputLabel htmlFor="email-signup">Email Address*</InputLabel>
+                <InputLabel
+                  htmlFor="email-signup"
+                  sx={{
+                    color: '#ffffff !important',
+                    fontWeight: 500,
+                    marginBottom: '0.5rem',
+                    display: 'block'
+                  }}
+                >
+                  Email Address*
+                </InputLabel>
                 <OutlinedInput
-                  fullWidth
-                  error={Boolean(touched.email && errors.email)}
                   id="email-login"
                   type="email"
-                  value={values.email}
                   name="email"
+                  value={values.email}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   placeholder="Enter email address"
-                  inputProps={{}}
+                  fullWidth
+                  error={Boolean(touched.email && errors.email)}
+                  sx={{
+                    backgroundColor: 'white',
+                    borderRadius: '0.375rem',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      border: '2px solid #9333ea'
+                    },
+                    '& input': {
+                      color: 'black'
+                    }
+                  }}
                 />
               </Stack>
               {touched.email && errors.email && (
@@ -215,19 +316,30 @@ export default function AuthRegister({ providers, csrfToken }: any) {
             </Grid>
             <Grid item xs={12}>
               <Stack spacing={1}>
-                <InputLabel htmlFor="password-signup">Password</InputLabel>
+                <InputLabel
+                  htmlFor="password-signup"
+                  sx={{
+                    color: '#ffffff !important',
+                    fontWeight: 500,
+                    marginBottom: '0.5rem',
+                    display: 'block'
+                  }}
+                >
+                  Password*
+                </InputLabel>
                 <OutlinedInput
-                  fullWidth
-                  error={Boolean(touched.password && errors.password)}
                   id="password-signup"
                   type={showPassword ? 'text' : 'password'}
-                  value={values.password}
                   name="password"
+                  value={values.password}
                   onBlur={handleBlur}
                   onChange={(e) => {
                     handleChange(e);
                     changePassword(e.target.value);
                   }}
+                  placeholder="Enter password"
+                  fullWidth
+                  error={Boolean(touched.password && errors.password)}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
@@ -241,7 +353,6 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                       </IconButton>
                     </InputAdornment>
                   }
-                  placeholder="Enter password"
                   sx={{
                     backgroundColor: 'white',
                     borderRadius: '0.375rem',
@@ -271,7 +382,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                     <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: '7px' }} />
                   </Grid>
                   <Grid item>
-                    <Typography variant="subtitle1" fontSize="0.75rem">
+                    <Typography variant="subtitle1" fontSize="0.75rem" sx={{ color: '#ffffff' }}>
                       {level?.label}
                     </Typography>
                   </Grid>
@@ -280,7 +391,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
             </Grid>
 
             <Grid item xs={12} sx={{ mt: -1 }}>
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{ color: '#ffffff' }}>
                 By Signing up, you agree to our &nbsp;
                 <Link component={NextLink} href="/" variant="subtitle2">
                   Terms of Service
@@ -298,7 +409,23 @@ export default function AuthRegister({ providers, csrfToken }: any) {
             )}
             <Grid item xs={12}>
               <AnimateButton>
-                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                <Button
+                  disableElevation
+                  disabled={isSubmitting}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    backgroundColor: '#9333ea',
+                    '&:hover': { backgroundColor: '#7e22ce' },
+                    textTransform: 'none',
+                    fontSize: '1rem',
+                    color: 'white',
+                    paddingY: '0.75rem',
+                    borderRadius: '0.375rem'
+                  }}
+                >
                   Create Account
                 </Button>
               </AnimateButton>
