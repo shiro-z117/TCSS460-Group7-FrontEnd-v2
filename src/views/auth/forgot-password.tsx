@@ -35,7 +35,7 @@ export default function ForgotPassword() {
           Trouble logging in?
         </h1>
         <p className="text-gray-400 text-center text-sm" style={{ color: '#9ca3af', textAlign: 'center', fontSize: '0.875rem', marginBottom: 0 }}>
-          Enter your email and we&pos;ll send you a link to reset your password.
+          Enter your email and we&apos;ll send you a link to reset your password.
         </p>
       </div>
 
