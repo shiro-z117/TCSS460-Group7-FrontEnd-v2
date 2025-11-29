@@ -388,18 +388,6 @@ export default function AuthRegister({ providers, csrfToken }: any) {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12} sx={{ mt: -1 }}>
-              <Typography variant="body2" sx={{ color: '#ffffff' }}>
-                By Signing up, you agree to our &nbsp;
-                <Link component={NextLink} href="/" variant="subtitle2">
-                  Terms of Service
-                </Link>
-                &nbsp; and &nbsp;
-                <Link component={NextLink} href="/" variant="subtitle2">
-                  Privacy Policy
-                </Link>
-              </Typography>
-            </Grid>
             {errors.submit && (
               <Grid item xs={12}>
                 <FormHelperText error>{errors.submit}</FormHelperText>
