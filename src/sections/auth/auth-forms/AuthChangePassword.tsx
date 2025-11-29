@@ -70,7 +70,7 @@ export default function AuthChangePassword() {
         }
 
         try {
-          const response = await fetch('https://credentials-api-group2-20f368b8528b.herokuapp.com/auth/user/password/change', {
+          const response = await fetch(`${process.env.CREDENTIALS_API_URL}/auth/user/password/change`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
