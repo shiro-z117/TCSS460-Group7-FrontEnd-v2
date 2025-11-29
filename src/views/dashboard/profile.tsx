@@ -14,26 +14,37 @@ export default function ProfileView() {
           </h1>
           <p className="text-xl text-gray-400 mb-6">How many movies & shows have you watched?</p>
 
-          {/* Top container: basic user info */}
-          <div className="mb-8 px-12 pt-6 pb-8 rounded-xl bg-gray-800/50 backdrop-blur border border-purple-500/30 text-white">
-            {/* User nickname */}
-            <h3 className="text-3xl font-bold mb-1 text-white">Laios</h3>
+          <div className="mb-8 px-12 pt-6 pb-8 rounded-xl bg-gray-800/50 backdrop-blur border border-purple-500/30 text-white flex items-center gap-12">
+            <div>
+              <h3 className="text-4xl font-bold mb-1 text-white">Laios</h3>
+              <p className="text-2xl text-gray-400 mb-4">monstergourmand4</p>
 
-            {/* Username */}
-            <p className="text-[1.2rem] text-gray-400 mb-4">monstergourmand4</p>
+              <img
+                src="https://shapes.inc/api/public/avatar/laiostouden"
+                alt="User Avatar"
+                className="w-48 h-48 rounded-full border-2 border-purple-500"
+              />
+            </div>
 
-            {/* Avatar */}
-            <img
-              src="https://shapes.inc/api/public/avatar/laiostouden"
-              alt="User Avatar"
-              className="w-48 h-48 rounded-full border-2 border-purple-500"
-            />
+            <div className="flex gap-12 ml-8">
+              <div className="text-center">
+                <p className="text-3xl font-semibold text-purple-300">FAVORITES</p>
+                <p className="text-2xl font-bold mt-1">61</p>
+              </div>
+
+              <div className="text-center">
+                <p className="text-3xl font-semibold text-purple-300">WATCHLIST</p>
+                <p className="text-2xl font-bold mt-1">67</p>
+              </div>
+
+              <div className="text-center">
+                <p className="text-3xl font-semibold text-purple-300">HISTORY</p>
+                <p className="text-2xl font-bold mt-1">4444</p>
+              </div>
+            </div>
           </div>
 
-          {/* Bottom container: larger container */}
-          <div className="h-64 p-6 rounded-xl bg-gray-800/50 backdrop-blur border border-purple-500/30 text-white">
-            {/* Placeholder for more detailed profile info */}
-          </div>
+          <div className="h-64 p-6 rounded-xl bg-gray-800/50 backdrop-blur border border-purple-500/30 text-white"></div>
         </div>
       </main>
     </div>
