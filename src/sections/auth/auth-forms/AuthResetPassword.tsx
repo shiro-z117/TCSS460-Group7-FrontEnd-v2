@@ -45,9 +45,10 @@ export default function AuthResetPassword() {
 
   const [level, setLevel] = useState<StringColorProps>();
   const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
   const handleMouseDownPassword = (event: SyntheticEvent) => {
     event.preventDefault();
@@ -70,10 +71,14 @@ export default function AuthResetPassword() {
         submit: null
       }}
       validationSchema={Yup.object().shape({
-        password: Yup.string().max(255).required('Password is required'),
+        password: Yup.string()
+          .required('New Password is required')
+          .matches(/^[\x21-\x7E]+$/, 'Password contains invalid characters')
+          .min(8, 'Password must be at least 8 characters')
+          .max(50, 'Password cannot exceed 50 characters'),
         confirmPassword: Yup.string()
-          .required('Confirm Password is required')
-          .test('confirmPassword', 'Both Password must be match!', (confirmPassword, yup) => yup.parent.password === confirmPassword)
+          .required('Please confirm your password')
+          .oneOf([Yup.ref('password')], 'Passwords must match')
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
@@ -84,7 +89,7 @@ export default function AuthResetPassword() {
 
             openSnackbar({
               open: true,
-              message: 'Successfuly reset password.',
+              message: 'Successfully reset password.',
               variant: 'alert',
               alert: {
                 color: 'success'
@@ -108,9 +113,15 @@ export default function AuthResetPassword() {
       {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
         <form noValidate onSubmit={handleSubmit}>
           <Grid container spacing={3}>
+            {/* New Password */}
             <Grid item xs={12}>
               <Stack spacing={1}>
-                <InputLabel htmlFor="password-reset">Password</InputLabel>
+                <InputLabel
+                  htmlFor="password-reset"
+                  sx={{ color: '#ffffff !important', fontWeight: 500, marginBottom: '0.5rem', display: 'block' }}
+                >
+                  New Password
+                </InputLabel>
                 <OutlinedInput
                   fullWidth
                   error={Boolean(touched.password && errors.password)}
@@ -136,7 +147,15 @@ export default function AuthResetPassword() {
                       </IconButton>
                     </InputAdornment>
                   }
-                  placeholder="Enter password"
+                  placeholder="Enter your new password"
+                  sx={{
+                    backgroundColor: 'white',
+                    borderRadius: '0.375rem',
+                    '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                    '&:hover .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: '2px solid #9333ea' },
+                    '& input': { color: 'black' }
+                  }}
                 />
               </Stack>
               {touched.password && errors.password && (
@@ -144,32 +163,48 @@ export default function AuthResetPassword() {
                   {errors.password}
                 </FormHelperText>
               )}
-              <FormControl fullWidth sx={{ mt: 2 }}>
-                <Grid container spacing={2} alignItems="center">
-                  <Grid item>
-                    <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: '7px' }} />
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="subtitle1" fontSize="0.75rem">
-                      {level?.label}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </FormControl>
             </Grid>
+
+            {/* Confirm Password */}
             <Grid item xs={12}>
               <Stack spacing={1}>
-                <InputLabel htmlFor="confirm-password-reset">Confirm Password</InputLabel>
+                <InputLabel
+                  htmlFor="confirm-password-reset"
+                  sx={{ color: '#ffffff !important', fontWeight: 500, marginBottom: '0.5rem', display: 'block' }}
+                >
+                  Confirm New Password
+                </InputLabel>
                 <OutlinedInput
                   fullWidth
                   error={Boolean(touched.confirmPassword && errors.confirmPassword)}
                   id="confirm-password-reset"
-                  type="password"
+                  type={showConfirmPassword ? 'text' : 'password'}
                   value={values.confirmPassword}
                   name="confirmPassword"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  placeholder="Enter confirm password"
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle confirm password visibility"
+                        onClick={handleClickShowConfirmPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                        color="secondary"
+                      >
+                        {showConfirmPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  placeholder="Confirm your new password"
+                  sx={{
+                    backgroundColor: 'white',
+                    borderRadius: '0.375rem',
+                    '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                    '&:hover .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: '2px solid #9333ea' },
+                    '& input': { color: 'black' }
+                  }}
                 />
               </Stack>
               {touched.confirmPassword && errors.confirmPassword && (
@@ -179,14 +214,49 @@ export default function AuthResetPassword() {
               )}
             </Grid>
 
+            {/* Password Strength Indicator - after both fields */}
+            <Grid item xs={12}>
+              <FormControl fullWidth sx={{ mt: 1 }}>
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item>
+                    <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: '7px' }} />
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="subtitle1" fontSize="0.75rem" sx={{ color: '#ffffff' }}>
+                      {level?.label}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </FormControl>
+            </Grid>
+
+            {/* Submission error */}
             {errors.submit && (
               <Grid item xs={12}>
                 <FormHelperText error>{errors.submit}</FormHelperText>
               </Grid>
             )}
+
+            {/* Reset Button */}
             <Grid item xs={12}>
               <AnimateButton>
-                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                <Button
+                  disableElevation
+                  disabled={isSubmitting}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    backgroundColor: '#9333ea',
+                    '&:hover': { backgroundColor: '#7e22ce' },
+                    textTransform: 'none',
+                    fontSize: '1rem',
+                    color: 'white',
+                    paddingY: '0.75rem',
+                    borderRadius: '0.375rem'
+                  }}
+                >
                   Reset Password
                 </Button>
               </AnimateButton>

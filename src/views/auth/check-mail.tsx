@@ -21,9 +21,11 @@ export default function CheckMail() {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Box sx={{ mb: { xs: -0.5, sm: 0.5 } }}>
-            <Typography variant="h3">Hi, Check Your Mail</Typography>
+            <Typography variant="h3" sx={{ color: '#ffffff' }}>
+              Check Your Mail
+            </Typography>
             <Typography color="secondary" sx={{ mb: 0.5, mt: 1.25 }}>
-              We have sent a password recover instructions to your email.
+              We have sent instructions for recovering your password to your email.
             </Typography>
           </Box>
         </Grid>
@@ -37,9 +39,17 @@ export default function CheckMail() {
               size="large"
               type="submit"
               variant="contained"
-              color="primary"
+              sx={{
+                backgroundColor: '#9333ea',
+                '&:hover': { backgroundColor: '#7e22ce' },
+                textTransform: 'none',
+                fontSize: '1rem',
+                color: 'white',
+                paddingY: '0.75rem',
+                borderRadius: '0.375rem'
+              }}
             >
-              Sign in
+              Go To Login
             </Button>
           </AnimateButton>
         </Grid>
