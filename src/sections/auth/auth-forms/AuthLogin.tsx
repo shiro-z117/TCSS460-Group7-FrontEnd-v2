@@ -65,11 +65,8 @@ export default function AuthLogin({ providers, csrfToken }: any) {
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-          password: Yup.string()
-            .required('Password is required')
-            .test('no-leading-trailing-whitespace', 'Password cannot start or end with spaces', (value) => value === value.trim())
-            .min(6, 'Password must be at least 6 characters')
+          email: Yup.string().required('Email is required'),
+          password: Yup.string().required('Password is required')
         })}
         onSubmit={(values, { setErrors, setSubmitting }) => {
           const trimmedEmail = values.email.trim();
@@ -150,7 +147,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
                 </FormHelperText>
               )}
             </div>
-            <div style={{ marginBottom: '2rem' }}>
+            <div style={{ marginBottom: '1rem' }}>
               <InputLabel
                 htmlFor="password-login"
                 className="block text-white font-medium mb-2"
