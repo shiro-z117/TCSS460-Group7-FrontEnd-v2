@@ -23,6 +23,7 @@ import { Formik } from 'formik';
 // project import
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
+import AuthErrorCard from 'components/cards/AuthErrorCard';
 
 import { APP_DEFAULT_PATH } from 'config';
 import { fetcher } from 'utils/axios';
@@ -32,230 +33,185 @@ import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 
 export default function AuthLogin({ providers, csrfToken }: any) {
-  const [checked, setChecked] = useState(false);
   const [capsWarning, setCapsWarning] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  const [apiError, setApiError] = useState<string | null>(null);
 
-  const handleMouseDownPassword = (event: SyntheticEvent) => {
-    event.preventDefault();
-  };
-
-  const onKeyDown = (keyEvent: any) => {
-    if (keyEvent.getModifierState('CapsLock')) {
-      setCapsWarning(true);
-    } else {
-      setCapsWarning(false);
-    }
-  };
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = (event: SyntheticEvent) => event.preventDefault();
+  const onKeyDown = (keyEvent: any) => setCapsWarning(keyEvent.getModifierState('CapsLock'));
 
   return (
-    <>
-      <Formik
-        initialValues={{
-          email: '', // TODO for dev work, you can hardcode a known user and password here
-          password: '',
-          submit: null
-        }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string().required('Email is required'),
-          password: Yup.string().required('Password is required')
-        })}
-        onSubmit={(values, { setErrors, setSubmitting }) => {
-          const trimmedEmail = values.email.trim();
-          signIn('credentials', {
-            redirect: false,
-            mode: 'login',
-            email: trimmedEmail,
-            password: values.password,
-            callbackUrl: APP_DEFAULT_PATH
-          }).then(
-            (res: any) => {
-              if (res?.error) {
-                setErrors({ submit: res.error });
-                setSubmitting(false);
-              } else {
-                preload('api/menu/dashboard', fetcher);
-                setSubmitting(false);
-              }
-            },
-            (res) => {
-              setErrors({ submit: res.error });
-              setSubmitting(false);
+    <Formik
+      initialValues={{
+        email: '',
+        password: ''
+      }}
+      validationSchema={Yup.object().shape({
+        email: Yup.string().required('Email is required'),
+        password: Yup.string().required('Password is required')
+      })}
+      onSubmit={(values, { setSubmitting }) => {
+        setApiError(null); // reset API error on submit
+        const trimmedEmail = values.email.trim();
+
+        signIn('credentials', {
+          redirect: false,
+          mode: 'login',
+          email: trimmedEmail,
+          password: values.password,
+          callbackUrl: APP_DEFAULT_PATH
+        })
+          .then((res: any) => {
+            if (res?.error) {
+              const errorMessage = decodeURIComponent(res.error);
+              setApiError(errorMessage.replace(/^Error:\s*/i, ''));
+            } else {
+              preload('api/menu/dashboard', fetcher);
             }
-          );
-        }}
-      >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-          <form noValidate onSubmit={handleSubmit}>
-            <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-            {errors.submit && (
-              <div
-                className="bg-red-500 bg-opacity-10 border border-red-500 text-red-500 px-4 py-3 rounded"
-                style={{ marginBottom: '1.5rem' }}
-              >
-                {errors.submit}
-              </div>
+            setSubmitting(false);
+          })
+          .catch((err) => {
+            const errorMessage = decodeURIComponent(err?.error || 'An error has occurred');
+            setApiError(errorMessage);
+            setSubmitting(false);
+          });
+      }}
+    >
+      {({ errors, touched, values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+        <form noValidate onSubmit={handleSubmit}>
+          <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
+
+          {/* API Error */}
+          <AuthErrorCard message={apiError} />
+
+          {/* Email */}
+          <div style={{ marginBottom: '1.5rem' }}>
+            <InputLabel
+              htmlFor="email-login"
+              className="block text-white font-medium mb-2"
+              sx={{
+                color: '#ffffff !important',
+                fontWeight: 500,
+                marginBottom: '0.5rem'
+              }}
+            >
+              Email
+            </InputLabel>
+
+            <OutlinedInput
+              id="email-login"
+              type="email"
+              name="email"
+              value={values.email}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              placeholder="Enter email address"
+              fullWidth
+              error={Boolean(touched.email && errors.email)}
+              sx={{
+                backgroundColor: 'white',
+                borderRadius: '0.375rem',
+                '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                '&:hover .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: '2px solid #9333ea' },
+                '& input': { color: 'black' }
+              }}
+            />
+            {touched.email && errors.email && <FormHelperText error>{errors.email}</FormHelperText>}
+          </div>
+
+          {/* Password */}
+          <div style={{ marginBottom: '1rem' }}>
+            <InputLabel
+              htmlFor="password-login"
+              className="block text-white font-medium mb-2"
+              sx={{
+                color: '#ffffff !important',
+                fontWeight: 500,
+                marginBottom: '0.5rem'
+              }}
+            >
+              Password
+            </InputLabel>
+
+            <OutlinedInput
+              id="password-login"
+              name="password"
+              type={showPassword ? 'text' : 'password'}
+              value={values.password}
+              onBlur={(event: FocusEvent<any, Element>) => {
+                setCapsWarning(false);
+                handleBlur(event);
+              }}
+              onKeyDown={onKeyDown}
+              onChange={handleChange}
+              fullWidth
+              error={Boolean(touched.password && errors.password)}
+              placeholder="Enter password"
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                    color="secondary"
+                  >
+                    {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              sx={{
+                backgroundColor: 'white',
+                borderRadius: '0.375rem',
+                '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                '&:hover .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: '2px solid #9333ea' },
+                '& input': { color: 'black' }
+              }}
+            />
+            {capsWarning && (
+              <Typography variant="caption" sx={{ color: 'warning.main' }}>
+                Caps lock on!
+              </Typography>
             )}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <InputLabel
-                htmlFor="email-login"
-                className="block text-white font-medium mb-2"
-                sx={{
-                  color: '#ffffff !important',
-                  fontWeight: 500,
-                  marginBottom: '0.5rem',
-                  display: 'block'
-                }}
-              >
-                Email
-              </InputLabel>
-              <OutlinedInput
-                id="email-login"
-                type="email"
-                value={values.email}
-                name="email"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                placeholder="Enter email address"
-                fullWidth
-                error={Boolean(touched.email && errors.email)}
-                sx={{
-                  backgroundColor: 'white',
-                  borderRadius: '0.375rem',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    border: 'none'
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    border: 'none'
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    border: '2px solid #9333ea'
-                  },
-                  '& input': {
-                    color: 'black'
-                  }
-                }}
-              />
-              {touched.email && errors.email && (
-                <FormHelperText error id="standard-weight-helper-text-email-login">
-                  {errors.email}
-                </FormHelperText>
-              )}
-            </div>
-            <div style={{ marginBottom: '1rem' }}>
-              <InputLabel
-                htmlFor="password-login"
-                className="block text-white font-medium mb-2"
-                sx={{
-                  color: '#ffffff !important',
-                  fontWeight: 500,
-                  marginBottom: '0.5rem',
-                  display: 'block'
-                }}
-              >
-                Password
-              </InputLabel>
-              <OutlinedInput
-                fullWidth
-                color={capsWarning ? 'warning' : 'primary'}
-                error={Boolean(touched.password && errors.password)}
-                id="-password-login"
-                type={showPassword ? 'text' : 'password'}
-                value={values.password}
-                name="password"
-                onBlur={(event: FocusEvent<any, Element>) => {
-                  setCapsWarning(false);
-                  handleBlur(event);
-                }}
-                onKeyDown={onKeyDown}
-                onChange={handleChange}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                      color="secondary"
-                    >
-                      {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                placeholder="Enter password"
-                sx={{
-                  backgroundColor: 'white',
-                  borderRadius: '0.375rem',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    border: 'none'
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    border: 'none'
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    border: '2px solid #9333ea'
-                  },
-                  '& input': {
-                    color: 'black'
-                  }
-                }}
-              />
-              {capsWarning && (
-                <Typography variant="caption" sx={{ color: 'warning.main' }} id="warning-helper-text-password-login">
-                  Caps lock on!
-                </Typography>
-              )}
-              {touched.password && errors.password && (
-                <FormHelperText error id="standard-weight-helper-text-password-login">
-                  {errors.password}
-                </FormHelperText>
-              )}
-            </div>
-            <div className="text-right" style={{ textAlign: 'right', marginBottom: '2rem' }}>
-              <Link
-                component={NextLink}
-                href={'/forgot-password'}
-                className="text-purple-400 hover:text-purple-300 text-sm no-underline"
-                sx={{
-                  color: '#c084fc',
-                  fontSize: '0.875rem',
-                  textDecoration: 'none',
-                  '&:hover': {
-                    color: '#d8b4fe'
-                  }
-                }}
-              >
-                Forgot Password?
-              </Link>
-            </div>
-            <AnimateButton>
-              <Button
-                disableElevation
-                disabled={isSubmitting}
-                fullWidth
-                size="large"
-                type="submit"
-                variant="contained"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded"
-                sx={{
-                  backgroundColor: '#9333ea',
-                  '&:hover': {
-                    backgroundColor: '#7e22ce'
-                  },
-                  textTransform: 'none',
-                  fontSize: '1rem'
-                }}
-              >
-                {isSubmitting ? 'Logging in...' : 'Login'}
-              </Button>
-            </AnimateButton>
-          </form>
-        )}
-      </Formik>
-    </>
+            {touched.password && errors.password && <FormHelperText error>{errors.password}</FormHelperText>}
+          </div>
+
+          {/* Forgot password */}
+          <div className="text-right" style={{ marginBottom: '2rem' }}>
+            <Link
+              component={NextLink}
+              href={'/forgot-password'}
+              className="text-purple-400 hover:text-purple-300 text-sm no-underline"
+              sx={{ color: '#c084fc', '&:hover': { color: '#d8b4fe' } }}
+            >
+              Forgot Password?
+            </Link>
+          </div>
+
+          {/* Submit */}
+          <AnimateButton>
+            <Button
+              disableElevation
+              fullWidth
+              size="large"
+              type="submit"
+              variant="contained"
+              disabled={isSubmitting}
+              sx={{
+                backgroundColor: '#9333ea',
+                '&:hover': { backgroundColor: '#7e22ce' },
+                textTransform: 'none',
+                fontSize: '1rem'
+              }}
+            >
+              {isSubmitting ? 'Logging in...' : 'Login'}
+            </Button>
+          </AnimateButton>
+        </form>
+      )}
+    </Formik>
   );
 }
