@@ -12,7 +12,7 @@ export default function ProfileView() {
           <h1 className="text-6xl font-bold text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
             Profile
           </h1>
-          <p className="text-xl text-gray-400 mb-6">How many movies & shows have you watched?</p>
+          <p className="text-xl text-gray-400 mb-6">What&apos;s next on your Watchlist?</p>
 
           <div className="mb-8 px-12 pt-6 pb-8 rounded-xl bg-gray-800/50 backdrop-blur border border-purple-500/30 text-white flex items-center gap-12">
             <div>
