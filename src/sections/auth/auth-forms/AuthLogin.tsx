@@ -24,6 +24,7 @@ import { Formik } from 'formik';
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
 import AuthErrorCard from 'components/cards/AuthErrorCard';
+import { authApi } from 'services/authApi';
 
 import { APP_DEFAULT_PATH } from 'config';
 import { fetcher } from 'utils/axios';
@@ -51,31 +52,31 @@ export default function AuthLogin({ providers, csrfToken }: any) {
         email: Yup.string().required('Email is required'),
         password: Yup.string().required('Password is required')
       })}
-      onSubmit={(values, { setSubmitting }) => {
-        setApiError(null); // reset API error on submit
+      onSubmit={async (values, { setSubmitting }) => {
+        setApiError(null);
         const trimmedEmail = values.email.trim();
 
-        signIn('credentials', {
+        const res = await signIn('credentials', {
           redirect: false,
           mode: 'login',
           email: trimmedEmail,
           password: values.password,
           callbackUrl: APP_DEFAULT_PATH
-        })
-          .then((res: any) => {
-            if (res?.error) {
-              const errorMessage = decodeURIComponent(res.error);
-              setApiError(errorMessage.replace(/^Error:\s*/i, ''));
-            } else {
-              preload('api/menu/dashboard', fetcher);
-            }
-            setSubmitting(false);
-          })
-          .catch((err) => {
-            const errorMessage = decodeURIComponent(err?.error || 'An error has occurred');
-            setApiError(errorMessage);
-            setSubmitting(false);
-          });
+        });
+
+        console.log('Full signIn response:', res);
+        console.log('res.error:', res?.error);
+        console.log('res.status:', res?.status);
+        console.log('res.ok:', res?.ok);
+        console.log('res.url:', res?.url);
+
+        if (res?.error) {
+          setApiError(res.error);
+        } else if (res?.ok) {
+          preload('api/menu/dashboard', fetcher);
+        }
+
+        setSubmitting(false);
       }}
     >
       {({ errors, touched, values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (

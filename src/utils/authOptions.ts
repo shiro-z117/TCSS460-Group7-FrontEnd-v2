@@ -75,8 +75,27 @@ export const authOptions: NextAuthOptions = {
             throw new Error('Invalid mode');
           }
         } catch (e: any) {
-          console.error(e);
-          const errorMessage = e?.message || e?.response?.data?.message || 'Something went wrong!';
+          console.error('=== AUTH ERROR CAUGHT ===');
+          console.error('Error object:', e);
+
+          // Handle different error formats
+          let errorMessage = 'Something went wrong!';
+
+          if (e?.error) {
+            // Direct error property (your API format)
+            errorMessage = e.error;
+          } else if (e?.response?.data?.message) {
+            // Axios error format
+            errorMessage = e.response.data.message;
+          } else if (e?.response?.data?.error) {
+            // Alternative axios format
+            errorMessage = e.response.data.error;
+          } else if (e?.message) {
+            // Standard error message
+            errorMessage = e.message;
+          }
+
+          console.error('Final error message thrown:', errorMessage);
           throw new Error(errorMessage);
         }
       }
