@@ -163,6 +163,18 @@ export default function AuthResetPassword() {
                   {errors.password}
                 </FormHelperText>
               )}
+              <FormControl fullWidth sx={{ mt: 2 }}>
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item>
+                    <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: '7px' }} />
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="subtitle1" fontSize="0.75rem" sx={{ color: '#ffffff' }}>
+                      {level?.label}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </FormControl>
             </Grid>
 
             {/* Confirm Password */}
@@ -183,19 +195,6 @@ export default function AuthResetPassword() {
                   name="confirmPassword"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle confirm password visibility"
-                        onClick={handleClickShowConfirmPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                        color="secondary"
-                      >
-                        {showConfirmPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
                   placeholder="Confirm your new password"
                   sx={{
                     backgroundColor: 'white',
@@ -214,22 +213,6 @@ export default function AuthResetPassword() {
               )}
             </Grid>
 
-            {/* Password Strength Indicator - after both fields */}
-            <Grid item xs={12}>
-              <FormControl fullWidth sx={{ mt: 1 }}>
-                <Grid container spacing={2} alignItems="center">
-                  <Grid item>
-                    <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: '7px' }} />
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="subtitle1" fontSize="0.75rem" sx={{ color: '#ffffff' }}>
-                      {level?.label}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </FormControl>
-            </Grid>
-
             {/* Submission error */}
             {errors.submit && (
               <Grid item xs={12}>
@@ -238,7 +221,7 @@ export default function AuthResetPassword() {
             )}
 
             {/* Reset Button */}
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ mt: 2 }}>
               <AnimateButton>
                 <Button
                   disableElevation

@@ -66,6 +66,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
         username: '',
         email: '',
         password: '',
+        confirmPassword: '',
         submit: null
       }}
       validationSchema={Yup.object().shape({
@@ -87,16 +88,15 @@ export default function AuthRegister({ providers, csrfToken }: any) {
           )
           .min(3, 'Username must be at least 3 characters')
           .max(30, 'Username cannot exceed 30 characters'),
-        email: Yup.string()
-          .email('Must be a valid email')
-          .required('Email is required')
-          .trim()
-          .max(255),
+        email: Yup.string().email('Must be a valid email').required('Email is required').trim().max(255),
         password: Yup.string()
           .required('Password is required')
           .matches(/^[\x21-\x7E]+$/, 'Password contains invalid characters')
           .min(8, 'Password must be at least 8 characters')
-          .max(50, 'Password cannot exceed 50 characters')
+          .max(50, 'Password cannot exceed 50 characters'),
+        confirmPassword: Yup.string()
+          .required('Please confirm your password')
+          .oneOf([Yup.ref('password')], 'Passwords must match')
       })}
       onSubmit={async (values, { setErrors, setSubmitting }) => {
         const trimmedFirst = values.firstname.trim();
@@ -387,13 +387,60 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                 </Grid>
               </FormControl>
             </Grid>
+            <Grid item xs={12}>
+              <Stack spacing={1}>
+                <InputLabel
+                  htmlFor="confirmPassword-signup"
+                  sx={{
+                    color: '#ffffff !important',
+                    fontWeight: 500,
+                    marginBottom: '0.5rem',
+                    display: 'block'
+                  }}
+                >
+                  Confirm Password
+                </InputLabel>
+                <OutlinedInput
+                  id="confirmPassword-signup"
+                  type={showPassword ? 'text' : 'password'} // you can toggle showPassword if you want same visibility toggle
+                  name="confirmPassword"
+                  value={values.confirmPassword}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  placeholder="Confirm your password"
+                  fullWidth
+                  error={Boolean(touched.confirmPassword && errors.confirmPassword)}
+                  sx={{
+                    backgroundColor: 'white',
+                    borderRadius: '0.375rem',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      border: 'none'
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      border: '2px solid #9333ea'
+                    },
+                    '& input': {
+                      color: 'black'
+                    }
+                  }}
+                />
+              </Stack>
+              {touched.confirmPassword && errors.confirmPassword && (
+                <FormHelperText error id="helper-text-confirmPassword-signup">
+                  {errors.confirmPassword}
+                </FormHelperText>
+              )}
+            </Grid>
 
             {errors.submit && (
               <Grid item xs={12}>
                 <FormHelperText error>{errors.submit}</FormHelperText>
               </Grid>
             )}
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ mt: 2 }}>
               <AnimateButton>
                 <Button
                   disableElevation

@@ -185,6 +185,18 @@ export default function AuthChangePassword() {
                 />
               </Stack>
               {touched.newPassword && errors.newPassword && <FormHelperText error>{errors.newPassword}</FormHelperText>}
+              <FormControl fullWidth sx={{ mt: 2 }}>
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item>
+                    <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: '7px' }} />
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="subtitle1" fontSize="0.75rem" sx={{ color: '#ffffff' }}>
+                      {level?.label}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </FormControl>
             </Grid>
 
             <Grid item xs={12}>
@@ -205,19 +217,6 @@ export default function AuthChangePassword() {
                   placeholder="Confirm your new password"
                   fullWidth
                   error={Boolean(touched.confirmPassword && errors.confirmPassword)}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle confirm password visibility"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                        color="secondary"
-                      >
-                        {showConfirmPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
                   sx={{
                     backgroundColor: 'white',
                     borderRadius: '0.375rem',
@@ -229,21 +228,6 @@ export default function AuthChangePassword() {
                 />
               </Stack>
               {touched.confirmPassword && errors.confirmPassword && <FormHelperText error>{errors.confirmPassword}</FormHelperText>}
-            </Grid>
-
-            <Grid item xs={12}>
-              <FormControl fullWidth sx={{ mt: 1 }}>
-                <Grid container spacing={2} alignItems="center">
-                  <Grid item>
-                    <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: '7px' }} />
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="subtitle1" fontSize="0.75rem" sx={{ color: '#ffffff' }}>
-                      {level?.label}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </FormControl>
             </Grid>
 
             {successMessage && (
@@ -258,7 +242,7 @@ export default function AuthChangePassword() {
               </Grid>
             )}
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ mt: 2 }}>
               <AnimateButton>
                 <Button
                   disableElevation

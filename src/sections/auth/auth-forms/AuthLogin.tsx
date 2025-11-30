@@ -24,7 +24,6 @@ import { Formik } from 'formik';
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
 import AuthErrorCard from 'components/cards/AuthErrorCard';
-import { authApi } from 'services/authApi';
 
 import { APP_DEFAULT_PATH } from 'config';
 import { fetcher } from 'utils/axios';
