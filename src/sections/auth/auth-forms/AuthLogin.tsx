@@ -8,15 +8,11 @@ import { signIn } from 'next-auth/react';
 
 // material-ui
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 // third party
@@ -97,7 +93,10 @@ export default function AuthLogin({ providers, csrfToken }: any) {
           <form noValidate onSubmit={handleSubmit}>
             <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
             {errors.submit && (
-              <div className="bg-red-500 bg-opacity-10 border border-red-500 text-red-500 px-4 py-3 rounded" style={{ marginBottom: '1.5rem' }}>
+              <div
+                className="bg-red-500 bg-opacity-10 border border-red-500 text-red-500 px-4 py-3 rounded"
+                style={{ marginBottom: '1.5rem' }}
+              >
                 {errors.submit}
               </div>
             )}
@@ -128,16 +127,16 @@ export default function AuthLogin({ providers, csrfToken }: any) {
                   backgroundColor: 'white',
                   borderRadius: '0.375rem',
                   '& .MuiOutlinedInput-notchedOutline': {
-                    border: 'none',
+                    border: 'none'
                   },
                   '&:hover .MuiOutlinedInput-notchedOutline': {
-                    border: 'none',
+                    border: 'none'
                   },
                   '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    border: '2px solid #9333ea',
+                    border: '2px solid #9333ea'
                   },
                   '& input': {
-                    color: 'black',
+                    color: 'black'
                   }
                 }}
               />
@@ -192,16 +191,16 @@ export default function AuthLogin({ providers, csrfToken }: any) {
                   backgroundColor: 'white',
                   borderRadius: '0.375rem',
                   '& .MuiOutlinedInput-notchedOutline': {
-                    border: 'none',
+                    border: 'none'
                   },
                   '&:hover .MuiOutlinedInput-notchedOutline': {
-                    border: 'none',
+                    border: 'none'
                   },
                   '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    border: '2px solid #9333ea',
+                    border: '2px solid #9333ea'
                   },
                   '& input': {
-                    color: 'black',
+                    color: 'black'
                   }
                 }}
               />
@@ -226,7 +225,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
                   fontSize: '0.875rem',
                   textDecoration: 'none',
                   '&:hover': {
-                    color: '#d8b4fe',
+                    color: '#d8b4fe'
                   }
                 }}
               >
@@ -245,10 +244,10 @@ export default function AuthLogin({ providers, csrfToken }: any) {
                 sx={{
                   backgroundColor: '#9333ea',
                   '&:hover': {
-                    backgroundColor: '#7e22ce',
+                    backgroundColor: '#7e22ce'
                   },
                   textTransform: 'none',
-                  fontSize: '1rem',
+                  fontSize: '1rem'
                 }}
               >
                 {isSubmitting ? 'Logging in...' : 'Login'}
