@@ -17,7 +17,7 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 ## Production Sprint Meetings
 ### Discussion 1
 - **Date:** Monday, December 1, 2025
-- **Time:** 1:30 PM - 
+- **Time:** 1:30 PM - 3:15 PM (105 minutes)
 - **Location:** Discord
 #### Actions:
 - Created to-do list
