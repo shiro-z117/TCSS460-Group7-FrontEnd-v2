@@ -40,8 +40,8 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 - Created single page movie and show detail pages (/dashboard/movies/[id]) and (/dashboard/shows/[id])
 - Implemented the delete UI button with confirmation messages
 - Reorganised and structured code to follow the template patterns (views and page.tsx separation)
-- Added placeholder cast section for future API integration
-- Fixed/remade credentials api
+- Added cast section and ratings for UI
+- Fixed/remade credentials api in Supabase
 
 ### Bao
 
