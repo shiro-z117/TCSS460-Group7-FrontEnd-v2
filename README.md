@@ -63,6 +63,13 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 ## Beta II Sprint Comments
 
 ### Patrick
+https://pibble-user-db.onrender.com
+Created Seperate Web API for user to be able to have a list for favorites, 
+watchlist, watched and have avatars for users
+    - Created database and connected it to render
+    - deployed web api that queries the database on render with endpoints
+    - created tests for said api and middleware
+
 
 ### Linda Miao
 
