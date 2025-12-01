@@ -25,10 +25,18 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
   
 ### Discussion 2
 - **Date:** Saturday, November 22, 2025
+- **Time:** 7:00 PM - 9:00 PM (120 minutes)
+- **Location:** Discord
+#### Actions:
+- Merged branches
+
+### Discussion 3
+- **Date:** Sunday, November 30, 2025
 - **Time:** 7:00 PM - 
 - **Location:** Discord
 #### Actions:
--
+- Update README
+- Discuss final sprint
 ---
 ## Beta II Sprint Contributions
 
@@ -40,8 +48,8 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 - Created single page movie and show detail pages (/dashboard/movies/[id]) and (/dashboard/shows/[id])
 - Implemented the delete UI button with confirmation messages
 - Reorganised and structured code to follow the template patterns (views and page.tsx separation)
-- Added placeholder cast section for future API integration
-- Fixed/remade credentials api
+- Added cast section and ratings for UI
+- Fixed/remade credentials api in Supabase
 
 ### Bao
 
