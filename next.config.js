@@ -46,6 +46,7 @@ const nextConfig = {
     MESSAGES_WEB_API_KEY: process.env.MESSAGES_WEB_API_KEY,
 
     CREDENTIALS_API_URL: 'https://credentials-api-group2-20f368b8528b.herokuapp.com/',
+    USER_DB_API_URL: process.env.USER_DB_API_URL || 'https://pibble-user-db.onrender.com',
 
     NEXT_APP_JWT_SECRET: process.env.REACT_APP_JWT_SECRET,
     NEXT_APP_JWT_TIMEOUT: process.env.REACT_APP_JWT_TIMEOUT,

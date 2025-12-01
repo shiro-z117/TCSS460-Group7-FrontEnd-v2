@@ -61,6 +61,14 @@ if (!process.env.SHOWS_WEB_API_KEY) {
   );
 }
 
+if (!process.env.USER_DB_API_URL) {
+  throw new Error(
+    'USER_DB_API_URL environment variable is not set. ' +
+    'Please add USER_DB_API_URL to your .env and/or next.config.js file(s). ' +
+    'Example: USER_DB_API_URL=https://pibble-user-db.onrender.com'
+  );
+}
+
 // ==============================|| CREDENTIALS SERVICE ||============================== //
 
 const credentialsService = axios.create({ baseURL: process.env.CREDENTIALS_API_URL });
@@ -194,10 +202,46 @@ showsService.interceptors.response.use(
   }
 );
 
+// ==============================|| USER DATABASE SERVICE ||============================== //
+
+const userDbService = axios.create({ baseURL: process.env.USER_DB_API_URL });
+
+userDbService.interceptors.request.use(
+  async (config: InternalAxiosRequestConfig) => {
+    const session = await getSession();
+    if (session?.token.accessToken) {
+      config.headers['Authorization'] = `Bearer ${session?.token.accessToken}`;
+    }
+    return config;
+  },
+  (error: AxiosError) => {
+    return Promise.reject(error);
+  }
+);
+
+userDbService.interceptors.response.use(
+  (response: AxiosResponse) => response,
+  (error: AxiosError) => {
+    if (error.code === 'ECONNREFUSED') {
+      const { baseURL, url, data } = error.config || {};
+      console.error('Connection refused. The User DB API server may be down. Attempting to connect to: ');
+      console.error({ baseURL, url, data });
+      return Promise.reject({
+        message: 'Connection refused.'
+      });
+    } else if (error.response?.status && error.response.status >= 500) {
+      return Promise.reject({ message: 'Server Error. Contact support' });
+    } else if (error.response?.status === 401 && typeof window !== 'undefined' && !window.location.href.includes('/login')) {
+      window.location.pathname = '/login';
+    }
+    return Promise.reject((error.response && error.response.data) || 'Server connection refused');
+  }
+);
+
 // ==============================|| EXPORTS ||============================== //
 
 export default credentialsService; // Maintain backward compatibility
-export { credentialsService, messagesService, movieService, showsService };
+export { credentialsService, messagesService, movieService, showsService, userDbService };
 
 // Credentials service helpers
 export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
