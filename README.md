@@ -25,10 +25,18 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
   
 ### Discussion 2
 - **Date:** Saturday, November 22, 2025
+- **Time:** 7:00 PM - 9:00 PM (120 minutes)
+- **Location:** Discord
+#### Actions:
+- Merged branches
+
+### Discussion 3
+- **Date:** Sunday, November 30, 2025
 - **Time:** 7:00 PM - 
 - **Location:** Discord
 #### Actions:
--
+- Update README
+- Discuss final sprint
 ---
 ## Beta II Sprint Contributions
 
