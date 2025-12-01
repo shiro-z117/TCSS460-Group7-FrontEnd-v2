@@ -54,6 +54,10 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 ### Bao
 
 ### Shiraz
+- Created profile page
+- Updated styling and structure on several pages
+- Fixed error messages on login page
+- Fixed authentication errors with login and register
 
 ---
 ## Beta II Sprint Comments
@@ -69,6 +73,7 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 ### Bao
 
 ### Shiraz
+- Working with a template can feel quite finnicky when the approaches you are used to differs from the implementations used by the template.
 
 ---
 
