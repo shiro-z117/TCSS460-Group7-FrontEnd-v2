@@ -62,6 +62,9 @@ watchlist, watched and have avatars for users
 - Fixed/remade credentials api in Supabase
 
 ### Bao
+- Created the search page with all of the necessary filters
+- Communicate with other group to handle problems related with our API
+- Cooperate with other team members on their branch
 
 ### Shiraz
 - Created profile page
@@ -85,7 +88,8 @@ watchlist, watched and have avatars for users
 - Making sure my code worked and figuring out the overall layout and aesthetics of the webpage was a struggle 
 
 ### Bao
-
+- All main functions worked well in this sprint, next sprint we just need to make the UI become consistent between pages
+  
 ### Shiraz
 - Working with a template can feel quite finnicky when the approaches you are used to differs from the implementations used by the template.
 
