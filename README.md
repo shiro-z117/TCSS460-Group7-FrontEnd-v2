@@ -50,6 +50,9 @@ watchlist, watched and have avatars for users
 - created tests for said api and middleware
 
 ### Linda Miao
+- Fixed dashboard pages for movies and TV shows
+- Added metrics section at the top of the dashboard
+- Set up real data integration for movies and TV shows
 
 ### Shiannel
 - Created single page movie and show detail pages (/dashboard/movies/[id]) and (/dashboard/shows/[id])
@@ -74,6 +77,8 @@ watchlist, watched and have avatars for users
 
 
 ### Linda Miao
+- Collaboration with team members (B and Coco) is crucial for page development
+- Keeping the latest branch updated is essential for project progress
 
 ### Shiannel
 - Navigating through the whole template code was a lot, but we managed
