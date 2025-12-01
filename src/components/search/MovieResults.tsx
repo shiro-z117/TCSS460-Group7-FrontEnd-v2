@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 interface Movie {
   id: number;
   title: string;
@@ -77,9 +79,10 @@ export default function MovieResults({
       {/* Movie Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
         {movies.map((movie) => (
-          <div
+          <Link
             key={movie.id}
-            className="bg-gray-800/50 backdrop-blur rounded-xl overflow-hidden border border-purple-500/30 hover:border-purple-500 transition-all hover:scale-105 cursor-pointer"
+            href={`/dashboard/movies/${movie.id}`}
+            className="bg-gray-800/50 backdrop-blur rounded-xl overflow-hidden border border-purple-500/30 hover:border-purple-500 transition-all hover:scale-105 cursor-pointer block"
           >
             {movie.poster_url ? (
               <img
@@ -120,7 +123,7 @@ export default function MovieResults({
                 <p className="text-gray-400 text-sm mt-2 line-clamp-3">{movie.overview}</p>
               )}
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 

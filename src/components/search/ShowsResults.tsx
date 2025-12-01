@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 interface Show {
   show_id: number;
   name: string;
@@ -70,9 +72,10 @@ export default function ShowsResults({
       {/* Shows Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
         {shows.map((show) => (
-          <div
+          <Link
             key={show.show_id}
-            className="bg-gray-800/50 backdrop-blur rounded-xl overflow-hidden border border-purple-500/30 hover:border-purple-500 transition-all hover:scale-105 cursor-pointer"
+            href={`/dashboard/shows/${show.show_id}`}
+            className="bg-gray-800/50 backdrop-blur rounded-xl overflow-hidden border border-purple-500/30 hover:border-purple-500 transition-all hover:scale-105 cursor-pointer block"
           >
             {show.poster_url ? (
               <img
@@ -129,7 +132,7 @@ export default function ShowsResults({
                 <p className="text-gray-400 text-sm mt-2 line-clamp-3">{show.overview}</p>
               )}
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
