@@ -14,6 +14,40 @@ TV Shows Data (Group 1): https://g1-tvapi.onrender.com/api-docs/
 Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 
 ---
+## Production Sprint Meetings
+### Discussion 1
+- **Date:** Monday, December 1, 2025
+- **Time:** 1:30 PM - 
+- **Location:** Discord
+#### Actions:
+- Created to-do list
+---
+## Production Sprint Contributions
+
+### Patrick
+
+### Linda Miao
+
+### Shiannel
+
+### Bao
+
+### Shiraz
+
+---
+## Production Sprint Comments
+
+### Patrick
+
+### Linda Miao
+
+### Shiannel
+
+### Bao
+
+### Shiraz
+
+---
 ## Beta II Sprint Meetings
 ### Discussion 1
 - **Date:** Monday, November 22, 2025
