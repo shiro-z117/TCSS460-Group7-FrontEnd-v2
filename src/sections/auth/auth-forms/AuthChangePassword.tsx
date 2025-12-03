@@ -23,6 +23,7 @@ import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { strengthColor, strengthIndicator } from 'utils/password-strength';
 import { StringColorProps } from 'types/password';
+import CapsLockWarning from 'components/CapsLockWarning';
 
 // assets
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
@@ -137,6 +138,7 @@ export default function AuthChangePassword() {
                   }}
                 />
               </Stack>
+              <CapsLockWarning />
               {touched.currentPassword && errors.currentPassword && <FormHelperText error>{errors.currentPassword}</FormHelperText>}
             </Grid>
 
@@ -184,6 +186,7 @@ export default function AuthChangePassword() {
                   }}
                 />
               </Stack>
+              <CapsLockWarning />
               {touched.newPassword && errors.newPassword && <FormHelperText error>{errors.newPassword}</FormHelperText>}
               <FormControl fullWidth sx={{ mt: 2 }}>
                 <Grid container spacing={2} alignItems="center">
@@ -227,6 +230,7 @@ export default function AuthChangePassword() {
                   }}
                 />
               </Stack>
+              <CapsLockWarning />
               {touched.confirmPassword && errors.confirmPassword && <FormHelperText error>{errors.confirmPassword}</FormHelperText>}
             </Grid>
 

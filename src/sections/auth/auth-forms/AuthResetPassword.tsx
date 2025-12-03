@@ -21,7 +21,10 @@ import { Formik } from 'formik';
 // project import
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
+import CapsLockWarning from 'components/CapsLockWarning';
 import { strengthColor, strengthIndicator } from 'utils/password-strength';
+
+// types
 import { StringColorProps } from 'types/password';
 
 // assets
@@ -96,6 +99,7 @@ export default function AuthChangePassword() {
       {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
         <form noValidate onSubmit={handleSubmit}>
           <Grid container spacing={3}>
+            {/* New Password */}
             <Grid item xs={12}>
               <Stack spacing={1}>
                 <InputLabel
@@ -184,7 +188,12 @@ export default function AuthChangePassword() {
                   }}
                 />
               </Stack>
-              {touched.newPassword && errors.newPassword && <FormHelperText error>{errors.newPassword}</FormHelperText>}
+              <CapsLockWarning />
+              {touched.newPassword && errors.newPassword && (
+                <FormHelperText error id="helper-text-password-reset">
+                  {errors.newPassword}
+                </FormHelperText>
+              )}
               <FormControl fullWidth sx={{ mt: 2 }}>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item>
@@ -240,7 +249,12 @@ export default function AuthChangePassword() {
                   }}
                 />
               </Stack>
-              {touched.confirmPassword && errors.confirmPassword && <FormHelperText error>{errors.confirmPassword}</FormHelperText>}
+              <CapsLockWarning />
+              {touched.confirmPassword && errors.confirmPassword && (
+                <FormHelperText error id="helper-text-confirm-password-reset">
+                  {errors.confirmPassword}
+                </FormHelperText>
+              )}
             </Grid>
 
             {successMessage && (
@@ -274,7 +288,7 @@ export default function AuthChangePassword() {
                     borderRadius: '0.375rem'
                   }}
                 >
-                  Change Password
+                  Reset Password
                 </Button>
               </AnimateButton>
             </Grid>
