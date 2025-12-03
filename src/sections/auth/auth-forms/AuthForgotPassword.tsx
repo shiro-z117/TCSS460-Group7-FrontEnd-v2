@@ -16,7 +16,7 @@ import { Formik } from 'formik';
 // project import
 import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'components/@extended/AnimateButton';
-
+import { authApi } from '@/services/authApi';
 import { openSnackbar } from 'api/snackbar';
 
 // types
@@ -39,12 +39,15 @@ export default function AuthForgotPassword() {
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
+          // Call the actual API
+          await authApi.forgotPassword(values.email);
+
           setStatus({ success: true });
           setSubmitting(false);
 
           openSnackbar({
             open: true,
-            message: 'Check mail for reset password link',
+            message: 'Password reset email sent! Check your inbox.',
             variant: 'alert',
             alert: {
               color: 'success'
@@ -56,9 +59,19 @@ export default function AuthForgotPassword() {
           }, 1500);
         } catch (err: any) {
           if (scriptedRef.current) {
+            const errorMessage = err?.response?.data?.message || err?.message || 'Failed to send reset email';
             setStatus({ success: false });
-            setErrors({ submit: err.message });
+            setErrors({ submit: errorMessage });
             setSubmitting(false);
+
+            openSnackbar({
+              open: true,
+              message: errorMessage,
+              variant: 'alert',
+              alert: {
+                color: 'error'
+              }
+            } as SnackbarProps);
           }
         }
       }}
