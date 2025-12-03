@@ -4,6 +4,7 @@ import { useEffect, useState, SyntheticEvent } from 'react';
 
 // next
 import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 
 // material-ui
@@ -38,6 +39,7 @@ import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 import { StringColorProps } from 'types/password';
 
 export default function AuthRegister({ providers, csrfToken }: any) {
+  const router = useRouter();
   const [level, setLevel] = useState<StringColorProps>();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -116,6 +118,9 @@ export default function AuthRegister({ providers, csrfToken }: any) {
           if (res?.error) {
             setErrors({ submit: res.error });
             setSubmitting(false);
+          } else if (res?.ok) {
+            // Successfully registered and signed in, redirect to dashboard
+            router.push(APP_DEFAULT_PATH);
           }
         });
       }}

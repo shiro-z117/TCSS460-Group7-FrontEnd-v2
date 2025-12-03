@@ -4,6 +4,7 @@ import React, { useState, FocusEvent, SyntheticEvent } from 'react';
 
 // next
 import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 
 // material-ui
@@ -33,6 +34,7 @@ import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 
 export default function AuthLogin({ providers, csrfToken }: any) {
+  const router = useRouter();
   const [capsWarning, setCapsWarning] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -71,11 +73,13 @@ export default function AuthLogin({ providers, csrfToken }: any) {
 
         if (res?.error) {
           setApiError(res.error);
+          setSubmitting(false);
         } else if (res?.ok) {
-          preload('api/menu/dashboard', fetcher);
+          // Successfully logged in, redirect to dashboard
+          router.push(APP_DEFAULT_PATH);
+        } else {
+          setSubmitting(false);
         }
-
-        setSubmitting(false);
       }}
     >
       {({ errors, touched, values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (

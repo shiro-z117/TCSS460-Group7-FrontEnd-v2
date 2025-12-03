@@ -8,21 +8,22 @@ export const authApi = {
     lastname: string; username: string; phone: string }) =>
     credentialsService.post('/auth/register', data),
 
+  // Send password reset email (requires verified email)
+  forgotPassword: (email: string) =>
+    credentialsService.post('/auth/password/reset-request', { email }),
+
+  // Reset password using token from email
+  resetPassword: (data: { token: string; newPassword: string }) =>
+    credentialsService.post('/auth/password/reset', data),
+
   // TODO: Update endpoint once provide by group
   sendVerificationEmail: () => credentialsService.post('/auth/verify/email/send'),
 
   // TODO: Update endpoint and data format once provide by group
   changePassword: (data: { currentPassword?: string; newPassword: string;
     token?: string }) =>
-    credentialsService.post('/auth/change-password', data),
+    credentialsService.post('/auth/user/password/change', data),
 
   // TODO: Update endpoint once provide by group
-  deleteAccount: () => credentialsService.delete('/auth/account'),
-
-  // TODO: Update endpoint once provide by group
-  resetPassword: (data: { token: string; newPassword: string }) =>
-    credentialsService.post('/auth/reset-password', data),
-
-  // TODO: Update endpoint once provides by group
-  forgotPassword: (email: string) => credentialsService.post('/auth/forgot-password', { email })
+  deleteAccount: () => credentialsService.delete('/auth/me')
 };
