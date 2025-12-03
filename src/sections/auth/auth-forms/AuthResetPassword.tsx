@@ -24,6 +24,7 @@ import { Formik } from 'formik';
 // project import
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
+import CapsLockWarning from 'components/CapsLockWarning';
 
 import { openSnackbar } from 'api/snackbar';
 import useScriptRef from 'hooks/useScriptRef';
@@ -158,6 +159,7 @@ export default function AuthResetPassword() {
                   }}
                 />
               </Stack>
+              <CapsLockWarning />
               {touched.password && errors.password && (
                 <FormHelperText error id="helper-text-password-reset">
                   {errors.password}
@@ -206,6 +208,7 @@ export default function AuthResetPassword() {
                   }}
                 />
               </Stack>
+              <CapsLockWarning />
               {touched.confirmPassword && errors.confirmPassword && (
                 <FormHelperText error id="helper-text-confirm-password-reset">
                   {errors.confirmPassword}

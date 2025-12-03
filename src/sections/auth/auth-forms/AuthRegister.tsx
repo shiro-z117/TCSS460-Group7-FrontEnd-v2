@@ -26,6 +26,7 @@ import { Formik } from 'formik';
 // project import
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
+import CapsLockWarning from 'components/CapsLockWarning';
 
 import { APP_DEFAULT_PATH } from 'config';
 import { strengthColor, strengthIndicator } from 'utils/password-strength';
@@ -369,6 +370,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                   }}
                 />
               </Stack>
+              <CapsLockWarning />
               {touched.password && errors.password && (
                 <FormHelperText error id="helper-text-password-signup">
                   {errors.password}
@@ -428,6 +430,7 @@ export default function AuthRegister({ providers, csrfToken }: any) {
                   }}
                 />
               </Stack>
+              <CapsLockWarning />
               {touched.confirmPassword && errors.confirmPassword && (
                 <FormHelperText error id="helper-text-confirmPassword-signup">
                   {errors.confirmPassword}

@@ -24,6 +24,7 @@ import { Formik } from 'formik';
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
 import AuthErrorCard from 'components/cards/AuthErrorCard';
+import CapsLockWarning from 'components/CapsLockWarning';
 
 import { APP_DEFAULT_PATH } from 'config';
 import { fetcher } from 'utils/axios';
@@ -141,7 +142,6 @@ export default function AuthLogin({ providers, csrfToken }: any) {
               type={showPassword ? 'text' : 'password'}
               value={values.password}
               onBlur={(event: FocusEvent<any, Element>) => {
-                setCapsWarning(false);
                 handleBlur(event);
               }}
               onKeyDown={onKeyDown}
@@ -171,11 +171,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
                 '& input': { color: 'black' }
               }}
             />
-            {capsWarning && (
-              <Typography variant="caption" sx={{ color: 'warning.main' }}>
-                Caps lock on!
-              </Typography>
-            )}
+            <CapsLockWarning />
             {touched.password && errors.password && <FormHelperText error>{errors.password}</FormHelperText>}
           </div>
 
