@@ -71,7 +71,7 @@ export default function AuthChangePassword() {
         }
 
         try {
-          const response = await fetch(`${process.env.CREDENTIALS_API_URL}/auth/user/password/change`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_CREDENTIALS_API_URL}/auth/user/password/change`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -220,6 +220,19 @@ export default function AuthChangePassword() {
                   placeholder="Confirm your new password"
                   fullWidth
                   error={Boolean(touched.confirmPassword && errors.confirmPassword)}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle confirm password visibility"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                        color="secondary"
+                      >
+                        {showConfirmPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
                   sx={{
                     backgroundColor: 'white',
                     borderRadius: '0.375rem',
