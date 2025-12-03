@@ -9,6 +9,7 @@ import { openSnackbar } from '@/api/snackbar';
 export default function ProfileView() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const router = useRouter();
 
@@ -31,6 +32,7 @@ export default function ProfileView() {
           },
           close: true
         } as any);
+        setIsVerifying(false);
         return;
       }
 
@@ -47,7 +49,6 @@ export default function ProfileView() {
       } as any);
     } catch (error: any) {
       const errorMessage = error?.details || error?.error || error?.message || 'Failed to send verification email';
-
       openSnackbar({
         open: true,
         message: errorMessage,
@@ -60,6 +61,66 @@ export default function ProfileView() {
       } as any);
     } finally {
       setIsVerifying(false);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    setIsChangingPassword(true);
+    try {
+      const token = getToken();
+      if (!token) {
+        openSnackbar({
+          open: true,
+          message: 'Please login first',
+          variant: 'alert',
+          alert: {
+            color: 'error',
+            variant: 'filled'
+          },
+          close: true
+        } as any);
+        setIsChangingPassword(false);
+        return;
+      }
+
+      const apiUrl = process.env.NEXT_PUBLIC_CREDENTIALS_API_URL || 'https://credentials-api-group2-20f368b8528b.herokuapp.com';
+      const response = await fetch(`${apiUrl}/auth/me`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const userData = await response.json();
+
+      if (!userData.data?.emailVerified) {
+        openSnackbar({
+          open: true,
+          message: 'Please verify your email first before changing password',
+          variant: 'alert',
+          alert: {
+            color: 'warning',
+            variant: 'filled'
+          },
+          close: true
+        } as any);
+        setIsChangingPassword(false);
+        return;
+      }
+
+      router.push('/change-password');
+    } catch (error: any) {
+      const errorMessage = error?.message || 'Failed to check verification status';
+      openSnackbar({
+        open: true,
+        message: errorMessage,
+        variant: 'alert',
+        alert: {
+          color: 'error',
+          variant: 'filled'
+        },
+        close: true
+      } as any);
+      setIsChangingPassword(false);
     }
   };
 
@@ -106,7 +167,6 @@ export default function ProfileView() {
 
     } catch (error: any) {
       const errorMessage = error?.details || error?.error || error?.message || 'Failed to delete account';
-
       openSnackbar({
         open: true,
         message: errorMessage,
@@ -126,9 +186,7 @@ export default function ProfileView() {
       <Sidebar />
       <main className="ml-64 flex-1 p-8">
         <div className="mb-8">
-          <h1 className="text-6xl font-bold text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            Profile
-          </h1>
+          <h1 className="text-6xl font-bold text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">Profile</h1>
           <p className="text-xl text-gray-400 mb-6">What&apos;s next on your Watchlist?</p>
           <div className="mb-8 px-12 pt-6 pb-8 rounded-xl bg-gray-800/50 backdrop-blur border border-purple-500/30 text-white flex items-center gap-12">
             <div>
@@ -163,13 +221,13 @@ export default function ProfileView() {
                   {isVerifying ? 'Sending...' : 'Verify Email'}
                 </button>
               </div>
-              <div className="flex items-center justify-between p-4 rounded-lg bg-gray-700/30 opacity-50">
+              <div className="flex items-center justify-between p-4 rounded-lg bg-gray-700/30">
                 <div>
                   <h3 className="text-lg font-semibold text-white">Change Password</h3>
                   <p className="text-sm text-gray-400">Update your account password</p>
                 </div>
-                <button disabled className="px-6 py-2 bg-gray-600 cursor-not-allowed text-white font-semibold rounded-lg">
-                  Coming Soon
+                <button onClick={handleChangePassword} disabled={isChangingPassword} className="px-6 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors">
+                  {isChangingPassword ? 'Checking...' : 'Change Password'}
                 </button>
               </div>
               <div className="flex items-center justify-between p-4 rounded-lg bg-gray-700/30">
@@ -190,16 +248,10 @@ export default function ProfileView() {
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <div className="bg-gray-800 rounded-xl p-8 max-w-md w-full mx-4 border border-red-500/30">
             <h2 className="text-2xl font-bold text-white mb-4">Delete Account?</h2>
-            <p className="text-gray-300 mb-6">
-              This action cannot be undone. All your data, favorites, watchlist, and history will be permanently deleted.
-            </p>
+            <p className="text-gray-300 mb-6">This action cannot be undone. All your data, favorites, watchlist, and history will be permanently deleted.</p>
             <div className="flex gap-4">
-              <button onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting} className="flex-1 px-6 py-3 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors">
-                Cancel
-              </button>
-              <button onClick={handleDeleteAccount} disabled={isDeleting} className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors">
-                {isDeleting ? 'Deleting...' : 'Delete Forever'}
-              </button>
+              <button onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting} className="flex-1 px-6 py-3 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors">Cancel</button>
+              <button onClick={handleDeleteAccount} disabled={isDeleting} className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors">{isDeleting ? 'Deleting...' : 'Delete Forever'}</button>
             </div>
           </div>
         </div>
