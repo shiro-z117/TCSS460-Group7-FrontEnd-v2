@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, SyntheticEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 
 // material-ui
 import Button from '@mui/material/Button';
@@ -30,6 +32,7 @@ import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 
 export default function AuthChangePassword() {
+  const router = useRouter();
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -71,24 +74,60 @@ export default function AuthChangePassword() {
         }
 
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_CREDENTIALS_API_URL}/auth/user/password/change`, {
+          const apiUrl = process.env.NEXT_PUBLIC_CREDENTIALS_API_URL || 'https://credentials-api-group2-20f368b8528b.herokuapp.com';
+          console.log('Changing password with endpoint:', `${apiUrl}/auth/user/password/change`);
+          console.log('Token:', token);
+
+          console.log('Form values:', values);
+
+          const requestBody = {
+            oldPassword: values.currentPassword,  // Try oldPassword
+            currentPassword: values.currentPassword,  // And currentPassword
+            newPassword: values.newPassword
+          };
+          console.log('Request body:', requestBody);
+
+          const response = await fetch(`${apiUrl}/auth/user/password/change`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify({
-              currentPassword: values.currentPassword,
-              newPassword: values.newPassword
-            })
+            body: JSON.stringify(requestBody)
           });
 
-          const result = await response.json();
-          if (!response.ok) throw new Error(result.details || result.error || 'Password change failed');
+          console.log('Response status:', response.status);
+          console.log('Response headers:', response.headers);
 
-          setSuccessMessage('Password changed successfully!');
+          // Check if response is JSON
+          const contentType = response.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            const text = await response.text();
+            console.error('Non-JSON response:', text);
+            throw new Error(`Server returned non-JSON response (${response.status}). The endpoint may not exist or there is a server error.`);
+          }
+
+          const result = await response.json();
+          console.log('Response data:', result);
+
+          if (!response.ok) {
+            throw new Error(result.details || result.error || result.message || 'Password change failed');
+          }
+
+          setSuccessMessage('Password changed successfully! Redirecting to login...');
           setSubmitting(false);
+
+          // Clear token and logout
+          localStorage.removeItem('token');
+          localStorage.removeItem('accessToken');
+
+          // Sign out and redirect to login after 2 seconds
+          setTimeout(async () => {
+            await signOut({ redirect: false });
+            router.push('/login');
+          }, 2000);
         } catch (err: any) {
+          console.error('Password change error:', err);
           setErrors({ submit: err.message || String(err) });
           setSubmitting(false);
         }

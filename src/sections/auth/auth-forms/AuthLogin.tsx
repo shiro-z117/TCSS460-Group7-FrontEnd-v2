@@ -42,7 +42,11 @@ export default function AuthLogin({ providers, csrfToken }: any) {
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = (event: SyntheticEvent) => event.preventDefault();
-  const onKeyDown = (keyEvent: any) => setCapsWarning(keyEvent.getModifierState('CapsLock'));
+  const onKeyDown = (keyEvent: any) => {
+    if (keyEvent && typeof keyEvent.getModifierState === 'function') {
+      setCapsWarning(keyEvent.getModifierState('CapsLock'));
+    }
+  };
 
   return (
     <Formik
@@ -76,7 +80,17 @@ export default function AuthLogin({ providers, csrfToken }: any) {
           setApiError(res.error);
           setSubmitting(false);
         } else if (res?.ok) {
-          // Successfully logged in, redirect to dashboard
+          // Successfully logged in
+          // Get session to extract token
+          const session = await fetch('/api/auth/session').then(r => r.json());
+
+          // Save token to localStorage
+          if (session?.token?.accessToken) {
+            localStorage.setItem('token', session.token.accessToken);
+            console.log('Token saved to localStorage');
+          }
+
+          // Redirect to dashboard
           router.push(APP_DEFAULT_PATH);
         } else {
           setSubmitting(false);

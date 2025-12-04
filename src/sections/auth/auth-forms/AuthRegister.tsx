@@ -115,12 +115,22 @@ export default function AuthRegister({ providers, csrfToken }: any) {
           email: trimmedEmail,
           password: values.password,
           callbackUrl: APP_DEFAULT_PATH
-        }).then((res: any) => {
+        }).then(async (res: any) => {
           if (res?.error) {
             setErrors({ submit: res.error });
             setSubmitting(false);
           } else if (res?.ok) {
-            // Successfully registered and signed in, redirect to dashboard
+            // Successfully registered and signed in
+            // Get session to extract token
+            const session = await fetch('/api/auth/session').then(r => r.json());
+
+            // Save token to localStorage
+            if (session?.token?.accessToken) {
+              localStorage.setItem('token', session.token.accessToken);
+              console.log('Token saved to localStorage');
+            }
+
+            // Redirect to dashboard
             router.push(APP_DEFAULT_PATH);
           }
         });

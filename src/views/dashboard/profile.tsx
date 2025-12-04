@@ -1,12 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import { authApi } from '@/services/authApi';
 import { openSnackbar } from '@/api/snackbar';
 
+interface UserData {
+  id: number;
+  email: string;
+  username: string;
+  name: string;
+  lastname: string;
+  role: string;
+  emailVerified: boolean;
+  phoneVerified: boolean;
+  accountStatus: string;
+}
+
 export default function ProfileView() {
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
@@ -16,6 +31,52 @@ export default function ProfileView() {
   const getToken = () => {
     return localStorage.getItem('token') || localStorage.getItem('accessToken');
   };
+
+  // Fetch user data on component mount
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = getToken();
+        if (!token) {
+          router.push('/login');
+          return;
+        }
+
+        const apiUrl = process.env.NEXT_PUBLIC_CREDENTIALS_API_URL || 'https://credentials-api-group2-20f368b8528b.herokuapp.com';
+        const response = await fetch(`${apiUrl}/auth/me`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const result = await response.json();
+        console.log('User data fetched:', result);
+        // API returns data in result.data.user for login, but result.data for /auth/me
+        const user = result.data?.user || result.data;
+        setUserData(user);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        openSnackbar({
+          open: true,
+          message: 'Failed to load user data',
+          variant: 'alert',
+          alert: {
+            color: 'error',
+            variant: 'filled'
+          },
+          close: true
+        } as any);
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [router]);
 
   const handleVerifyEmail = async () => {
     setIsVerifying(true);
@@ -83,6 +144,7 @@ export default function ProfileView() {
         return;
       }
 
+      // Fetch latest user data to check current verification status
       const apiUrl = process.env.NEXT_PUBLIC_CREDENTIALS_API_URL || 'https://credentials-api-group2-20f368b8528b.herokuapp.com';
       const response = await fetch(`${apiUrl}/auth/me`, {
         headers: {
@@ -90,9 +152,18 @@ export default function ProfileView() {
         }
       });
 
-      const userData = await response.json();
+      if (!response.ok) {
+        throw new Error('Failed to fetch user data');
+      }
 
-      if (!userData.data?.emailVerified) {
+      const result = await response.json();
+      const latestUserData = result.data?.user || result.data;
+
+      // Update state with latest data
+      setUserData(latestUserData);
+
+      // Check if email is verified
+      if (!latestUserData.emailVerified) {
         openSnackbar({
           open: true,
           message: 'Please verify your email first before changing password',
@@ -107,7 +178,8 @@ export default function ProfileView() {
         return;
       }
 
-      router.push('/change-password');
+      // Navigate to change password page
+      router.push('/dashboard/change-password');
     } catch (error: any) {
       const errorMessage = error?.message || 'Failed to check verification status';
       openSnackbar({
@@ -148,7 +220,7 @@ export default function ProfileView() {
 
       openSnackbar({
         open: true,
-        message: 'Account deleted successfully',
+        message: 'Account deleted successfully. Redirecting to login...',
         variant: 'alert',
         alert: {
           color: 'success',
@@ -157,11 +229,14 @@ export default function ProfileView() {
         close: true
       } as any);
 
+      // Clear all stored data
       localStorage.removeItem('token');
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
 
-      setTimeout(() => {
+      // Sign out and redirect to login
+      setTimeout(async () => {
+        await signOut({ redirect: false });
         router.push('/login');
       }, 1500);
 
@@ -190,9 +265,23 @@ export default function ProfileView() {
           <p className="text-xl text-gray-400 mb-6">What&apos;s next on your Watchlist?</p>
           <div className="mb-8 px-12 pt-6 pb-8 rounded-xl bg-gray-800/50 backdrop-blur border border-purple-500/30 text-white flex items-center gap-12">
             <div>
-              <h3 className="text-4xl font-bold mb-1 text-white">Laios</h3>
-              <p className="text-2xl text-gray-400 mb-4">monstergourmand4</p>
-              <img src="https://shapes.inc/api/public/avatar/laiostouden" alt="User Avatar" className="w-48 h-48 rounded-full border-2 border-purple-500" />
+              <h3 className="text-4xl font-bold mb-1 text-white">
+                {isLoading ? 'Loading...' : userData ? `${userData.name} ${userData.lastname}` : 'User'}
+              </h3>
+              <p className="text-2xl text-gray-400 mb-4">
+                {isLoading ? 'Loading...' : userData ? userData.username : 'username'}
+              </p>
+              <img
+                src={
+                  isLoading
+                    ? 'https://ui-avatars.com/api/?name=Loading&size=192&background=9333ea&color=fff'
+                    : userData
+                    ? `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}+${encodeURIComponent(userData.lastname)}&size=192&background=9333ea&color=fff&bold=true`
+                    : 'https://ui-avatars.com/api/?name=User&size=192&background=9333ea&color=fff'
+                }
+                alt="User Avatar"
+                className="w-48 h-48 rounded-full border-2 border-purple-500"
+              />
             </div>
             <div className="flex gap-12 ml-8">
               <div className="text-center">
