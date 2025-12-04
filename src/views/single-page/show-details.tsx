@@ -41,11 +41,11 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
     const confirmDelete = window.confirm(
       `Are you sure you want to delete "${show.name}"?\n\n(Note: This only removes it from the current view. Refresh the page to see it again.)`
     );
-    
+
     if (confirmDelete) {
       setIsDeleted(true);
       setTimeout(() => {
-        router.push('/dashboard/shows');
+        router.push('/dashboard/search?tab=tvshows');
       }, 1000);
     }
   };
@@ -73,9 +73,7 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
               </div>
             </div>
             <h1 className="text-4xl font-bold mb-4">TV Show Deleted Successfully</h1>
-            <p className="text-gray-400 mb-6">
-              The show has been removed from your view. Refresh the page to see it again.
-            </p>
+            <p className="text-gray-400 mb-6">The show has been removed from your view. Refresh the page to see it again.</p>
             <p className="text-sm text-gray-500">Redirecting...</p>
           </div>
         </div>
@@ -88,11 +86,9 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 p-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center text-white">
-            <h1 className="text-4xl font-bold mb-4">
-              {error ? 'Error Loading Show' : 'TV Show Not Found'}
-            </h1>
+            <h1 className="text-4xl font-bold mb-4">{error ? 'Error Loading Show' : 'TV Show Not Found'}</h1>
             {error && <p className="text-red-400 mb-4">{error}</p>}
-            <Link href="/dashboard/shows" className="text-purple-400 hover:text-purple-300 text-lg">
+            <Link href="/dashboard/search?tab=tvshows" className="text-purple-400 hover:text-purple-300 text-lg">
               ← Back to TV Shows
             </Link>
           </div>
@@ -119,8 +115,8 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <div className="max-w-7xl mx-auto p-8">
-        <Link 
-          href="/dashboard/shows" 
+        <Link
+          href="/dashboard/search?tab=tvshows"
           className="text-purple-400 hover:text-purple-300 text-lg mb-6 inline-flex items-center gap-2"
         >
           <span>←</span> Back to TV Shows
@@ -128,15 +124,14 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
 
         <div className="mt-8 bg-black bg-opacity-50 rounded-lg p-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
             <div className="lg:col-span-1">
               <div className="relative aspect-[2/3] rounded-lg overflow-hidden bg-purple-900 mb-6">
                 {show.poster_url ? (
-                  <Image 
+                  <Image
                     src={show.poster_url.startsWith('http') ? show.poster_url : `${IMAGE_BASE_URL}${show.poster_url}`}
-                    alt={show.name} 
-                    fill 
-                    className="object-cover" 
+                    alt={show.name}
+                    fill
+                    className="object-cover"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-gray-500">
@@ -149,17 +144,21 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
                 <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                   <span>+</span> Add to Watch Later
                 </button>
-                
+
                 <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                   <span>✓</span> Add to Finished Watching
                 </button>
 
-                <button 
+                <button
                   className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
                   onClick={handleDelete}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                    <path
+                      fillRule="evenodd"
+                      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   Delete TV Show
                 </button>
@@ -179,10 +178,11 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
 
               {show.first_air_date && (
                 <p className="text-gray-400 mb-2">
-                  First Aired: {new Date(show.first_air_date).toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
+                  First Aired:{' '}
+                  {new Date(show.first_air_date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
                   })}
                 </p>
               )}
@@ -204,10 +204,7 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
               {genres.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-6">
                   {genres.map((genre: string, index: number) => (
-                    <span 
-                      key={index}
-                      className="bg-purple-600 px-4 py-1 rounded-full text-sm font-semibold"
-                    >
+                    <span key={index} className="bg-purple-600 px-4 py-1 rounded-full text-sm font-semibold">
                       {genre}
                     </span>
                   ))}
@@ -216,17 +213,13 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
 
               <div className="mb-8">
                 <h2 className="text-2xl font-bold mb-3 text-purple-300">Overview</h2>
-                <p className="text-gray-300 text-lg leading-relaxed">
-                  {show.overview || 'No description available.'}
-                </p>
+                <p className="text-gray-300 text-lg leading-relaxed">{show.overview || 'No description available.'}</p>
               </div>
 
               {show.creators && show.creators.length > 0 && (
                 <div className="mb-4">
                   <h3 className="text-lg font-semibold text-purple-300">Creators</h3>
-                  <p className="text-gray-300">
-                    {Array.isArray(show.creators) ? show.creators.join(', ') : show.creators}
-                  </p>
+                  <p className="text-gray-300">{Array.isArray(show.creators) ? show.creators.join(', ') : show.creators}</p>
                 </div>
               )}
 
@@ -246,9 +239,7 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
                           )}
                         </div>
                         <p className="text-sm font-medium text-white">{actor.name}</p>
-                        {actor.character && (
-                          <p className="text-xs text-gray-400">{actor.character}</p>
-                        )}
+                        {actor.character && <p className="text-xs text-gray-400">{actor.character}</p>}
                       </div>
                     ))}
                   </div>

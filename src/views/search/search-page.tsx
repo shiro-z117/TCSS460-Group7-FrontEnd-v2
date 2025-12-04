@@ -1,12 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Sidebar from '@/components/dashboard/Sidebar';
 import MovieSearchPage from './movie-search-page';
 import TVShowSearchPage from './tvshow-search-page';
 
 export default function SearchPage() {
-  const [activeTab, setActiveTab] = useState<'movies' | 'tvshows'>('movies');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get('tab') as 'movies' | 'tvshows' | null;
+  const [activeTab, setActiveTab] = useState<'movies' | 'tvshows'>(initialTab || 'movies');
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+      router.replace('/dashboard/search');
+    }
+  }, [initialTab, router]);
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">

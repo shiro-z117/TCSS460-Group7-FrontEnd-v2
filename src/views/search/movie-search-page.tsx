@@ -100,7 +100,7 @@ export default function MovieSearchPage() {
             onSearch={handleSearch}
             loading={loading}
             title="Movie Search"
-            placeholder="Search for movies by title..."
+            placeholder="Search for Movies by title..."
           />
         </div>
       </div>

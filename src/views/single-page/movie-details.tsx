@@ -41,11 +41,11 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
     const confirmDelete = window.confirm(
       `Are you sure you want to delete "${movie.title}"?\n\n(Note: This only removes it from the current view. Refresh the page to see it again.)`
     );
-    
+
     if (confirmDelete) {
       setIsDeleted(true);
       setTimeout(() => {
-        router.push('/dashboard/movies');
+        router.push('/dashboard/search?tab=movies');
       }, 1000);
     }
   };
@@ -73,9 +73,7 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
               </div>
             </div>
             <h1 className="text-4xl font-bold mb-4">Movie Deleted Successfully</h1>
-            <p className="text-gray-400 mb-6">
-              The movie has been removed from your view. Refresh the page to see it again.
-            </p>
+            <p className="text-gray-400 mb-6">The movie has been removed from your view. Refresh the page to see it again.</p>
             <p className="text-sm text-gray-500">Redirecting...</p>
           </div>
         </div>
@@ -88,11 +86,9 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 p-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center text-white">
-            <h1 className="text-4xl font-bold mb-4">
-              {error ? 'Error Loading Movie' : 'Movie Not Found'}
-            </h1>
+            <h1 className="text-4xl font-bold mb-4">{error ? 'Error Loading Movie' : 'Movie Not Found'}</h1>
             {error && <p className="text-red-400 mb-4">{error}</p>}
-            <Link href="/dashboard/movies" className="text-purple-400 hover:text-purple-300 text-lg">
+            <Link href="/dashboard/search?tab=movies" className="text-purple-400 hover:text-purple-300 text-lg">
               ← Back to Movies
             </Link>
           </div>
@@ -107,8 +103,8 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <div className="max-w-7xl mx-auto p-8">
-        <Link 
-          href="/dashboard/movies" 
+        <Link
+          href="/dashboard/search?tab=movies"
           className="text-purple-400 hover:text-purple-300 text-lg mb-6 inline-flex items-center gap-2"
         >
           <span>←</span> Back to Movies
@@ -116,16 +112,10 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
 
         <div className="mt-8 bg-black bg-opacity-50 rounded-lg p-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
             <div className="lg:col-span-1">
               <div className="relative aspect-[2/3] rounded-lg overflow-hidden bg-purple-900 mb-6">
                 {movie.poster_url ? (
-                  <Image 
-                    src={`${IMAGE_BASE_URL}${movie.poster_url}`}
-                    alt={movie.title} 
-                    fill 
-                    className="object-cover" 
-                  />
+                  <Image src={`${IMAGE_BASE_URL}${movie.poster_url}`} alt={movie.title} fill className="object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-gray-500">
                     <span className="text-9xl">🎬</span>
@@ -137,17 +127,21 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
                 <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                   <span>+</span> Add to Watch Later
                 </button>
-                
+
                 <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                   <span>✓</span> Add to Finished Watching
                 </button>
 
-                <button 
+                <button
                   className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
                   onClick={handleDelete}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                    <path
+                      fillRule="evenodd"
+                      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   Delete Movie
                 </button>
@@ -166,27 +160,21 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
 
               {movie.release_date && (
                 <p className="text-gray-400 mb-4">
-                  Release Date: {new Date(movie.release_date).toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
+                  Release Date:{' '}
+                  {new Date(movie.release_date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
                   })}
                 </p>
               )}
 
-              {movie.runtime && (
-                <p className="text-gray-400 mb-4">
-                  Runtime: {movie.runtime} minutes
-                </p>
-              )}
+              {movie.runtime && <p className="text-gray-400 mb-4">Runtime: {movie.runtime} minutes</p>}
 
               {genres.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-6">
                   {genres.map((genre: string, index: number) => (
-                    <span 
-                      key={index}
-                      className="bg-purple-600 px-4 py-1 rounded-full text-sm font-semibold"
-                    >
+                    <span key={index} className="bg-purple-600 px-4 py-1 rounded-full text-sm font-semibold">
                       {genre}
                     </span>
                   ))}
@@ -195,9 +183,7 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
 
               <div className="mb-8">
                 <h2 className="text-2xl font-bold mb-3 text-purple-300">Overview</h2>
-                <p className="text-gray-300 text-lg leading-relaxed">
-                  {movie.overview || 'No description available.'}
-                </p>
+                <p className="text-gray-300 text-lg leading-relaxed">{movie.overview || 'No description available.'}</p>
               </div>
 
               {movie.directors && movie.directors.length > 0 && (
@@ -215,12 +201,7 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
                       <div key={index} className="text-center">
                         <div className="relative w-full aspect-square bg-purple-700 rounded-lg mb-2 overflow-hidden">
                           {actor.profile ? (
-                            <Image
-                              src={`${IMAGE_BASE_URL}${actor.profile}`}
-                              alt={actor.name}
-                              fill
-                              className="object-cover"
-                            />
+                            <Image src={`${IMAGE_BASE_URL}${actor.profile}`} alt={actor.name} fill className="object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
                               <span className="text-4xl">👤</span>
@@ -228,9 +209,7 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
                           )}
                         </div>
                         <p className="text-sm font-medium text-white">{actor.name}</p>
-                        {actor.character && (
-                          <p className="text-xs text-gray-400">{actor.character}</p>
-                        )}
+                        {actor.character && <p className="text-xs text-gray-400">{actor.character}</p>}
                       </div>
                     ))}
                   </div>
