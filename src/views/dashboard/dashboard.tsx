@@ -135,7 +135,7 @@ export default function DashboardView() {
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-white">Featured Movies</h2>
             <Link
-              href="/dashboard/movies"
+              href="/dashboard/search"
               className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-all flex items-center gap-2"
             >
               View All Movies ({totalMovies.toLocaleString()})<span className="text-xl">→</span>
@@ -162,10 +162,10 @@ export default function DashboardView() {
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-white">Featured TV Shows</h2>
             <Link
-              href="/dashboard/shows"
+              href="/dashboard/search"
               className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all flex items-center gap-2"
             >
-              View All TV Shows ({totalShows.toLocaleString()})<span className="text-xl">→</span>
+              View All Shows ({totalShows.toLocaleString()})<span className="text-xl">→</span>
             </Link>
           </div>
 
