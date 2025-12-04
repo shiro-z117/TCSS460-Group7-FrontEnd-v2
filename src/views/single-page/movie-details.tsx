@@ -45,7 +45,7 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
     if (confirmDelete) {
       setIsDeleted(true);
       setTimeout(() => {
-        router.push('/dashboard/search?tab=movies');
+        router.push('/dashboard/movies');
       }, 1000);
     }
   };
@@ -88,7 +88,7 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
           <div className="text-center text-white">
             <h1 className="text-4xl font-bold mb-4">{error ? 'Error Loading Movie' : 'Movie Not Found'}</h1>
             {error && <p className="text-red-400 mb-4">{error}</p>}
-            <Link href="/dashboard/search?tab=movies" className="text-purple-400 hover:text-purple-300 text-lg">
+            <Link href="/dashboard/movies" className="text-purple-400 hover:text-purple-300 text-lg">
               ← Back to Movies
             </Link>
           </div>
@@ -103,10 +103,7 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <div className="max-w-7xl mx-auto p-8">
-        <Link
-          href="/dashboard/search?tab=movies"
-          className="text-purple-400 hover:text-purple-300 text-lg mb-6 inline-flex items-center gap-2"
-        >
+        <Link href="/dashboard/movies" className="text-purple-400 hover:text-purple-300 text-lg mb-6 inline-flex items-center gap-2">
           <span>←</span> Back to Movies
         </Link>
 

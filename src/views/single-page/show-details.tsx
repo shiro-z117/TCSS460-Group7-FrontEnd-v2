@@ -45,7 +45,7 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
     if (confirmDelete) {
       setIsDeleted(true);
       setTimeout(() => {
-        router.push('/dashboard/search?tab=tvshows');
+        router.push('/dashboard/shows');
       }, 1000);
     }
   };
@@ -88,7 +88,7 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
           <div className="text-center text-white">
             <h1 className="text-4xl font-bold mb-4">{error ? 'Error Loading Show' : 'TV Show Not Found'}</h1>
             {error && <p className="text-red-400 mb-4">{error}</p>}
-            <Link href="/dashboard/search?tab=tvshows" className="text-purple-400 hover:text-purple-300 text-lg">
+            <Link href="/dashboard/shows" className="text-purple-400 hover:text-purple-300 text-lg">
               ← Back to TV Shows
             </Link>
           </div>
@@ -116,7 +116,7 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <div className="max-w-7xl mx-auto p-8">
         <Link
-          href="/dashboard/search?tab=tvshows"
+          href="/dashboard/shows"
           className="text-purple-400 hover:text-purple-300 text-lg mb-6 inline-flex items-center gap-2"
         >
           <span>←</span> Back to TV Shows

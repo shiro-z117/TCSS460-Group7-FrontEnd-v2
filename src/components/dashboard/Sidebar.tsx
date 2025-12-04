@@ -6,8 +6,6 @@ import { signOut } from 'next-auth/react';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: '🏠' },
-  { name: 'Movies', href: '/dashboard/movies', icon: '🎬' },
-  { name: 'TV Shows', href: '/dashboard/shows', icon: '📺' },
   { name: 'Explore', href: '/dashboard/search', icon: '🔍' },
   { name: 'Profile', href: '/dashboard/profile', icon: '👤' }
 ];
