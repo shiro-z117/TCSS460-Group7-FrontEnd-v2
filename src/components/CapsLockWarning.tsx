@@ -7,20 +7,18 @@ export default function CapsLockWarning() {
   const [capsOn, setCapsOn] = useState(false);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      setCapsOn(e.getModifierState('CapsLock'));
+    const update = (e: Event) => {
+      if (e instanceof KeyboardEvent) {
+        setCapsOn(e.getModifierState('CapsLock'));
+      }
     };
 
-    const handleKeyUp = (e: KeyboardEvent) => {
-      setCapsOn(e.getModifierState('CapsLock'));
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener('keydown', update);
+    window.addEventListener('keyup', update);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('keydown', update);
+      window.removeEventListener('keyup', update);
     };
   }, []);
 
