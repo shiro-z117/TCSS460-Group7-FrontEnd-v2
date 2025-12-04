@@ -8,7 +8,7 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: '🏠' },
   { name: 'Movies', href: '/dashboard/movies', icon: '🎬' },
   { name: 'TV Shows', href: '/dashboard/shows', icon: '📺' },
-  { name: 'Advance Search', href: '/search', icon: '🔍' },
+  { name: 'Explore', href: '/dashboard/search', icon: '🔍' },
   { name: 'Profile', href: '/dashboard/profile', icon: '👤' }
 ];
 
