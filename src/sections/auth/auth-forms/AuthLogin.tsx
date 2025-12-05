@@ -4,6 +4,7 @@ import React, { useState, FocusEvent, SyntheticEvent } from 'react';
 
 // next
 import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 
 // material-ui
@@ -34,13 +35,18 @@ import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 
 export default function AuthLogin({ providers, csrfToken }: any) {
+  const router = useRouter();
   const [capsWarning, setCapsWarning] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = (event: SyntheticEvent) => event.preventDefault();
-  const onKeyDown = (keyEvent: any) => setCapsWarning(keyEvent.getModifierState('CapsLock'));
+  const onKeyDown = (keyEvent: any) => {
+    if (keyEvent && typeof keyEvent.getModifierState === 'function') {
+      setCapsWarning(keyEvent.getModifierState('CapsLock'));
+    }
+  };
 
   return (
     <Formik
@@ -72,11 +78,23 @@ export default function AuthLogin({ providers, csrfToken }: any) {
 
         if (res?.error) {
           setApiError(res.error);
+          setSubmitting(false);
         } else if (res?.ok) {
-          preload('api/menu/dashboard', fetcher);
-        }
+          // Successfully logged in
+          // Get session to extract token
+          const session = await fetch('/api/auth/session').then(r => r.json());
 
-        setSubmitting(false);
+          // Save token to localStorage
+          if (session?.token?.accessToken) {
+            localStorage.setItem('token', session.token.accessToken);
+            console.log('Token saved to localStorage');
+          }
+
+          // Redirect to dashboard
+          router.push(APP_DEFAULT_PATH);
+        } else {
+          setSubmitting(false);
+        }
       }}
     >
       {({ errors, touched, values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (

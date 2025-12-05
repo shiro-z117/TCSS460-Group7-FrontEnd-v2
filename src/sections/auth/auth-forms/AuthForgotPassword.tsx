@@ -16,7 +16,7 @@ import { Formik } from 'formik';
 // project import
 import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'components/@extended/AnimateButton';
-
+import { authApi } from '@/services/authApi';
 import { openSnackbar } from 'api/snackbar';
 
 // types
@@ -39,26 +39,65 @@ export default function AuthForgotPassword() {
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
+          console.log('Sending password reset request for:', values.email);
+          console.log('API endpoint:', process.env.NEXT_PUBLIC_CREDENTIALS_API_URL + '/auth/password/reset-request');
+
+          // Call the actual API
+          const response = await authApi.forgotPassword(values.email);
+
+          console.log('API Response:', response);
+          console.log('Password reset email sent successfully');
+
           setStatus({ success: true });
           setSubmitting(false);
 
           openSnackbar({
             open: true,
-            message: 'Check mail for reset password link',
+            message: 'Password reset email sent! Check your inbox.',
             variant: 'alert',
             alert: {
               color: 'success'
             }
           } as SnackbarProps);
 
+          // Redirect after showing success message
           setTimeout(() => {
             router.push('/check-mail');
           }, 1500);
         } catch (err: any) {
+          console.error('Forgot password error:', err);
+          console.error('Error details:', {
+            message: err?.message,
+            response: err?.response?.data,
+            status: err?.response?.status
+          });
+
           if (scriptedRef.current) {
+            // Extract error message from API response
+            let errorMessage = 'Failed to send reset email. Please try again.';
+
+            if (err?.response?.data?.details) {
+              errorMessage = err.response.data.details;
+            } else if (err?.response?.data?.error) {
+              errorMessage = err.response.data.error;
+            } else if (err?.response?.data?.message) {
+              errorMessage = err.response.data.message;
+            } else if (err?.message) {
+              errorMessage = err.message;
+            }
+
             setStatus({ success: false });
-            setErrors({ submit: err.message });
+            setErrors({ submit: errorMessage });
             setSubmitting(false);
+
+            openSnackbar({
+              open: true,
+              message: errorMessage,
+              variant: 'alert',
+              alert: {
+                color: 'error'
+              }
+            } as SnackbarProps);
           }
         }
       }}

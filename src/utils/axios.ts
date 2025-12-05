@@ -74,8 +74,15 @@ credentialsService.interceptors.response.use(
       });
     } else if (error.response?.status && error.response.status >= 500) {
       return Promise.reject({ message: 'Server Error. Contact support' });
-    } else if (error.response?.status === 401 && typeof window !== 'undefined' && !window.location.href.includes('/login')) {
-      window.location.pathname = '/login';
+    } else if (error.response?.status === 401 && typeof window !== 'undefined') {
+      // Don't auto-redirect on auth-related pages (login, register, forgot-password, reset-password)
+      const authPages = ['/login', '/register', '/forgot-password', '/reset-password', '/check-mail'];
+      const currentPath = window.location.pathname;
+      const isAuthPage = authPages.some(page => currentPath.includes(page));
+
+      if (!isAuthPage) {
+        window.location.pathname = '/login';
+      }
     }
     return Promise.reject((error.response && error.response.data) || 'Server connection refused');
   }

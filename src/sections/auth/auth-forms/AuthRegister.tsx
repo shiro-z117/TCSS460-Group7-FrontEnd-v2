@@ -4,6 +4,7 @@ import { useEffect, useState, SyntheticEvent } from 'react';
 
 // next
 import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 
 // material-ui
@@ -39,6 +40,7 @@ import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 import { StringColorProps } from 'types/password';
 
 export default function AuthRegister({ providers, csrfToken }: any) {
+  const router = useRouter();
   const [level, setLevel] = useState<StringColorProps>();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -113,10 +115,23 @@ export default function AuthRegister({ providers, csrfToken }: any) {
           email: trimmedEmail,
           password: values.password,
           callbackUrl: APP_DEFAULT_PATH
-        }).then((res: any) => {
+        }).then(async (res: any) => {
           if (res?.error) {
             setErrors({ submit: res.error });
             setSubmitting(false);
+          } else if (res?.ok) {
+            // Successfully registered and signed in
+            // Get session to extract token
+            const session = await fetch('/api/auth/session').then(r => r.json());
+
+            // Save token to localStorage
+            if (session?.token?.accessToken) {
+              localStorage.setItem('token', session.token.accessToken);
+              console.log('Token saved to localStorage');
+            }
+
+            // Redirect to dashboard
+            router.push(APP_DEFAULT_PATH);
           }
         });
       }}

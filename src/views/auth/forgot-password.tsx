@@ -3,6 +3,7 @@ import NextLink from 'next/link';
 
 // material-ui
 import Link from '@mui/material/Link';
+import Alert from '@mui/material/Alert';
 
 // project import
 import AuthWrapper from 'sections/auth/AuthWrapper';
@@ -38,6 +39,22 @@ export default function ForgotPassword() {
           Enter your email and we&apos;ll send you a link to reset your password.
         </p>
       </div>
+
+      {/* Email Verification Notice */}
+      <Alert
+        severity="info"
+        sx={{
+          marginBottom: '1.5rem',
+          backgroundColor: 'rgba(33, 150, 243, 0.1)',
+          color: '#90caf9',
+          border: '1px solid rgba(33, 150, 243, 0.3)',
+          '& .MuiAlert-icon': {
+            color: '#90caf9'
+          }
+        }}
+      >
+        <strong>Note:</strong> This feature only works with verified email addresses.
+      </Alert>
 
       <div style={{ marginBottom: '2.5rem' }}>
         <AuthForgotPassword />
