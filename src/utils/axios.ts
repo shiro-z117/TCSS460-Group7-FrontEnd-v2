@@ -75,8 +75,8 @@ credentialsService.interceptors.response.use(
     } else if (error.response?.status && error.response.status >= 500) {
       return Promise.reject({ message: 'Server Error. Contact support' });
     } else if (error.response?.status === 401 && typeof window !== 'undefined') {
-      // Don't auto-redirect on auth-related pages (login, register, forgot-password, reset-password)
-      const authPages = ['/login', '/register', '/forgot-password', '/reset-password', '/check-mail'];
+      // Don't auto-redirect on auth-related pages
+      const authPages = ['/login', '/register', '/forgot-password', '/check-mail'];
       const currentPath = window.location.pathname;
       const isAuthPage = authPages.some(page => currentPath.includes(page));
 
