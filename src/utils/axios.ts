@@ -45,6 +45,22 @@ if (!process.env.SHOWS_WEB_API_KEY) {
   );
 }
 
+if (!process.env.USER_DB_API_URL) {
+  throw new Error(
+    'USER_DB_API_URL environment variable is not set. ' +
+    'Please add USER_DB_API_URL to your .env and/or next.config.js file(s). ' +
+    'Example: USER_DB_API_URL=http://localhost:8009'
+  );
+}
+
+if (!process.env.USER_DB_API_KEY) {
+  throw new Error(
+    'USER_DB_API_KEY environment variable is not set. ' +
+    'Please add USER_DB_API_KEY to your .env and/or next.config.js file(s). ' +
+    'Example: USER_DB_API_KEY=your-api-key-here'
+  );
+}
+
 // ==============================|| CREDENTIALS SERVICE ||============================== //
 
 const credentialsService = axios.create({ baseURL: process.env.CREDENTIALS_API_URL });
@@ -75,7 +91,8 @@ credentialsService.interceptors.response.use(
     } else if (error.response?.status && error.response.status >= 500) {
       return Promise.reject({ message: 'Server Error. Contact support' });
     } else if (error.response?.status === 401 && typeof window !== 'undefined' && !window.location.href.includes('/login')) {
-      window.location.pathname = '/login';
+      // Dispatch auth error event instead of redirecting
+      window.dispatchEvent(new Event('auth-error'));
     }
     return Promise.reject((error.response && error.response.data) || 'Server connection refused');
   }
@@ -147,10 +164,61 @@ showsService.interceptors.response.use(
   }
 );
 
+// ==============================|| USER DB SERVICE ||============================== //
+
+const userDbService = axios.create({ baseURL: process.env.USER_DB_API_URL });
+
+userDbService.interceptors.request.use(
+  async (config: InternalAxiosRequestConfig) => {
+    const session = await getSession();
+
+    // Debug logging
+    console.log('User DB Request - Session check:', {
+      hasSession: !!session,
+      hasToken: !!session?.token,
+      hasAccessToken: !!session?.token?.accessToken,
+      accessToken: session?.token?.accessToken ? `${session.token.accessToken.substring(0, 20)}...` : 'none'
+    });
+
+    if (session?.token?.accessToken) {
+      config.headers['Authorization'] = `Bearer ${session.token.accessToken}`;
+    } else {
+      console.error('User DB Request - No access token available in session');
+    }
+
+    // Add API key for User DB service
+    config.headers['X-API-Key'] = process.env.USER_DB_API_KEY;
+    return config;
+  },
+  (error: AxiosError) => {
+    return Promise.reject(error);
+  }
+);
+
+userDbService.interceptors.response.use(
+  (response: AxiosResponse) => response,
+  (error: AxiosError) => {
+    if (error.code === 'ECONNREFUSED') {
+      const { baseURL, url, data } = error.config || {};
+      console.error('Connection refused. The User DB API server may be down. Attempting to connect to: ');
+      console.error({ baseURL, url, data });
+      return Promise.reject({
+        message: 'Connection refused.'
+      });
+    } else if (error.response?.status && error.response.status >= 500) {
+      return Promise.reject({ message: 'Server Error. Contact support' });
+    } else if (error.response?.status === 401 && typeof window !== 'undefined' && !window.location.href.includes('/login')) {
+      // Dispatch auth error event instead of redirecting
+      window.dispatchEvent(new Event('auth-error'));
+    }
+    return Promise.reject((error.response && error.response.data) || 'Server connection refused');
+  }
+);
+
 // ==============================|| EXPORTS ||============================== //
 
 export default credentialsService; // Maintain backward compatibility
-export { credentialsService, movieService, showsService };
+export { credentialsService, movieService, showsService, userDbService };
 
 // Credentials service helpers
 export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
@@ -221,6 +289,35 @@ export const showsFetcherPut = async (args: string | [string, AxiosRequestConfig
 export const showsFetcherDelete = async (args: string | [string, AxiosRequestConfig]) => {
   const [url, config] = Array.isArray(args) ? args : [args];
   const res = await showsService.delete(url, { ...config });
+
+  return res.data;
+};
+
+// User DB service helpers
+export const userDbFetcher = async (args: string | [string, AxiosRequestConfig]) => {
+  const [url, config] = Array.isArray(args) ? args : [args];
+  const res = await userDbService.get(url, { ...config });
+
+  return res.data;
+};
+
+export const userDbFetcherPost = async (args: string | [string, AxiosRequestConfig]) => {
+  const [url, config] = Array.isArray(args) ? args : [args];
+  const res = await userDbService.post(url, { ...config });
+
+  return res.data;
+};
+
+export const userDbFetcherPatch = async (args: string | [string, AxiosRequestConfig]) => {
+  const [url, config] = Array.isArray(args) ? args : [args];
+  const res = await userDbService.patch(url, { ...config });
+
+  return res.data;
+};
+
+export const userDbFetcherDelete = async (args: string | [string, AxiosRequestConfig]) => {
+  const [url, config] = Array.isArray(args) ? args : [args];
+  const res = await userDbService.delete(url, { ...config });
 
   return res.data;
 };

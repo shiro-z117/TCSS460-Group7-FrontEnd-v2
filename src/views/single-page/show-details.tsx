@@ -24,6 +24,7 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
       try {
         setLoading(true);
         setError(null);
+        console.log('📺 TV Show ID:', showId);
         const response = await showsApi.getById(parseInt(showId));
         setShow(response.data.data || response.data); // Handle both possible structures
       } catch (err: any) {

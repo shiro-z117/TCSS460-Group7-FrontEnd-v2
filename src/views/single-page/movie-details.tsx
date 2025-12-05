@@ -24,6 +24,7 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
       try {
         setLoading(true);
         setError(null);
+        console.log('🎬 Movie ID:', movieId);
         const response = await movieApi.getById(parseInt(movieId));
         setMovie(response.data.data);
       } catch (err: any) {
