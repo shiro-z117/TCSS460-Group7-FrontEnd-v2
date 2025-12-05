@@ -21,6 +21,13 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 - **Location:** Discord
 #### Actions:
 - Created to-do list
+### Discussion 2
+- **Date:** Friday, December 5, 2025
+- **Time:** 9:30 AM - 10:15 AM (45 minutes)
+- **Location:** Discord
+#### Actions:
+- Merged branches
+- Prepared to perform finishing touches
 ---
 ## Production Sprint Contributions
 
