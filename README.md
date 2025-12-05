@@ -34,8 +34,17 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 ### Patrick
 
 ### Linda Miao
+- Created and completed email verification function on profile page (tested with Coco's support)
+- Created and completed change password function on profile page (tested with Coco's support)
+- Created and completed account deletion function on profile page (tested with Coco's support)
+- Attempted to create forgot password feature on login page, but was ultimately completed by Bao
+- Attempted to fix movie rating display (showing 0.0 instead of content ratings) but was unsuccessful
 
 ### Shiannel
+- Worked with B to solve the bug in our groups Credentials API. (Decided to pay for $7 upgrade for instance type)
+- Tested bug fixes to make sure email verification works in Credential api-docs.
+- Fixed functionality for change password when email is verified (For our groups credentials api)
+- Tested the profile page functionality Linda has implemented (Verify email, change password, and delete account for our front end)
 
 ### Bao
 
@@ -47,8 +56,12 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 ### Patrick
 
 ### Linda Miao
+- Debugging the profile page was challenging. I used console logs and the browser Network tab to trace errors and fix authentication flows.
+- Debugging the movie rating issue was challenging. After coordination with Group 2 (backend team), I confirmed that movies use the mpa_rating field instead of numeric ratings. However, implementing the fix was complicated by recent changes merged to main, and I was unable to complete it within the time constraints.
 
 ### Shiannel
+- There was a lot of testing for functionality
+- Figuring out the bug within our own Credentials API was difficult but ended up being a simple fix (since we resorted to paying the $7 fee in Render, we couldn't find a free work around)
 
 ### Bao
 
