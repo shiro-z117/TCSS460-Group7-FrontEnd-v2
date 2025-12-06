@@ -55,6 +55,10 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 - Tested all authentication pages to make sure they work correctly.
 
 ### Shiraz
+- Implemented full enforcement for authentication (users must log in to access the actual site)
+- Fixed logout functions (now clears local data)
+- Performed cleanup to remove unused routes
+- Updated nextjs version so that vercel would once again allow deployment (previous version had a critical security vulnerability, and Vercel has recently pushed an update to their service, which now disallows that version)
 
 ---
 ## Production Sprint Comments
@@ -73,6 +77,7 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 - Working on the same branch with other teammates help reduce a lot of conflicts in the code.
 
 ### Shiraz
+- Debugging is more of "what is even going wrong" rather than "how do I fix it"
 
 ---
 ## Beta II Sprint Meetings
