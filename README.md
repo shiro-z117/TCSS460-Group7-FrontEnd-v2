@@ -41,10 +41,11 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 - Attempted to fix movie rating display (showing 0.0 instead of content ratings) but was unsuccessful
 
 ### Shiannel
-- Worked with B to solve the bug in our groups Credentials API. (Decided to pay for $7 upgrade for instance type)
+- Worked with B to solve the bug in our group's Credentials API. (Decided to pay for $7 upgrade for instance type)
 - Tested bug fixes to make sure email verification works in Credential api-docs.
-- Fixed functionality for change password when email is verified (For our groups credentials api)
+- Fixed functionality for changing password when email is verified (For our group's credentials api)
 - Tested the profile page functionality Linda has implemented (Verify email, change password, and delete account for our front end)
+- Changed the ratings for movies and promotional carousel to match/be similar to shows' ratings (since they differ from stars vs content ratings)
 
 ### Bao
 
