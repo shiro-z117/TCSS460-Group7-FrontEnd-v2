@@ -14,11 +14,23 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const handleLogout = () => {
-    signOut({
-      redirect: true,
-      callbackUrl: '/login'
-    });
+  const handleLogout = async () => {
+    try {
+      await signOut({ redirect: false });
+
+      // clear cached data
+      if (typeof window !== 'undefined') {
+        window.localStorage.clear();
+        window.sessionStorage.clear();
+      }
+
+      // redirect
+      router.push('/login');
+      router.refresh();
+    } catch (error) {
+      console.error('Logout error:', error);
+      router.push('/login');
+    }
   };
 
   return (

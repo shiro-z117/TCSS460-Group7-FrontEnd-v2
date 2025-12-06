@@ -8,40 +8,40 @@ import { getSession } from 'next-auth/react';
 if (!process.env.CREDENTIALS_API_URL) {
   throw new Error(
     'CREDENTIALS_API_URL environment variable is not set. ' +
-    'Please add CREDENTIALS_API_URL to your .env and/or next.config.js file(s). ' +
-    'Example: CREDENTIALS_API_URL=http://localhost:8008'
+      'Please add CREDENTIALS_API_URL to your .env and/or next.config.js file(s). ' +
+      'Example: CREDENTIALS_API_URL=http://localhost:8008'
   );
 }
 
 if (!process.env.MOVIES_WEB_API_URL) {
   throw new Error(
     'MOVIES_WEB_API_URL environment variable is not set. ' +
-    'Please add MOVIES_WEB_API_URL to your .env and/or next.config.js file(s). ' +
-    'Example: MOVIES_WEB_API_URL=https://dataset-web-api.onrender.com/api'
+      'Please add MOVIES_WEB_API_URL to your .env and/or next.config.js file(s). ' +
+      'Example: MOVIES_WEB_API_URL=https://dataset-web-api.onrender.com/api'
   );
 }
 
 if (!process.env.MOVIES_WEB_API_KEY) {
   throw new Error(
     'MOVIES_WEB_API_KEY environment variable is not set. ' +
-    'Please add MOVIES_WEB_API_KEY to your .env and/or next.config.js file(s). ' +
-    'Example: MOVIES_WEB_API_KEY=your-api-key-here'
+      'Please add MOVIES_WEB_API_KEY to your .env and/or next.config.js file(s). ' +
+      'Example: MOVIES_WEB_API_KEY=your-api-key-here'
   );
 }
 
 if (!process.env.SHOWS_WEB_API_URL) {
   throw new Error(
     'SHOWS_WEB_API_URL environment variable is not set. ' +
-    'Please add SHOWS_WEB_API_URL to your .env and/or next.config.js file(s). ' +
-    'Example: SHOWS_WEB_API_URL=https://g1-tvapi.onrender.com/'
+      'Please add SHOWS_WEB_API_URL to your .env and/or next.config.js file(s). ' +
+      'Example: SHOWS_WEB_API_URL=https://g1-tvapi.onrender.com/'
   );
 }
 
 if (!process.env.SHOWS_WEB_API_KEY) {
   throw new Error(
     'SHOWS_WEB_API_KEY environment variable is not set. ' +
-    'Please add SHOWS_WEB_API_KEY to your .env and/or next.config.js file(s). ' +
-    'Example: SHOWS_WEB_API_KEY=your-api-key-here'
+      'Please add SHOWS_WEB_API_KEY to your .env and/or next.config.js file(s). ' +
+      'Example: SHOWS_WEB_API_KEY=your-api-key-here'
   );
 }
 
@@ -78,7 +78,7 @@ credentialsService.interceptors.response.use(
       // Don't auto-redirect on auth-related pages
       const authPages = ['/login', '/register', '/forgot-password', '/check-mail'];
       const currentPath = window.location.pathname;
-      const isAuthPage = authPages.some(page => currentPath.includes(page));
+      const isAuthPage = authPages.some((page) => currentPath.includes(page));
 
       if (!isAuthPage) {
         window.location.pathname = '/login';
