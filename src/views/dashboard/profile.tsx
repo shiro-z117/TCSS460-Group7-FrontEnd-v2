@@ -45,7 +45,7 @@ export default function ProfileView() {
         const apiUrl = process.env.NEXT_PUBLIC_CREDENTIALS_API_URL || 'https://credentials-api-group2-20f368b8528b.herokuapp.com';
         const response = await fetch(`${apiUrl}/auth/me`, {
           headers: {
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         });
 
@@ -148,7 +148,7 @@ export default function ProfileView() {
       const apiUrl = process.env.NEXT_PUBLIC_CREDENTIALS_API_URL || 'https://credentials-api-group2-20f368b8528b.herokuapp.com';
       const response = await fetch(`${apiUrl}/auth/me`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       });
 
@@ -229,17 +229,28 @@ export default function ProfileView() {
         close: true
       } as any);
 
-      // Clear all stored data
-      localStorage.removeItem('token');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('user');
-
       // Sign out and redirect to login
       setTimeout(async () => {
-        await signOut({ redirect: false });
-        router.push('/login');
-      }, 1500);
+        try {
+          await signOut({ redirect: false });
 
+          if (typeof window !== 'undefined') {
+            window.localStorage.clear();
+            window.sessionStorage.clear();
+          }
+
+          router.push('/login');
+          router.refresh();
+        } catch (error) {
+          console.error('Logout error after account deletion:', error);
+          // Still try to redirect even if sign out fails
+          if (typeof window !== 'undefined') {
+            window.localStorage.clear();
+            window.sessionStorage.clear();
+          }
+          router.push('/login');
+        }
+      }, 1500);
     } catch (error: any) {
       const errorMessage = error?.details || error?.error || error?.message || 'Failed to delete account';
       openSnackbar({
@@ -261,23 +272,23 @@ export default function ProfileView() {
       <Sidebar />
       <main className="ml-64 flex-1 p-8">
         <div className="mb-8">
-          <h1 className="text-6xl font-bold text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">Profile</h1>
+          <h1 className="text-6xl font-bold text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+            Profile
+          </h1>
           <p className="text-xl text-gray-400 mb-6">What&apos;s next on your Watchlist?</p>
           <div className="mb-8 px-12 pt-6 pb-8 rounded-xl bg-gray-800/50 backdrop-blur border border-purple-500/30 text-white flex items-center gap-12">
             <div>
               <h3 className="text-4xl font-bold mb-1 text-white">
                 {isLoading ? 'Loading...' : userData ? `${userData.name} ${userData.lastname}` : 'User'}
               </h3>
-              <p className="text-2xl text-gray-400 mb-4">
-                {isLoading ? 'Loading...' : userData ? userData.username : 'username'}
-              </p>
+              <p className="text-2xl text-gray-400 mb-4">{isLoading ? 'Loading...' : userData ? userData.username : 'username'}</p>
               <img
                 src={
                   isLoading
                     ? 'https://ui-avatars.com/api/?name=Loading&size=192&background=9333ea&color=fff'
                     : userData
-                    ? `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}+${encodeURIComponent(userData.lastname)}&size=192&background=9333ea&color=fff&bold=true`
-                    : 'https://ui-avatars.com/api/?name=User&size=192&background=9333ea&color=fff'
+                      ? `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}+${encodeURIComponent(userData.lastname)}&size=192&background=9333ea&color=fff&bold=true`
+                      : 'https://ui-avatars.com/api/?name=User&size=192&background=9333ea&color=fff'
                 }
                 alt="User Avatar"
                 className="w-48 h-48 rounded-full border-2 border-purple-500"
@@ -306,7 +317,11 @@ export default function ProfileView() {
                   <h3 className="text-lg font-semibold text-white">Email Verification</h3>
                   <p className="text-sm text-gray-400">Verify your email address to enable all features</p>
                 </div>
-                <button onClick={handleVerifyEmail} disabled={isVerifying} className="px-6 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors">
+                <button
+                  onClick={handleVerifyEmail}
+                  disabled={isVerifying}
+                  className="px-6 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
+                >
                   {isVerifying ? 'Sending...' : 'Verify Email'}
                 </button>
               </div>
@@ -315,7 +330,11 @@ export default function ProfileView() {
                   <h3 className="text-lg font-semibold text-white">Change Password</h3>
                   <p className="text-sm text-gray-400">Update your account password</p>
                 </div>
-                <button onClick={handleChangePassword} disabled={isChangingPassword} className="px-6 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors">
+                <button
+                  onClick={handleChangePassword}
+                  disabled={isChangingPassword}
+                  className="px-6 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
+                >
                   {isChangingPassword ? 'Checking...' : 'Change Password'}
                 </button>
               </div>
@@ -324,7 +343,11 @@ export default function ProfileView() {
                   <h3 className="text-lg font-semibold text-white">Delete Account</h3>
                   <p className="text-sm text-gray-400">Permanently delete your account and data</p>
                 </div>
-                <button onClick={() => setShowDeleteConfirm(true)} disabled={isDeleting} className="px-6 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors">
+                <button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  disabled={isDeleting}
+                  className="px-6 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
+                >
                   {isDeleting ? 'Deleting...' : 'Delete Account'}
                 </button>
               </div>
@@ -337,10 +360,24 @@ export default function ProfileView() {
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <div className="bg-gray-800 rounded-xl p-8 max-w-md w-full mx-4 border border-red-500/30">
             <h2 className="text-2xl font-bold text-white mb-4">Delete Account?</h2>
-            <p className="text-gray-300 mb-6">This action cannot be undone. All your data, favorites, watchlist, and history will be permanently deleted.</p>
+            <p className="text-gray-300 mb-6">
+              This action cannot be undone. All your data, favorites, watchlist, and history will be permanently deleted.
+            </p>
             <div className="flex gap-4">
-              <button onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting} className="flex-1 px-6 py-3 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors">Cancel</button>
-              <button onClick={handleDeleteAccount} disabled={isDeleting} className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors">{isDeleting ? 'Deleting...' : 'Delete Forever'}</button>
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                disabled={isDeleting}
+                className="flex-1 px-6 py-3 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                disabled={isDeleting}
+                className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
+              >
+                {isDeleting ? 'Deleting...' : 'Delete Forever'}
+              </button>
             </div>
           </div>
         </div>
