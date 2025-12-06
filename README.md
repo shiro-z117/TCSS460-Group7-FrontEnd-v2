@@ -48,6 +48,11 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 - Changed the ratings for movies and promotional carousel to match/be similar to shows' ratings (since they differ from stars vs content ratings)
 
 ### Bao
+- Worked with Shiannel to solve the bug in our group's Credentials API.
+- Communicated and follow the bugs report from other group.
+- Finished functions of forgot password page and profile page.
+- Fixed all bugs related to forgot password and profile page.
+- Tested all authentication pages to make sure they work correctly.
 
 ### Shiraz
 
@@ -65,6 +70,7 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 - Figuring out the bug within our own Credentials API was difficult but ended up being a simple fix (since we resorted to paying the $7 fee in Render, we couldn't find a free work around)
 
 ### Bao
+- Working on the same branch with other teammates help reduce a lot of conflicts in the code.
 
 ### Shiraz
 
