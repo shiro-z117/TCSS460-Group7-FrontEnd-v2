@@ -3,7 +3,7 @@
 Group Project for TCSS 460 @ UWT  
 
 
-### Live API: https://tcss460-group7-frontend-v2.vercel.app
+### Live API: https://tcss460-group7-frontend-v2-fawn.vercel.app
 
 Utilizes the following APIs:
 
