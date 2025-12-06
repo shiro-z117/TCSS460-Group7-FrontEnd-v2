@@ -16,6 +16,7 @@ interface Movie {
   poster_url?: string;
   release_date: string;
   rating: number;
+  mpa_rating?: string;
   genres: string[];
 }
 
@@ -60,7 +61,8 @@ export default function DashboardView() {
                 : `${IMAGE_BASE_URL}${movie.poster_url}`
               : undefined,
             release_date: movie.release_date || '',
-            rating: 0, // Group 8 API doesn't provide ratings
+            rating: 0,
+            mpa_rating: movie.mpa_rating || movie.rating || 'NR',
             genres: Array.isArray(movie.genres) ? movie.genres : []
           }));
 
@@ -90,12 +92,11 @@ export default function DashboardView() {
             id: show.show_id || show.id,
             name: show.name || 'Untitled',
             description: show.overview || '',
-            poster_url: show.poster_url, // TV Shows API returns full URLs
+            poster_url: show.poster_url,
             first_air_date: show.first_air_date || '',
             rating: show.tmdb_rating || 0,
             genres: Array.isArray(show.genres) ? show.genres : []
           }));
-          // Use the 'count' field from the API response
           totalShowsCount = showsResponse.data?.count || showsData.length;
         } catch (err) {
           console.error('Error fetching shows:', err);

@@ -10,6 +10,7 @@ interface Movie {
   backdrop_url?: string;
   poster_url?: string;
   vote_average?: number;
+  mpa_rating?: string;
   release_date?: string;
 }
 
@@ -107,9 +108,11 @@ export default function PromotionalCarousel() {
           </p>
 
           <div className="flex items-center gap-4">
-            <span className="flex items-center gap-2 text-yellow-400 font-semibold">
-              ⭐ {currentItem.vote_average?.toFixed(1) || 'N/A'}
-            </span>
+            {currentItem.mpa_rating && (
+              <span className="bg-gray-700/90 backdrop-blur-sm text-white text-sm font-bold px-3 py-1 rounded border border-gray-600">
+                {currentItem.mpa_rating}
+              </span>
+            )}
             <span className="text-gray-300">
               {currentItem.release_date || 'Release date unknown'}
             </span>

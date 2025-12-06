@@ -12,6 +12,7 @@ interface Movie {
   release_date?: string;
   first_air_date?: string;
   rating: number;
+  mpa_rating?: string;
   genres: string[];
 }
 
@@ -47,16 +48,17 @@ export default function MovieCard({ movie, type = 'movie' }: MovieCardProps) {
 
         <div className="p-4">
           <h3 className="text-white font-semibold truncate mb-2">{title}</h3>
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between">
             <span className="text-purple-400 text-sm">{year}</span>
-            <span className="text-yellow-400 text-sm">⭐ {movie.rating.toFixed(1)}</span>
-          </div>
-          <div className="flex flex-wrap gap-1">
-            {movie.genres.slice(0, 2).map((genre) => (
-              <span key={genre} className="text-xs bg-purple-900 text-purple-200 px-2 py-1 rounded-full">
-                {genre}
+            {type === 'movie' && movie.mpa_rating ? (
+              <span className="text-gray-300 text-sm font-semibold border border-gray-500 px-2 py-0.5 rounded">
+                {movie.mpa_rating}
               </span>
-            ))}
+            ) : (
+              <span className="text-gray-300 text-sm font-semibold border border-gray-500 px-2 py-0.5 rounded">
+                ⭐ {movie.rating.toFixed(1)}
+              </span>
+            )}
           </div>
         </div>
       </div>
