@@ -81,8 +81,8 @@ export default function AuthChangePassword() {
           console.log('Form values:', values);
 
           const requestBody = {
-            oldPassword: values.currentPassword,  // Try oldPassword
-            currentPassword: values.currentPassword,  // And currentPassword
+            oldPassword: values.currentPassword, // Try oldPassword
+            currentPassword: values.currentPassword, // And currentPassword
             newPassword: values.newPassword
           };
           console.log('Request body:', requestBody);
@@ -104,7 +104,9 @@ export default function AuthChangePassword() {
           if (!contentType || !contentType.includes('application/json')) {
             const text = await response.text();
             console.error('Non-JSON response:', text);
-            throw new Error(`Server returned non-JSON response (${response.status}). The endpoint may not exist or there is a server error.`);
+            throw new Error(
+              `Server returned non-JSON response (${response.status}). The endpoint may not exist or there is a server error.`
+            );
           }
 
           const result = await response.json();
@@ -117,14 +119,17 @@ export default function AuthChangePassword() {
           setSuccessMessage('Password changed successfully! Redirecting to login...');
           setSubmitting(false);
 
-          // Clear token and logout
-          localStorage.removeItem('token');
-          localStorage.removeItem('accessToken');
-
-          // Sign out and redirect to login after 2 seconds
+          // Sign out and redirect to login
           setTimeout(async () => {
             await signOut({ redirect: false });
+
+            if (typeof window !== 'undefined') {
+              window.localStorage.clear();
+              window.sessionStorage.clear();
+            }
+
             router.push('/login');
+            router.refresh();
           }, 2000);
         } catch (err: any) {
           console.error('Password change error:', err);
