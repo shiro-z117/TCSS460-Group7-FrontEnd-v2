@@ -13,8 +13,8 @@ import ScrollTop from 'components/ScrollTop';
 import Snackbar from 'components/@extended/Snackbar';
 import Notistack from 'components/third-party/Notistack';
 import { ConfigProvider } from 'contexts/ConfigContext';
-import { AuthErrorProvider } from 'contexts/AuthErrorContext';
-import AuthErrorDialog from 'components/AuthErrorDialog';
+import { AuthErrorProvider } from '@/contexts/AuthErrorContext';
+import AuthErrorDialog from '@/components/AuthErrorDialog';
 
 // ==============================|| APP - THEME, ROUTER, LOCAL ||============================== //
 

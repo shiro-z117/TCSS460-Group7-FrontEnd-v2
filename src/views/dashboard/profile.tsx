@@ -1,14 +1,34 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import HorizontalMediaList from '@/components/profile/HorizontalMediaList';
+import AvatarPicker from '@/components/profile/AvatarPicker';
 import useUserProfile from '@/hooks/useUserProfile';
 
 export default function ProfileView() {
   const { data: session } = useSession();
   const profile = useUserProfile();
+  const [itemsToShow, setItemsToShow] = useState(6); // Default to 6 items
+  const [showAvatarPicker, setShowAvatarPicker] = useState(false);
+
+  // Calculate how many items can fit on screen
+  useEffect(() => {
+    const calculateItemsToShow = () => {
+      // Account for sidebar (256px), main padding (2 * 32px = 64px), card padding (2 * 48px = 96px)
+      const availableWidth = window.innerWidth - 256 - 64 - 96;
+      // Each card is 192px (w-48) + 24px gap
+      const itemWidth = 192 + 24;
+      const count = Math.floor(availableWidth / itemWidth);
+      // Show at least 3, at most 10 items
+      setItemsToShow(Math.max(3, Math.min(10, count)));
+    };
+
+    calculateItemsToShow();
+    window.addEventListener('resize', calculateItemsToShow);
+    return () => window.removeEventListener('resize', calculateItemsToShow);
+  }, []);
 
   // Refetch data when page becomes visible (e.g., when navigating back)
   useEffect(() => {
@@ -94,11 +114,34 @@ export default function ProfileView() {
               <h3 className="text-4xl font-bold mb-1 text-white">{displayName}</h3>
               <p className="text-2xl text-gray-400 mb-4">{displayEmail}</p>
 
-              <img
-                src={avatarUrl}
-                alt="User Avatar"
-                className="w-48 h-48 rounded-full border-2 border-purple-500 object-cover"
-              />
+              <div className="relative group">
+                <img
+                  src={avatarUrl}
+                  alt="User Avatar"
+                  className="w-48 h-48 rounded-full border-2 border-purple-500 object-cover cursor-pointer transition-all group-hover:border-purple-400"
+                  onClick={() => setShowAvatarPicker(true)}
+                />
+                <button
+                  onClick={() => setShowAvatarPicker(true)}
+                  className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                >
+                  <div className="text-center">
+                    <svg
+                      className="w-8 h-8 text-white mx-auto mb-1"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                      <path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span className="text-white text-sm font-medium">Change Avatar</span>
+                  </div>
+                </button>
+              </div>
             </div>
 
             <div className="flex gap-12 ml-8">
@@ -117,7 +160,7 @@ export default function ProfileView() {
               </div>
 
               <div className="text-center">
-                <p className="text-3xl font-semibold text-purple-300">HISTORY</p>
+                <p className="text-3xl font-semibold text-purple-300">WATCH HISTORY</p>
                 <p className="text-2xl font-bold mt-1">
                   {profile.isLoadingWatched ? '...' : profile.watchedCount}
                 </p>
@@ -142,7 +185,12 @@ export default function ProfileView() {
                 <p className="text-sm mt-2">Start adding your favorite movies and shows!</p>
               </div>
             ) : (
-              <HorizontalMediaList title={'Favorites'} items={profile.favorites} />
+              <HorizontalMediaList
+                title={'Favorites'}
+                items={profile.favorites.slice(0, itemsToShow)}
+                viewAllLink="/dashboard/favorites"
+                totalCount={profile.favoritesCount}
+              />
             )}
           </div>
 
@@ -163,7 +211,12 @@ export default function ProfileView() {
                 <p className="text-sm mt-2">Mark movies and shows as watched to see them here!</p>
               </div>
             ) : (
-              <HorizontalMediaList title={'Watched'} items={profile.watched} />
+              <HorizontalMediaList
+                title={'Watch History'}
+                items={profile.watched.slice(0, itemsToShow)}
+                viewAllLink="/dashboard/history"
+                totalCount={profile.watchedCount}
+              />
             )}
           </div>
 
@@ -184,11 +237,28 @@ export default function ProfileView() {
                 <p className="text-sm mt-2">Add movies and shows to watch later!</p>
               </div>
             ) : (
-              <HorizontalMediaList title={'Watchlist'} items={profile.watchlist} />
+              <HorizontalMediaList
+                title={'Watchlist'}
+                items={profile.watchlist.slice(0, itemsToShow)}
+                viewAllLink="/dashboard/watchlist"
+                totalCount={profile.watchlistCount}
+              />
             )}
           </div>
         </div>
       </main>
+
+      {/* Avatar Picker Modal */}
+      {showAvatarPicker && profile.userId && (
+        <AvatarPicker
+          currentAvatarId={profile.avatar?.avatar_id}
+          userId={profile.userId}
+          onAvatarChange={() => {
+            profile.refetch();
+          }}
+          onClose={() => setShowAvatarPicker(false)}
+        />
+      )}
     </div>
   );
 }

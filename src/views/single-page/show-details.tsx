@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { showsApi } from '@/services/showsApi';
 import Image from 'next/image';
 import Link from 'next/link';
+import useUserProfile from '@/hooks/useUserProfile';
+import { useMediaLists } from '@/hooks/useMediaLists';
 
 interface ShowDetailsViewProps {
   showId: string;
@@ -18,6 +20,33 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
   const [isDeleted, setIsDeleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  // Get user's lists
+  const { watchlist, favorites, watched, refetch } = useUserProfile();
+
+  // Extract media IDs from user's lists
+  const watchlistIds = watchlist.map(item => item.id.toString());
+  const favoritesIds = favorites.map(item => item.id.toString());
+  const watchedIds = watched.map(item => item.id.toString());
+
+  // Media list management
+  const {
+    isInWatchlist,
+    isInFavorites,
+    isInWatched,
+    addToWatchlist,
+    addToFavorites,
+    addToWatched,
+    removeFromWatchlist,
+    removeFromFavorites,
+    removeFromWatched,
+    isLoading: isListLoading
+  } = useMediaLists({
+    watchlistIds,
+    favoritesIds,
+    watchedIds,
+    onListsChanged: refetch
+  });
 
   useEffect(() => {
     const fetchShow = async () => {
@@ -147,15 +176,65 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
               </div>
 
               <div className="space-y-3">
-                <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                  <span>+</span> Add to Watch Later
-                </button>
-                
-                <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                  <span>✓</span> Add to Finished Watching
-                </button>
+                {/* Watchlist Button */}
+                {isInWatchlist(showId) ? (
+                  <button
+                    onClick={() => removeFromWatchlist(showId)}
+                    disabled={isListLoading}
+                    className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>✓</span> Remove from Watchlist
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => addToWatchlist('tvshow', showId)}
+                    disabled={isListLoading}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>+</span> Add to Watchlist
+                  </button>
+                )}
 
-                <button 
+                {/* Favorites Button */}
+                {isInFavorites(showId) ? (
+                  <button
+                    onClick={() => removeFromFavorites(showId)}
+                    disabled={isListLoading}
+                    className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>★</span> Remove from Favorites
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => addToFavorites('tvshow', showId)}
+                    disabled={isListLoading}
+                    className="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>⭐</span> Add to Favorites
+                  </button>
+                )}
+
+                {/* Watched Button */}
+                {isInWatched(showId) ? (
+                  <button
+                    onClick={() => removeFromWatched(showId)}
+                    disabled={isListLoading}
+                    className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>✓</span> Remove from Watched
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => addToWatched('tvshow', showId)}
+                    disabled={isListLoading}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>✓</span> Mark as Watched
+                  </button>
+                )}
+
+                {/* Delete Button - Keep original */}
+                <button
                   className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
                   onClick={handleDelete}
                 >
@@ -239,7 +318,7 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
                       <div key={index} className="text-center">
                         <div className="relative w-full aspect-square bg-purple-700 rounded-lg mb-2 overflow-hidden">
                           {actor.profile_url ? (
-                            <Image src={actor.profile_url} alt={actor.name} fill className="object-cover" />
+                            <Image src={actor.profile_url} alt={actor.name} fill sizes="(max-width: 640px) 50vw, 20vw" className="object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
                               <span className="text-4xl">👤</span>

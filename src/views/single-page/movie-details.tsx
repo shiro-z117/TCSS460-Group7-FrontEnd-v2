@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { movieApi } from '@/services/movieApi';
 import Image from 'next/image';
 import Link from 'next/link';
+import useUserProfile from '@/hooks/useUserProfile';
+import { useMediaLists } from '@/hooks/useMediaLists';
 
 interface MovieDetailsViewProps {
   movieId: string;
@@ -19,6 +21,33 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  // Get user's lists
+  const { watchlist, favorites, watched, refetch } = useUserProfile();
+
+  // Extract media IDs from user's lists
+  const watchlistIds = watchlist.map(item => item.id.toString());
+  const favoritesIds = favorites.map(item => item.id.toString());
+  const watchedIds = watched.map(item => item.id.toString());
+
+  // Media list management
+  const {
+    isInWatchlist,
+    isInFavorites,
+    isInWatched,
+    addToWatchlist,
+    addToFavorites,
+    addToWatched,
+    removeFromWatchlist,
+    removeFromFavorites,
+    removeFromWatched,
+    isLoading: isListLoading
+  } = useMediaLists({
+    watchlistIds,
+    favoritesIds,
+    watchedIds,
+    onListsChanged: refetch
+  });
+
   useEffect(() => {
     const fetchMovie = async () => {
       try {
@@ -26,7 +55,10 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
         setError(null);
         console.log('🎬 Movie ID:', movieId);
         const response = await movieApi.getById(parseInt(movieId));
-        setMovie(response.data.data);
+
+        // Handle both possible response structures
+        const movieData = response.data.data || response.data;
+        setMovie(movieData);
       } catch (err: any) {
         console.error('Error fetching movie:', err);
         setError(err.message || 'Failed to load movie');
@@ -135,15 +167,65 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
               </div>
 
               <div className="space-y-3">
-                <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                  <span>+</span> Add to Watch Later
-                </button>
-                
-                <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                  <span>✓</span> Add to Finished Watching
-                </button>
+                {/* Watchlist Button */}
+                {isInWatchlist(movieId) ? (
+                  <button
+                    onClick={() => removeFromWatchlist(movieId)}
+                    disabled={isListLoading}
+                    className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>✓</span> Remove from Watchlist
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => addToWatchlist('movie', movieId)}
+                    disabled={isListLoading}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>+</span> Add to Watchlist
+                  </button>
+                )}
 
-                <button 
+                {/* Favorites Button */}
+                {isInFavorites(movieId) ? (
+                  <button
+                    onClick={() => removeFromFavorites(movieId)}
+                    disabled={isListLoading}
+                    className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>★</span> Remove from Favorites
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => addToFavorites('movie', movieId)}
+                    disabled={isListLoading}
+                    className="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>⭐</span> Add to Favorites
+                  </button>
+                )}
+
+                {/* Watched Button */}
+                {isInWatched(movieId) ? (
+                  <button
+                    onClick={() => removeFromWatched(movieId)}
+                    disabled={isListLoading}
+                    className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>✓</span> Remove from Watched
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => addToWatched('movie', movieId)}
+                    disabled={isListLoading}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>✓</span> Mark as Watched
+                  </button>
+                )}
+
+                {/* Delete Button - Keep original */}
+                <button
                   className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
                   onClick={handleDelete}
                 >
@@ -220,6 +302,7 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
                               src={`${IMAGE_BASE_URL}${actor.profile}`}
                               alt={actor.name}
                               fill
+                              sizes="(max-width: 640px) 50vw, 20vw"
                               className="object-cover"
                             />
                           ) : (
