@@ -67,19 +67,21 @@ export default function HorizontalMediaList({
         )}
       </div>
 
-      {/* Horizontal Scrolling List */}
+      {/* Horizontal List */}
       {isLoading ? (
-        <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div
-              key={i}
-              className="flex-shrink-0 w-48 bg-gray-800/50 rounded-xl h-96 animate-pulse"
-            />
-          ))}
+        <div className="overflow-hidden">
+          <div className="flex gap-6 pb-4">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div
+                key={i}
+                className="flex-shrink-0 w-48 bg-gray-800/50 rounded-xl h-96 animate-pulse"
+              />
+            ))}
+          </div>
         </div>
       ) : (
-        <div className="relative group">
-          <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900 scroll-smooth">
+        <div className="overflow-hidden">
+          <div className="flex gap-6 pb-4">
             {items.filter(item => item.id !== undefined && item.id !== null).map((item, index) => {
               const itemTitle = item.title || item.name || 'Untitled';
               const date = item.release_date || item.first_air_date;
@@ -144,14 +146,6 @@ export default function HorizontalMediaList({
               );
             })}
           </div>
-
-          {/* Scroll Indicators */}
-          {items.length > 6 && (
-            <>
-              <div className="absolute left-0 top-0 bottom-4 w-12 bg-gradient-to-r from-gray-900 to-transparent pointer-events-none" />
-              <div className="absolute right-0 top-0 bottom-4 w-12 bg-gradient-to-l from-gray-900 to-transparent pointer-events-none" />
-            </>
-          )}
         </div>
       )}
     </div>
