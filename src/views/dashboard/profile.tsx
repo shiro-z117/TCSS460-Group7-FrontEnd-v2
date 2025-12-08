@@ -231,8 +231,6 @@ export default function ProfileView() {
         return;
       }
 
-      await authApi.deleteAccount();
-
       const apiUrl = process.env.NEXT_PUBLIC_CREDENTIALS_API_URL || 'https://credentials-api-group2-20f368b8528b.herokuapp.com';
       const response = await fetch(`${apiUrl}/auth/me`, {
         method: 'DELETE',
