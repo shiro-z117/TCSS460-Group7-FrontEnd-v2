@@ -184,22 +184,47 @@ export default function ProfileView() {
         return;
       }
 
-      await authApi.requestPasswordReset(userData?.email || '');
-      openSnackbar({
-        open: true,
-        message: 'Password reset email sent! Check your inbox.',
-        variant: 'alert',
-        alert: {
-          color: 'success',
-          variant: 'filled'
-        },
-        close: true
-      } as any);
+      // Fetch latest user data to check current verification status
+      const apiUrl = process.env.NEXT_PUBLIC_CREDENTIALS_API_URL || 'https://credentials-api-group2-20f368b8528b.herokuapp.com';
+      const response = await fetch(`${apiUrl}/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+
+      const result = await response.json();
+      const latestUserData = result.data?.user || result.data;
+
+      // Update state with latest data
+      setUserData(latestUserData);
+
+      // Check if email is verified
+      if (!latestUserData.emailVerified) {
+        openSnackbar({
+          open: true,
+          message: 'Please verify your email first before changing password',
+          variant: 'alert',
+          alert: {
+            color: 'warning',
+            variant: 'filled'
+          },
+          close: true
+        } as any);
+        setIsChangingPassword(false);
+        return;
+      }
+
+      // Navigate to change password page
+      router.push('/dashboard/change-password');
     } catch (error: any) {
-      console.error('Error requesting password reset:', error);
+      const errorMessage = error?.message || 'Failed to check verification status';
       openSnackbar({
         open: true,
-        message: error.message || 'Failed to request password reset',
+        message: errorMessage,
         variant: 'alert',
         alert: {
           color: 'error',
@@ -207,7 +232,6 @@ export default function ProfileView() {
         },
         close: true
       } as any);
-    } finally {
       setIsChangingPassword(false);
     }
   };
