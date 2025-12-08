@@ -82,19 +82,20 @@ export default function MetricsGrid() {
           },
           {
             id: 3,
+            title: 'Total Library',
+            value: (totalMovies + totalShows).toLocaleString(),
+            icon: '🎥',
+            color: 'pink',
+            gradient: 'from-pink-600/20 to-pink-900/20'
+          }
+          /*
+          {
+            id: 4,
             title: 'Random Movies',
             value: randomMoviesCount.toString(),
             icon: '🔥',
             color: 'orange',
             gradient: 'from-orange-600/20 to-orange-900/20'
-          },
-          {
-            id: 4,
-            title: 'Featured Content',
-            value: (totalMovies + totalShows).toLocaleString(),
-            icon: '⭐',
-            color: 'yellow',
-            gradient: 'from-yellow-600/20 to-yellow-900/20'
           },
           {
             id: 5,
@@ -106,12 +107,13 @@ export default function MetricsGrid() {
           },
           {
             id: 6,
-            title: 'Total Library',
+            title: 'Featured Content',
             value: (totalMovies + totalShows).toLocaleString(),
-            icon: '🎥',
-            color: 'pink',
-            gradient: 'from-pink-600/20 to-pink-900/20'
+            icon: '⭐',
+            color: 'yellow',
+            gradient: 'from-yellow-600/20 to-yellow-900/20'
           }
+          */
         ];
 
         setMetrics(metricsData);
