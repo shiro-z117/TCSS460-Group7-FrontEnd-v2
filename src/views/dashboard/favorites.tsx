@@ -77,6 +77,7 @@ export default function FavoritesView() {
                   poster_url: posterUrl,
                   release_date: movie.release_date,
                   rating: movie.tmdb_rating || 0,
+                  mpa_rating: movie.mpa_rating || 'NR',
                   genres: genresList,
                   media_type: 'movie' as const
                 };

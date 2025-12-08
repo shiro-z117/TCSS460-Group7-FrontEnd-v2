@@ -338,11 +338,7 @@ export default function ProfileView() {
           {/* Profile Header */}
           <div className="mb-8 p-12 rounded-xl bg-gray-800/50 backdrop-blur border border-purple-500/30 flex items-center">
             <div className="relative group cursor-pointer" onClick={() => setShowAvatarPicker(true)}>
-              <img
-                src={avatarUrl}
-                alt="User Avatar"
-                className="w-48 h-48 rounded-full border-2 border-purple-500"
-              />
+              <img src={avatarUrl} alt="User Avatar" className="w-48 h-48 rounded-full border-2 border-purple-500" />
               <div className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <span className="text-white text-sm font-semibold">Change Avatar</span>
               </div>
@@ -353,25 +349,19 @@ export default function ProfileView() {
                 <p className="text-xl text-gray-300">{displayEmail}</p>
               </div>
               <div className="flex gap-12">
-              <div className="text-center">
-                <p className="text-3xl font-semibold text-purple-300">FAVORITES</p>
-                <p className="text-2xl font-bold text-white mt-1">
-                  {profile.isLoadingFavorites ? '...' : profile.favoritesCount}
-                </p>
+                <div className="text-center">
+                  <p className="text-3xl font-semibold text-purple-300">FAVORITES</p>
+                  <p className="text-2xl font-bold text-white mt-1">{profile.isLoadingFavorites ? '...' : profile.favoritesCount}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-semibold text-purple-300">WATCHLIST</p>
+                  <p className="text-2xl font-bold text-white mt-1">{profile.isLoadingWatchlist ? '...' : profile.watchlistCount}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-semibold text-purple-300">WATCH HISTORY</p>
+                  <p className="text-2xl font-bold text-white mt-1">{profile.isLoadingWatched ? '...' : profile.watchedCount}</p>
+                </div>
               </div>
-              <div className="text-center">
-                <p className="text-3xl font-semibold text-purple-300">WATCHLIST</p>
-                <p className="text-2xl font-bold text-white mt-1">
-                  {profile.isLoadingWatchlist ? '...' : profile.watchlistCount}
-                </p>
-              </div>
-              <div className="text-center">
-                <p className="text-3xl font-semibold text-purple-300">WATCH HISTORY</p>
-                <p className="text-2xl font-bold text-white mt-1">
-                  {profile.isLoadingWatched ? '...' : profile.watchedCount}
-                </p>
-              </div>
-            </div>
             </div>
           </div>
 
@@ -401,32 +391,6 @@ export default function ProfileView() {
             )}
           </div>
 
-          {/* Watched List */}
-          <div className="mb-8 pt-6 pb-8 px-6 rounded-xl bg-gray-800/50 backdrop-blur border border-purple-500/30 text-white">
-            {profile.isLoadingWatched ? (
-              <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
-                <p className="text-gray-400">Loading watch history...</p>
-              </div>
-            ) : profile.watchedError ? (
-              <div className="text-center py-8 text-red-400">
-                <p>Error loading watch history: {profile.watchedError}</p>
-              </div>
-            ) : profile.watched.length === 0 ? (
-              <div className="text-center py-8 text-gray-400">
-                <p className="text-xl">No watch history yet</p>
-                <p className="text-sm mt-2">Mark movies and shows as watched to see them here!</p>
-              </div>
-            ) : (
-              <HorizontalMediaList
-                title={'Watch History'}
-                items={profile.watched.slice(0, itemsToShow)}
-                viewAllLink="/dashboard/history"
-                totalCount={profile.watchedCount}
-              />
-            )}
-          </div>
-
           {/* Watchlist */}
           <div className="mb-8 pt-6 pb-8 px-6 rounded-xl bg-gray-800/50 backdrop-blur border border-purple-500/30 text-white">
             {profile.isLoadingWatchlist ? (
@@ -449,6 +413,32 @@ export default function ProfileView() {
                 items={profile.watchlist.slice(0, itemsToShow)}
                 viewAllLink="/dashboard/watchlist"
                 totalCount={profile.watchlistCount}
+              />
+            )}
+          </div>
+
+          {/* Watch History */}
+          <div className="mb-8 pt-6 pb-8 px-6 rounded-xl bg-gray-800/50 backdrop-blur border border-purple-500/30 text-white">
+            {profile.isLoadingWatched ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+                <p className="text-gray-400">Loading watch history...</p>
+              </div>
+            ) : profile.watchedError ? (
+              <div className="text-center py-8 text-red-400">
+                <p>Error loading watch history: {profile.watchedError}</p>
+              </div>
+            ) : profile.watched.length === 0 ? (
+              <div className="text-center py-8 text-gray-400">
+                <p className="text-xl">No watch history yet</p>
+                <p className="text-sm mt-2">Mark movies and shows as watched to see them here!</p>
+              </div>
+            ) : (
+              <HorizontalMediaList
+                title={'Watch History'}
+                items={profile.watched.slice(0, itemsToShow)}
+                viewAllLink="/dashboard/history"
+                totalCount={profile.watchedCount}
               />
             )}
           </div>
