@@ -42,7 +42,7 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
         router.push('/dashboard');
         break;
       default:
-        router.push('/dashboard/movies'); // explore page
+        router.push('/dashboard/movies');
     }
   };
 
@@ -50,9 +50,9 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
   const { watchlist, favorites, watched, refetch } = useUserProfile();
 
   // Extract media IDs from user's lists
-  const watchlistIds = watchlist.map(item => item.id.toString());
-  const favoritesIds = favorites.map(item => item.id.toString());
-  const watchedIds = watched.map(item => item.id.toString());
+  const watchlistIds = watchlist.map((item) => item.id.toString());
+  const favoritesIds = favorites.map((item) => item.id.toString());
+  const watchedIds = watched.map((item) => item.id.toString());
 
   // Media list management
   const {

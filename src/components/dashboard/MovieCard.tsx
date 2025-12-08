@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 interface Movie {
   id: number;
@@ -22,10 +23,14 @@ interface MovieCardProps {
 }
 
 export default function MovieCard({ movie, type = 'movie' }: MovieCardProps) {
+  const pathname = usePathname();
+  const segments = pathname.split('/').filter(Boolean);
+  const pageSegment = segments[segments.length - 1];
+
   const title = movie.title || movie.name || 'Untitled';
   const date = movie.release_date || movie.first_air_date;
   const year = date ? new Date(date).getFullYear() : 'N/A';
-  const href = type === 'movie' ? `/dashboard/movies/${movie.id}` : `/dashboard/shows/${movie.id}`;
+  const href = type === 'movie' ? `/dashboard/movies/${movie.id}?from=${pageSegment}` : `/dashboard/shows/${movie.id}?from=${pageSegment}`;
 
   return (
     <Link href={href} className="group cursor-pointer block">
@@ -51,9 +56,7 @@ export default function MovieCard({ movie, type = 'movie' }: MovieCardProps) {
           <div className="flex items-center justify-between">
             <span className="text-purple-400 text-sm">{year}</span>
             {type === 'movie' && movie.mpa_rating ? (
-              <span className="text-gray-300 text-sm font-semibold border border-gray-500 px-2 py-0.5 rounded">
-                {movie.mpa_rating}
-              </span>
+              <span className="text-gray-300 text-sm font-semibold border border-gray-500 px-2 py-0.5 rounded">{movie.mpa_rating}</span>
             ) : (
               <span className="text-gray-300 text-sm font-semibold border border-gray-500 px-2 py-0.5 rounded">
                 ⭐ {movie.rating.toFixed(1)}

@@ -50,9 +50,9 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
   const { watchlist, favorites, watched, refetch } = useUserProfile();
 
   // Extract media IDs from user's lists
-  const watchlistIds = watchlist.map(item => item.id.toString());
-  const favoritesIds = favorites.map(item => item.id.toString());
-  const watchedIds = watched.map(item => item.id.toString());
+  const watchlistIds = watchlist.map((item) => item.id.toString());
+  const favoritesIds = favorites.map((item) => item.id.toString());
+  const watchedIds = watched.map((item) => item.id.toString());
 
   // Media list management
   const {
@@ -156,7 +156,7 @@ export default function ShowDetailsView({ showId }: ShowDetailsViewProps) {
   const getGenres = () => {
     if (!show.genres) return [];
     if (Array.isArray(show.genres)) {
-      return show.genres.map((g: any) => typeof g === 'string' ? g : (g.name || g));
+      return show.genres.map((g: any) => (typeof g === 'string' ? g : g.name || g));
     }
     if (typeof show.genres === 'string') {
       return show.genres.split(',').map((g: string) => g.trim());

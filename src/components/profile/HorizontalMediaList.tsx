@@ -72,79 +72,65 @@ export default function HorizontalMediaList({
         <div className="overflow-hidden">
           <div className="flex gap-6 pb-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div
-                key={i}
-                className="flex-shrink-0 w-48 bg-gray-800/50 rounded-xl h-96 animate-pulse"
-              />
+              <div key={i} className="flex-shrink-0 w-48 bg-gray-800/50 rounded-xl h-96 animate-pulse" />
             ))}
           </div>
         </div>
       ) : (
         <div className="overflow-hidden">
           <div className="flex gap-6 pb-4">
-            {items.filter(item => item.id !== undefined && item.id !== null).map((item, index) => {
-              const itemTitle = item.title || item.name || 'Untitled';
-              const date = item.release_date || item.first_air_date;
-              const year = date ? new Date(date).getFullYear() : 'N/A';
-              // Use media_type from the item to determine the correct route
-              const href =
-                item.media_type === 'movie'
-                  ? `/dashboard/movies/${item.id}`
-                  : `/dashboard/shows/${item.id}`;
+            {items
+              .filter((item) => item.id !== undefined && item.id !== null)
+              .map((item, index) => {
+                const itemTitle = item.title || item.name || 'Untitled';
+                const date = item.release_date || item.first_air_date;
+                const year = date ? new Date(date).getFullYear() : 'N/A';
+                // Use media_type from the item to determine the correct route
+                const href =
+                  item.media_type === 'movie' ? `/dashboard/movies/${item.id}?from=profile` : `/dashboard/shows/${item.id}?from=profile`;
 
-              return (
-                <Link
-                  key={`${item.media_type}-${item.id}`}
-                  href={href}
-                  className="group/card cursor-pointer block flex-shrink-0 w-48"
-                >
-                  <div className="bg-gray-800 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl">
-                    <div className="relative aspect-[2/3] bg-gray-700">
-                      {item.poster_url ? (
-                        <Image
-                          src={item.poster_url}
-                          alt={itemTitle}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 192px"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-500">
-                          <span className="text-6xl">🎬</span>
-                        </div>
-                      )}
-
-                      {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300" />
-                    </div>
-
-                    <div className="p-4">
-                      <h3 className="text-white font-semibold truncate mb-2 group-hover/card:text-transparent group-hover/card:bg-clip-text group-hover/card:bg-gradient-to-r group-hover/card:from-purple-400 group-hover/card:to-pink-400 transition-all">
-                        {itemTitle}
-                      </h3>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className={`${colors.year} text-sm`}>{year}</span>
-                        {item.rating > 0 && (
-                          <span className="text-yellow-400 text-sm">
-                            ⭐ {item.rating.toFixed(1)}
-                          </span>
+                return (
+                  <Link key={`${item.media_type}-${item.id}`} href={href} className="group/card cursor-pointer block flex-shrink-0 w-48">
+                    <div className="bg-gray-800 rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+                      <div className="relative aspect-[2/3] bg-gray-700">
+                        {item.poster_url ? (
+                          <Image
+                            src={item.poster_url}
+                            alt={itemTitle}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 192px"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-500">
+                            <span className="text-6xl">🎬</span>
+                          </div>
                         )}
+
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300" />
                       </div>
-                      <div className="flex flex-wrap gap-1">
-                        {item.genres.slice(0, 2).map((genre) => (
-                          <span
-                            key={genre}
-                            className={`text-xs ${colors.badge} px-2 py-1 rounded-full`}
-                          >
-                            {genre}
-                          </span>
-                        ))}
+
+                      <div className="p-4">
+                        <h3 className="text-white font-semibold truncate mb-2 group-hover/card:text-transparent group-hover/card:bg-clip-text group-hover/card:bg-gradient-to-r group-hover/card:from-purple-400 group-hover/card:to-pink-400 transition-all">
+                          {itemTitle}
+                        </h3>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className={`${colors.year} text-sm`}>{year}</span>
+                          {item.rating > 0 && <span className="text-yellow-400 text-sm">⭐ {item.rating.toFixed(1)}</span>}
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                          {item.genres.slice(0, 2).map((genre) => (
+                            <span key={genre} className={`text-xs ${colors.badge} px-2 py-1 rounded-full`}>
+                              {genre}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
-              );
-            })}
+                  </Link>
+                );
+              })}
           </div>
         </div>
       )}
