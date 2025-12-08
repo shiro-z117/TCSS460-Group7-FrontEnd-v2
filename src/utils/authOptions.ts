@@ -124,11 +124,11 @@ export const authOptions: NextAuthOptions = {
 
   session: {
     strategy: 'jwt',
-    maxAge: Number(process.env.NEXT_APP_JWT_TIMEOUT!)
+    maxAge: Number(process.env.REACT_APP_JWT_TIMEOUT!)
   },
 
   jwt: {
-    secret: process.env.NEXT_APP_JWT_SECRET
+    secret: process.env.REACT_APP_JWT_SECRET
   },
 
   pages: {
