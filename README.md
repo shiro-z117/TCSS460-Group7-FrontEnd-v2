@@ -28,6 +28,12 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 #### Actions:
 - Merged branches
 - Prepared to perform finishing touches
+### Discussion 3
+- **Date:** Sunday, December 7, 2025
+- **Time:** 7:00 PM - 
+- **Location:** Discord
+#### Actions:
+- Submit project
 ---
 ## Production Sprint Contributions
 
@@ -59,6 +65,8 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 - Fixed logout functions (now clears local data)
 - Performed cleanup to remove unused routes
 - Updated nextjs version so that vercel would once again allow deployment (previous version had a critical security vulnerability, and Vercel has recently pushed an update to their service, which now disallows that version)
+- Implemented dynamic "go back" buttons to details pages
+- Handled merges and conflicts
 
 ---
 ## Production Sprint Comments
