@@ -133,7 +133,7 @@ export default function DashboardView() {
         <PromotionalCarousel />
 
         {/* Rotating Metrics Grid - Above Movies */}
-        <MetricsGrid />
+        {/* <MetricsGrid /> */}
 
         {/* Featured Movies */}
         <div className="mb-12">
