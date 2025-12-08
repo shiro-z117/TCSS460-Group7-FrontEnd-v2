@@ -231,18 +231,20 @@ export default function ProfileView() {
         return;
       }
 
-      await authApi.deleteAccount();
-
       const apiUrl = process.env.NEXT_PUBLIC_CREDENTIALS_API_URL || 'https://credentials-api-group2-20f368b8528b.herokuapp.com';
+
+      // Make the DELETE request to delete the account
       const response = await fetch(`${apiUrl}/auth/me`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete account');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Failed to delete account');
       }
 
       openSnackbar({
