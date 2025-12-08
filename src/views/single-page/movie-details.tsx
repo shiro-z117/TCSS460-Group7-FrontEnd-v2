@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import { movieApi } from '@/services/movieApi';
 import Image from 'next/image';
 import Link from 'next/link';
+import useUserProfile from '@/hooks/useUserProfile';
+import { useMediaLists } from '@/hooks/useMediaLists';
+import { useSearchParams } from 'next/navigation';
 
 interface MovieDetailsViewProps {
   movieId: string;
@@ -18,14 +21,69 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
   const [isDeleted, setIsDeleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const fromPage = searchParams.get('from') || 'search';
+
+  const handleGoBack = () => {
+    switch (fromPage) {
+      case 'profile':
+        router.push('/dashboard/profile');
+        break;
+      case 'favorites':
+        router.push('/dashboard/favorites');
+        break;
+      case 'watchlist':
+        router.push('/dashboard/watchlist');
+        break;
+      case 'history':
+        router.push('/dashboard/history');
+        break;
+      case 'dashboard':
+        router.push('/dashboard');
+        break;
+      default:
+        router.push('/dashboard/movies');
+    }
+  };
+
+  // Get user's lists
+  const { watchlist, favorites, watched, refetch } = useUserProfile();
+
+  // Extract media IDs from user's lists
+  const watchlistIds = watchlist.map((item) => item.id.toString());
+  const favoritesIds = favorites.map((item) => item.id.toString());
+  const watchedIds = watched.map((item) => item.id.toString());
+
+  // Media list management
+  const {
+    isInWatchlist,
+    isInFavorites,
+    isInWatched,
+    addToWatchlist,
+    addToFavorites,
+    addToWatched,
+    removeFromWatchlist,
+    removeFromFavorites,
+    removeFromWatched,
+    isLoading: isListLoading
+  } = useMediaLists({
+    watchlistIds,
+    favoritesIds,
+    watchedIds,
+    onListsChanged: refetch
+  });
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
         setLoading(true);
         setError(null);
+        console.log('🎬 Movie ID:', movieId);
         const response = await movieApi.getById(parseInt(movieId));
-        setMovie(response.data.data);
+
+        // Handle both possible response structures
+        const movieData = response.data.data || response.data;
+        setMovie(movieData);
       } catch (err: any) {
         console.error('Error fetching movie:', err);
         setError(err.message || 'Failed to load movie');
@@ -88,9 +146,9 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
           <div className="text-center text-white">
             <h1 className="text-4xl font-bold mb-4">{error ? 'Error Loading Movie' : 'Movie Not Found'}</h1>
             {error && <p className="text-red-400 mb-4">{error}</p>}
-            <Link href="/dashboard/movies" className="text-purple-400 hover:text-purple-300 text-lg">
-              ← Back to Movies
-            </Link>
+            <button onClick={handleGoBack} className="text-purple-400 hover:text-purple-300 text-lg mb-6 inline-flex items-center gap-2">
+              <span>←</span> Go Back
+            </button>
           </div>
         </div>
       </div>
@@ -103,9 +161,9 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <div className="max-w-7xl mx-auto p-8">
-        <Link href="/dashboard/movies" className="text-purple-400 hover:text-purple-300 text-lg mb-6 inline-flex items-center gap-2">
-          <span>←</span> Back to Movies
-        </Link>
+        <button onClick={handleGoBack} className="text-purple-400 hover:text-purple-300 text-lg mb-6 inline-flex items-center gap-2">
+          <span>←</span> Go Back
+        </button>
 
         <div className="mt-8 bg-black bg-opacity-50 rounded-lg p-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -121,14 +179,64 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
               </div>
 
               <div className="space-y-3">
-                <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                  <span>+</span> Add to Watch Later
-                </button>
+                {/* Watchlist Button */}
+                {isInWatchlist(movieId) ? (
+                  <button
+                    onClick={() => removeFromWatchlist(movieId)}
+                    disabled={isListLoading}
+                    className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>✓</span> Remove from Watchlist
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => addToWatchlist('movie', movieId)}
+                    disabled={isListLoading}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>+</span> Add to Watchlist
+                  </button>
+                )}
 
-                <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                  <span>✓</span> Add to Finished Watching
-                </button>
+                {/* Favorites Button */}
+                {isInFavorites(movieId) ? (
+                  <button
+                    onClick={() => removeFromFavorites(movieId)}
+                    disabled={isListLoading}
+                    className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>★</span> Remove from Favorites
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => addToFavorites('movie', movieId)}
+                    disabled={isListLoading}
+                    className="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>⭐</span> Add to Favorites
+                  </button>
+                )}
 
+                {/* Watched Button */}
+                {isInWatched(movieId) ? (
+                  <button
+                    onClick={() => removeFromWatched(movieId)}
+                    disabled={isListLoading}
+                    className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>✓</span> Remove from Watched
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => addToWatched('movie', movieId)}
+                    disabled={isListLoading}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    <span>✓</span> Mark as Watched
+                  </button>
+                )}
+
+                {/* Delete Button - Keep original */}
                 <button
                   className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
                   onClick={handleDelete}
@@ -198,7 +306,13 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
                       <div key={index} className="text-center">
                         <div className="relative w-full aspect-square bg-purple-700 rounded-lg mb-2 overflow-hidden">
                           {actor.profile ? (
-                            <Image src={`${IMAGE_BASE_URL}${actor.profile}`} alt={actor.name} fill className="object-cover" />
+                            <Image
+                              src={`${IMAGE_BASE_URL}${actor.profile}`}
+                              alt={actor.name}
+                              fill
+                              sizes="(max-width: 640px) 50vw, 20vw"
+                              className="object-cover"
+                            />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
                               <span className="text-4xl">👤</span>

@@ -4,7 +4,7 @@
   "description": "Group Project for TCSS 460 @ UWT",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000",
+    "dev": "next dev --turbo -p 3000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
@@ -61,7 +61,8 @@
     "postcss": "^8.5.6",
     "prettier": "^3.4.2",
     "tailwindcss": "^4.1.17",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "webpack-dev-server": "^5.2.2"
   },
   "overrides": {
     "react-is": "^18.3.1"
