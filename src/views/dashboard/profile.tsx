@@ -228,25 +228,15 @@ export default function ProfileView() {
           close: true
         } as any);
         setIsDeleting(false);
+        setShowDeleteConfirm(false);
         return;
       }
 
-      const apiUrl = process.env.NEXT_PUBLIC_CREDENTIALS_API_URL || 'https://credentials-api-group2-20f368b8528b.herokuapp.com';
-      const response = await fetch(`${apiUrl}/auth/delete`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete account');
-      }
+      await authApi.deleteAccount();
 
       openSnackbar({
         open: true,
-        message: 'Account deleted successfully',
+        message: 'Account deleted successfully. Redirecting to login...',
         variant: 'alert',
         alert: {
           color: 'success',
@@ -255,16 +245,21 @@ export default function ProfileView() {
         close: true
       } as any);
 
-      // Clear tokens and redirect
+      // Clear all stored data
       localStorage.removeItem('token');
       localStorage.removeItem('accessToken');
-      await signOut({ redirect: false });
-      router.push('/login');
+      localStorage.removeItem('user');
+
+      // Sign out and redirect to login (with delay to show success message)
+      setTimeout(async () => {
+        await signOut({ redirect: false });
+        router.push('/login');
+      }, 1500);
     } catch (error: any) {
-      console.error('Error deleting account:', error);
+      const errorMessage = error?.details || error?.error || error?.message || 'Failed to delete account';
       openSnackbar({
         open: true,
-        message: error.message || 'Failed to delete account',
+        message: errorMessage,
         variant: 'alert',
         alert: {
           color: 'error',
@@ -272,7 +267,6 @@ export default function ProfileView() {
         },
         close: true
       } as any);
-    } finally {
       setIsDeleting(false);
       setShowDeleteConfirm(false);
     }
