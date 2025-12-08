@@ -13,6 +13,8 @@ TV Shows Data (Group 1): https://g1-tvapi.onrender.com/api-docs/
 
 Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com/api-docs/
 
+Special Feature API (Group 7): https://github.com/pquaidoo/Pibble-User-DB
+
 ---
 ## Production Sprint Meetings
 ### Discussion 1
