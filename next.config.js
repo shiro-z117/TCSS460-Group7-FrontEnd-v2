@@ -45,6 +45,9 @@ const nextConfig = {
     MOVIES_WEB_API_KEY: process.env.MOVIES_WEB_API_KEY,
 
     CREDENTIALS_API_URL: process.env.CREDENTIALS_WEB_API_URL || 'https://credentials-api-group2-20f368b8528b.herokuapp.com/',
+
+    USER_DB_API_URL: process.env.USER_DB_API_URL || 'https://pibble-user-db.onrender.com',
+    USER_DB_API_KEY: process.env.USER_DB_API_KEY,
   }
 };
 
