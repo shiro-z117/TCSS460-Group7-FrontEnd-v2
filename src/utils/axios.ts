@@ -45,19 +45,19 @@ if (!process.env.SHOWS_WEB_API_KEY) {
   );
 }
 
-if (!process.env.USER_DB_API_URL) {
+if (!process.env.NEXT_PUBLIC_USER_DB_API_URL) {
   throw new Error(
-    'USER_DB_API_URL environment variable is not set. ' +
-    'Please add USER_DB_API_URL to your .env and/or next.config.js file(s). ' +
-    'Example: USER_DB_API_URL=http://localhost:8009'
+    'NEXT_PUBLIC_USER_DB_API_URL environment variable is not set. ' +
+    'Please add NEXT_PUBLIC_USER_DB_API_URL to your .env and Vercel environment variables. ' +
+    'Example: NEXT_PUBLIC_USER_DB_API_URL=http://localhost:8009'
   );
 }
 
-if (!process.env.USER_DB_API_KEY) {
+if (!process.env.NEXT_PUBLIC_USER_DB_API_KEY) {
   throw new Error(
-    'USER_DB_API_KEY environment variable is not set. ' +
-    'Please add USER_DB_API_KEY to your .env and/or next.config.js file(s). ' +
-    'Example: USER_DB_API_KEY=your-api-key-here'
+    'NEXT_PUBLIC_USER_DB_API_KEY environment variable is not set. ' +
+    'Please add NEXT_PUBLIC_USER_DB_API_KEY to your .env and Vercel environment variables. ' +
+    'Example: NEXT_PUBLIC_USER_DB_API_KEY=your-api-key-here'
   );
 }
 
@@ -166,7 +166,7 @@ showsService.interceptors.response.use(
 
 // ==============================|| USER DB SERVICE ||============================== //
 
-const userDbService = axios.create({ baseURL: process.env.USER_DB_API_URL });
+const userDbService = axios.create({ baseURL: process.env.NEXT_PUBLIC_USER_DB_API_URL });
 
 userDbService.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
@@ -187,7 +187,7 @@ userDbService.interceptors.request.use(
     }
 
     // Add API key for User DB service
-    config.headers['X-API-Key'] = process.env.USER_DB_API_KEY;
+    config.headers['X-API-Key'] = process.env.NEXT_PUBLIC_USER_DB_API_KEY;
     return config;
   },
   (error: AxiosError) => {
