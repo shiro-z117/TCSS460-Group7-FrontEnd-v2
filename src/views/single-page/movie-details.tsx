@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import useUserProfile from '@/hooks/useUserProfile';
 import { useMediaLists } from '@/hooks/useMediaLists';
+import { useSearchParams } from 'next/navigation';
 
 interface MovieDetailsViewProps {
   movieId: string;
@@ -20,6 +21,30 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
   const [isDeleted, setIsDeleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const fromPage = searchParams.get('from') || 'search';
+
+  const handleGoBack = () => {
+    switch (fromPage) {
+      case 'profile':
+        router.push('/dashboard/profile');
+        break;
+      case 'favorites':
+        router.push('/dashboard/favorites');
+        break;
+      case 'watchlist':
+        router.push('/dashboard/watchlist');
+        break;
+      case 'history':
+        router.push('/dashboard/history');
+        break;
+      case 'dashboard':
+        router.push('/dashboard');
+        break;
+      default:
+        router.push('/dashboard/movies'); // explore page
+    }
+  };
 
   // Get user's lists
   const { watchlist, favorites, watched, refetch } = useUserProfile();
@@ -121,9 +146,9 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
           <div className="text-center text-white">
             <h1 className="text-4xl font-bold mb-4">{error ? 'Error Loading Movie' : 'Movie Not Found'}</h1>
             {error && <p className="text-red-400 mb-4">{error}</p>}
-            <Link href="/dashboard/movies" className="text-purple-400 hover:text-purple-300 text-lg">
-              ← Back to Movies
-            </Link>
+            <button onClick={handleGoBack} className="text-purple-400 hover:text-purple-300 text-lg mb-6 inline-flex items-center gap-2">
+              <span>←</span> Go Back
+            </button>
           </div>
         </div>
       </div>
@@ -136,9 +161,9 @@ export default function MovieDetailsView({ movieId }: MovieDetailsViewProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
       <div className="max-w-7xl mx-auto p-8">
-        <Link href="/dashboard/movies" className="text-purple-400 hover:text-purple-300 text-lg mb-6 inline-flex items-center gap-2">
-          <span>←</span> Back to Movies
-        </Link>
+        <button onClick={handleGoBack} className="text-purple-400 hover:text-purple-300 text-lg mb-6 inline-flex items-center gap-2">
+          <span>←</span> Go Back
+        </button>
 
         <div className="mt-8 bg-black bg-opacity-50 rounded-lg p-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
