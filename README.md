@@ -4,7 +4,7 @@ Group Project for TCSS 460 @ UWT
 
 
 ### Live API: https://tcss460-group7-frontend-v2-fawn.vercel.app
-
+### TV Show API: https://github.com/shiro-z117/TCSS-460-Group-7-tv-shows-dataset-api
 Utilizes the following APIs:
 
 Movies Data (Group 8): https://dataset-web-api.onrender.com/api-docs/
@@ -30,14 +30,18 @@ Credentials (Group 2): https://credentials-api-group2-20f368b8528b.herokuapp.com
 - Prepared to perform finishing touches
 ### Discussion 3
 - **Date:** Sunday, December 7, 2025
-- **Time:** 7:00 PM - 
+- **Time:** 7:00 PM - 9:00PM (120 minutes)
 - **Location:** Discord
 #### Actions:
 - Submit project
+- Reviewed Tests
 ---
 ## Production Sprint Contributions
 
 ### Patrick
+- Implemented Changable Avatars to Profile
+- Refactored profile to have both lists of movies/tvshows and email verfication and delete account
+- Bug fixes for vercel connection to User API
 
 ### Linda Miao
 - Created and completed email verification function on profile page (tested with Coco's support)
