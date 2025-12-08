@@ -279,7 +279,7 @@ export default function useUserProfile(): UseUserProfileReturn {
 
       // If avatar_url is a relative path, prepend the base URL
       if (avatarData?.avatar_url && !avatarData.avatar_url.startsWith('http')) {
-        const USER_DB_BASE_URL = process.env.USER_DB_API_URL || 'https://pibble-user-db.onrender.com';
+        const USER_DB_BASE_URL = process.env.NEXT_PUBLIC_USER_DB_API_URL || 'https://pibble-user-db.onrender.com';
         avatarData.avatar_url = `${USER_DB_BASE_URL}${avatarData.avatar_url}`;
         console.log('🖼️ [AVATAR] Avatar URL after prepending base:', avatarData.avatar_url);
       }
