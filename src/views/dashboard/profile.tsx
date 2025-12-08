@@ -232,11 +232,10 @@ export default function ProfileView() {
       }
 
       const apiUrl = process.env.NEXT_PUBLIC_CREDENTIALS_API_URL || 'https://credentials-api-group2-20f368b8528b.herokuapp.com';
-      const response = await fetch(`${apiUrl}/auth/delete`, {
+      const response = await fetch(`${apiUrl}/auth/me`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${token}`
         }
       });
 
